@@ -1,12 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import BrendaIntro from '../components/BrendaIntro.astro';
 import CTAButton from '../components/CTAButton.astro';
 ---
 
 <BaseLayout
   topic="About Brenda"
-  description="Brenda is London Ontario's formally trained balloon artist, with an active mentor in Toronto. Custom installations for weddings, showers, corporate, birthdays, and graduations."
+  description="The artist behind Balloonia Events. Custom balloon installations built in London Ontario for weddings, showers, corporate events, birthdays, and graduations."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'About', url: '/about' },
@@ -15,48 +14,60 @@ import CTAButton from '../components/CTAButton.astro';
   <section class="about-hero section">
     <div class="container container-narrow">
       <p class="eyebrow">The artist</p>
-      <h1>Brenda built this as a craft.</h1>
+      <h1>The artist behind Balloonia.</h1>
       <p class="lede">
-        Most balloon vendors in London Ontario are self-taught. Brenda went to school for balloon artistry and stayed in active mentorship with one of Toronto's top balloon artists. Every install on Balloonia Events comes from that training.
+        Brenda has been building balloon installations long enough to know exactly which jobs are worth taking and which ones to send elsewhere. She takes most of them.
       </p>
     </div>
   </section>
 
-  <BrendaIntro variant="about" />
-
   <section class="about-body section">
     <div class="container container-narrow">
-      <h2>How Brenda works</h2>
+      <h2>What the work is meant to do</h2>
       <p>
-        Every booking starts with a written quote. Color palette, venue dimensions, materials, delivery time. Brenda reviews the details before she ever picks up a balloon, so the install matches what the customer planned.
+        An arch that frames the head table like it belonged there. A ceiling install that's still tight at the end of the night. A color palette that reads correctly in the photographer's flash, not just on the order form. Decor that sets the room before guests notice the decor.
       </p>
       <p>
-        On the day, she arrives 2 to 3 hours before the event start, builds on-site, and leaves before guests show up. For ceiling installs and larger weddings, that runs 3 to 4 hours. Cleanup after the event can be added at booking.
-      </p>
-
-      <h2>The Toronto mentorship</h2>
-      <p>
-        The mentor relationship is live, not a course Brenda finished and shelved. It means she has direct access to technique escalation when a customer wants a structural geometric arch, an unusual ceiling install, or a custom themed build that most local vendors turn down. London hasn't seen that range of capability before.
+        That's the brief on every install Brenda takes.
       </p>
 
-      <h2>The team behind the art</h2>
+      <h2>Brenda</h2>
       <p>
-        Brenda is the sole artist. Blake handles operations, scheduling, and customer communication during phone hours (Mon-Fri 9-6, Sat 11-6). It's a small operation. We don't pretend otherwise.
+        London Ontario. Spanish first, English when she needs it. Full-time at this for years. Trained, mentored, busy. She runs the studio at 412 Newbold St alone, which is how she likes it: one project at a time, with full attention.
       </p>
 
-      <div class="about-cta">
-        <CTAButton href="/quote" variant="primary" size="lg">Work with Brenda</CTAButton>
-        <CTAButton href="/portfolio" variant="secondary" size="lg">See the work</CTAButton>
+      <h2>What ends up in her calendar</h2>
+      <p>
+        Weddings, kids' birthdays, baby and bridal showers, corporate brand events, milestone parties, graduations. The skew is toward weekends and toward installs that have a structural challenge or a color brief that takes more than a quick read.
+      </p>
+
+      <h2>What you'll see when she's done</h2>
+      <p>
+        A room that reads the way you'd been picturing it for months. A photograph that ages well. Decor that sits inside the event rather than competing with it. Cleanup handled, no pieces left behind.
+      </p>
+
+      <div class="about-cta-wrap">
+        <h2>Tell her about your event.</h2>
+        <p>
+          Date, venue, colors, what you're picturing. Brenda's reply lands within 24 hours, with no commitment.
+        </p>
+        <div class="about-cta">
+          <CTAButton href="/quote" variant="primary" size="lg">Get a quote</CTAButton>
+          <CTAButton href="/portfolio" variant="secondary" size="lg">Browse recent installs</CTAButton>
+        </div>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  .about-cta-wrap {
+    margin-top: var(--space-8);
+  }
   .about-cta {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-top: var(--space-7);
+    margin-top: var(--space-5);
   }
 </style>

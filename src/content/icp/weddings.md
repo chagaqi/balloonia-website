@@ -3,7 +3,7 @@ title: Wedding Balloon Decor in London Ontario
 eventType: weddings
 heroImage: /images/icp/weddings-hero.svg
 heroAlt: Wedding ceremony arch with cream and pampas accents
-metaDescription: Custom wedding balloon decor in London Ontario. Ceremony arches, reception backdrops, ceiling installs, and centerpieces by a formally trained artist. From $499.
+metaDescription: Custom wedding balloon decor in London Ontario. Ceremony arches, reception backdrops, ceiling installs, and centerpieces. Built fresh in your colors, delivered and installed. From $499.
 pricingMin: 499
 pricingMax: 2400
 order: 1

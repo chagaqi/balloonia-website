@@ -4,8 +4,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import ProductGrid from '../../components/ProductGrid.astro';
 import { faqPageSchema } from '../../lib/schema/faqPage';
 import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const entry = await getEntry('icp', 'graduations');
@@ -21,6 +23,9 @@ const portfolio = (await getCollection('portfolio'))
   .filter((p) => p.data.eventType === 'graduations')
   .sort((a, b) => a.data.order - b.data.order)
   .slice(0, 6);
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('graduation')).slice(0, 6);
 
 const schemas = [
   faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
@@ -72,6 +77,22 @@ const schemas = [
             </li>
           ))}
         </ul>
+      </div>
+    </section>
+  )}
+
+  {products.length > 0 && (
+    <section class="icp-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Graduation balloon products</h2>
+          <p class="lede">Class-of arches, columns, and grad backdrops from the catalog. Custom Class-of-2026 builds also available.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/graduations">View all graduation products →</a>
+        </p>
       </div>
     </section>
   )}

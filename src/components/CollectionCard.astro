@@ -10,7 +10,7 @@ const { collection, showThumb = true } = Astro.props;
 const href = shopCollectionUrl(collection.handle);
 ---
 
-<a class="collection-card" href={href} target="_blank" rel="noopener noreferrer">
+<a class="collection-card" href={href}>
   {showThumb && collection.thumb && (
     <div class="collection-thumb">
       <img src={collection.thumb} alt="" loading="lazy" />
@@ -19,7 +19,7 @@ const href = shopCollectionUrl(collection.handle);
   <div class="collection-body">
     <h3>{collection.title}</h3>
     <p class="blurb">{collection.blurb}</p>
-    <span class="cta">Browse all <span aria-hidden="true">↗</span></span>
+    <span class="cta">Browse all <span aria-hidden="true">→</span></span>
   </div>
 </a>
 

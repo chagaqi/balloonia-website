@@ -3,7 +3,7 @@ title: Baby and Bridal Shower Balloon Decor in London Ontario
 eventType: showers
 heroImage: /images/icp/showers-hero.svg
 heroAlt: Baby shower balloon backdrop with pastel garland
-metaDescription: Custom baby shower and bridal shower balloon packages in London Ontario. Garlands, walls, centerpieces, and accent arrangements by a formally trained artist.
+metaDescription: Custom baby shower and bridal shower balloon packages in London Ontario. Garlands, walls, centerpieces, and accent arrangements. Built fresh in your colors.
 pricingMin: 200
 pricingMax: 1000
 order: 3

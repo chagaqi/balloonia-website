@@ -21,18 +21,7 @@ function isActive(item: PrimaryNavItem): boolean {
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="/" aria-label="Balloonia Events home">
-      <span class="brand-mark">
-        <svg viewBox="0 0 80 80" width="36" height="36" aria-hidden="true">
-          <ellipse cx="40" cy="33" rx="22" ry="26" fill="#d28b75" />
-          <ellipse cx="33" cy="24" rx="6" ry="8" fill="#efc6b9" opacity="0.7" />
-          <path d="M40 60 Q42 70 36 80" stroke="#3a3a3a" stroke-width="1.5" fill="none" />
-          <polygon points="40,60 36,66 44,66" fill="#d28b75" />
-        </svg>
-      </span>
-      <span class="brand-words">
-        <span class="brand-words-name">Balloonia</span>
-        <span class="brand-words-events">events</span>
-      </span>
+      <img class="brand-logo" src="/images/brand/logo-header.png" alt="Balloonia Events" width="180" height="64" />
     </a>
 
     <nav class="primary-nav" aria-label="Primary">
@@ -215,24 +204,16 @@ function isActive(item: PrimaryNavItem): boolean {
   .brand {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-3);
-    font-family: var(--font-display);
-    color: var(--color-ink);
   }
-  .brand-mark { display: inline-flex; align-items: center; }
-  .brand-words {
-    display: inline-flex;
-    flex-direction: column;
-    line-height: 1;
-    font-size: 1.5rem;
+  .brand-logo {
+    display: block;
+    height: 56px;
+    width: auto;
   }
-  .brand-words-name { letter-spacing: 0.02em; }
-  .brand-words-events {
-    font-style: italic;
-    font-size: 0.7em;
-    color: var(--color-ink-muted);
-    letter-spacing: 0.16em;
-    margin-top: 2px;
+  @media (min-width: 768px) {
+    .brand-logo {
+      height: 64px;
+    }
   }
 
   .primary-nav { justify-self: end; }

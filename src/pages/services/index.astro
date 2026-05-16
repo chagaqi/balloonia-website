@@ -184,8 +184,8 @@ function collectionUrl(handle: string): string {
             <ProductGrid products={s.products} columns={3} />
             {s.collectionHandle && (
               <div class="service-section-link">
-                <a href={collectionUrl(s.collectionHandle)} target="_blank" rel="noopener noreferrer">
-                  View all {s.title.toLowerCase()} <span aria-hidden="true">↗</span>
+                <a href={collectionUrl(s.collectionHandle)}>
+                  View all {s.title.toLowerCase()} <span aria-hidden="true">→</span>
                 </a>
               </div>
             )}
@@ -194,8 +194,8 @@ function collectionUrl(handle: string): string {
           <div class="service-section-empty">
             <p class="muted">More items in this category land here soon.</p>
             {s.collectionHandle && (
-              <a class="service-section-link-inline" href={collectionUrl(s.collectionHandle)} target="_blank" rel="noopener noreferrer">
-                Browse on Shopify <span aria-hidden="true">↗</span>
+              <a class="service-section-link-inline" href={collectionUrl(s.collectionHandle)}>
+                Browse on Shopify <span aria-hidden="true">→</span>
               </a>
             )}
             <CTAButton href="/quote" variant="ghost">Or get a custom quote</CTAButton>

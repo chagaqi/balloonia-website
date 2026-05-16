@@ -1,5 +1,4 @@
 import { useState } from 'preact/hooks';
-import { readUtm } from '../../lib/utm';
 
 type State =
   | { kind: 'idle' }
@@ -7,33 +6,19 @@ type State =
   | { kind: 'success' }
   | { kind: 'error'; mailtoHref: string; message: string };
 
+// Formsubmit.co forwards form POSTs straight to this inbox.
+// First submission triggers a verification email; click the link inside it to activate.
+// After activation, every submission lands in contact@balloonia.events.
+const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/contact@balloonia.events';
+
 export default function ContactForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [state, setState] = useState<State>({ kind: 'idle' });
 
-  function buildPayload() {
-    const utm = readUtm();
-    return {
-      event_type: '',
-      event_date: '',
-      venue_name: '',
-      city: 'London',
-      budget_range: '',
-      style_or_theme: message.trim(),
-      first_name: name.split(' ').slice(0, -1).join(' ') || name,
-      last_name: name.split(' ').slice(-1).join(' ') || '',
-      email,
-      phone: '',
-      utm_source: utm.utm_source ?? '',
-      utm_medium: utm.utm_medium ?? '',
-      utm_campaign: utm.utm_campaign ?? '',
-    };
-  }
-
-  function buildMailto(payload: ReturnType<typeof buildPayload>) {
-    const body = `From: ${payload.first_name} ${payload.last_name} <${payload.email}>\n\n${payload.style_or_theme}`;
+  function buildMailto() {
+    const body = `From: ${name} <${email}>\n\n${message}`;
     return `mailto:contact@balloonia.events?subject=${encodeURIComponent('Website message')}&body=${encodeURIComponent(body)}`;
   }
 
@@ -41,28 +26,22 @@ export default function ContactForm() {
     e.preventDefault();
     if (!name.trim() || !email.trim() || !message.trim()) return;
 
-    const payload = buildPayload();
-    const mode = import.meta.env.PUBLIC_SUBMIT_MODE === 'live' ? 'live' : 'mock';
-
     setState({ kind: 'submitting' });
 
-    if (mode === 'mock') {
-      // eslint-disable-next-line no-console
-      console.log('[balloonia contact] mock submit payload:', payload);
-      setState({ kind: 'success' });
-      setName('');
-      setEmail('');
-      setMessage('');
-      return;
-    }
-
     try {
-      const res = await fetch(import.meta.env.PUBLIC_ZAPIER_WEBHOOK, {
+      const res = await fetch(FORMSUBMIT_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _subject: `Website message from ${name}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
       });
-      if (!res.ok) throw new Error(`Webhook returned ${res.status}`);
+      if (!res.ok) throw new Error(`Formsubmit returned ${res.status}`);
       setState({ kind: 'success' });
       setName('');
       setEmail('');
@@ -70,7 +49,7 @@ export default function ContactForm() {
     } catch (err) {
       setState({
         kind: 'error',
-        mailtoHref: buildMailto(payload),
+        mailtoHref: buildMailto(),
         message: err instanceof Error ? err.message : 'Network error',
       });
     }

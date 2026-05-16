@@ -9,13 +9,13 @@ export const business = {
   url: 'https://balloonia.events',
   shopUrl: 'https://shop.balloonia.events',
   description:
-    "London Ontario's formally trained balloon artist. Custom installations for weddings, showers, corporate, birthdays, and graduations. Delivered and set up.",
+    "Custom balloon installations in London Ontario. Wedding arches, shower walls, corporate activations, kids birthdays, grad backdrops. Delivered and set up.",
   founded: '2024',
   address: {
-    streetAddress: '',
+    streetAddress: '412 Newbold St, Unit 4',
     addressLocality: 'London',
     addressRegion: 'ON',
-    postalCode: '',
+    postalCode: 'N6E 1K1',
     addressCountry: 'CA',
   },
   serviceArea: {

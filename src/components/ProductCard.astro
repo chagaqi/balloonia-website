@@ -10,14 +10,14 @@ const { product } = Astro.props;
 const href = shopUrlFor(product.handle);
 ---
 
-<a class="product-card" href={href} target="_blank" rel="noopener noreferrer">
+<a class="product-card" href={href}>
   <div class="product-card-image">
     <img src={product.image.src} alt={product.image.alt} loading="lazy" />
   </div>
   <div class="product-card-body">
     <h3>{product.title}</h3>
     <p class="price">From ${product.startingPrice}</p>
-    <span class="view">View details <span aria-hidden="true">↗</span></span>
+    <span class="view">View details <span aria-hidden="true">→</span></span>
   </div>
 </a>
 
