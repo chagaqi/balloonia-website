@@ -1,0 +1,59 @@
+---
+type Pillar = {
+  title: string;
+  body: string;
+  icon?: string;
+};
+
+type Props = {
+  pillars: Pillar[];
+  eyebrow?: string;
+};
+
+const { pillars, eyebrow } = Astro.props;
+---
+
+<section class="value-prop section">
+  <div class="container">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <div class="pillars">
+      {pillars.map((p) => (
+        <article class="pillar">
+          {p.icon && <div class="pillar-icon" aria-hidden="true">{p.icon}</div>}
+          <h3>{p.title}</h3>
+          <p>{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .pillar {
+    padding: var(--space-5);
+    background: var(--color-paper-soft);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line);
+  }
+  .pillar-icon {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-3);
+  }
+  .pillar h3 {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-3);
+  }
+  .pillar p {
+    color: var(--color-ink-soft);
+  }
+  @media (min-width: 768px) {
+    .pillars {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,395 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ValueProp from '../components/ValueProp.astro';
+import ProductGrid from '../components/ProductGrid.astro';
+import BrendaIntro from '../components/BrendaIntro.astro';
+import CTAButton from '../components/CTAButton.astro';
+import { getFeaturedProducts } from '../data/catalog/shopify';
+
+const portfolio = (await getCollection('portfolio'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 6);
+
+const featuredProducts = (await getFeaturedProducts()).slice(0, 8);
+
+const browseStockCards = [
+  {
+    title: 'Arches and Garlands',
+    blurb: 'Organic, hoop, geometric. Stock and custom.',
+    image: '/images/categories/arches-garlands.png',
+    href: '/services#arches-garlands',
+  },
+  {
+    title: 'Walls and Backdrops',
+    blurb: 'Branded backdrops, photo-op walls, event focal points.',
+    image: '/images/categories/walls-backdrops.png',
+    href: '/services#walls-backdrops',
+  },
+  {
+    title: 'Centerpieces and Columns',
+    blurb: 'Table centerpieces, milestone number columns, accent stands.',
+    image: '/images/categories/centerpieces.png',
+    href: '/services#centerpieces',
+  },
+  {
+    title: 'Ceiling Installations',
+    blurb: 'Overhead clusters, canopies, floating displays.',
+    image: '/images/categories/ceiling.png',
+    href: '/services#ceiling',
+  },
+  {
+    title: 'Bouquets',
+    blurb: 'Helium bouquets and accent clusters, deliverable around London.',
+    image: '/images/categories/bouquets.png',
+    href: '/services#bouquets',
+  },
+];
+
+const icpCards = [
+  { title: 'Weddings', body: 'Ceremony arches, reception backdrops, ceiling installs, centerpieces.', href: '/services/weddings' },
+  { title: 'Corporate', body: 'Grand openings, brand activations, holiday parties, office events.', href: '/services/corporate' },
+  { title: 'Showers', body: 'Baby and bridal shower packages, garlands, walls, accents.', href: '/services/showers' },
+  { title: 'Birthdays + Graduations', body: 'Milestone arches, themed kid parties, Class-of grad columns.', href: '/services/birthdays' },
+];
+---
+
+<BaseLayout
+  topic="Balloon Decor London Ontario"
+  description="Custom balloon installations by a formally trained artist. Weddings, showers, corporate, birthdays. From $60 in London Ontario, delivered and set up."
+>
+  <Hero
+    headline="Custom balloon installations, built fresh for your event."
+    subhead="Wedding arches, shower walls, corporate activations, kids birthdays, grad backdrops. Brenda is the only formally trained balloon artist in London Ontario. Quotes back within 24 hours."
+    primaryCta={{ href: '/quote', label: 'Get a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See recent work' }}
+    image="/images/hero/peach-wedding-arch.jpg"
+    imageAlt="Peach and blush wedding balloon arch over a set head table at an outdoor ceremony"
+    variant="bleed"
+  />
+
+  <ValueProp
+    eyebrow="Why Balloonia"
+    pillars={[
+      {
+        title: 'Formally trained',
+        body: 'Brenda completed formal balloon artistry training and works with an active mentor in Toronto. The structural quality matches the hours you put into planning.',
+        icon: '✦',
+      },
+      {
+        title: 'Custom every time',
+        body: 'No pre-made arches pulled from a catalog. Every install is built fresh in your colors, theme, and venue dimensions.',
+        icon: '◐',
+      },
+      {
+        title: 'Delivered and installed',
+        body: 'We arrive 2 to 3 hours before your event, build on-site, and clean up after. You walk in to a finished room.',
+        icon: '↑',
+      },
+    ]}
+  />
+
+  <section class="featured-portfolio section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Featured work</p>
+        <h2>Recent installs</h2>
+        <a class="section-link" href="/portfolio">See all work →</a>
+      </header>
+      <ul class="portfolio-grid-home">
+        {portfolio.map((item) => (
+          <li>
+            <a href="/portfolio">
+              <img src={item.data.image} alt={item.data.alt} loading="lazy" />
+              <span class="portfolio-grid-meta">{item.data.title}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="featured-products section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Shop the catalog</p>
+        <h2>Featured products</h2>
+        <a class="section-link" href="/shop">Browse all categories →</a>
+      </header>
+      <ProductGrid products={featuredProducts} columns={4} />
+    </div>
+  </section>
+
+  <section class="order-online section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Order Online</p>
+        <h2>Browse stock by category</h2>
+        <a class="section-link" href="/services">See all categories →</a>
+      </header>
+      <ul class="browse-stock-grid">
+        {browseStockCards.map((card) => (
+          <li>
+            <a class="stock-card" href={card.href}>
+              <div class="stock-card-image">
+                <img src={card.image} alt={card.title} loading="lazy" />
+              </div>
+              <div class="stock-card-body">
+                <h3>{card.title}</h3>
+                <p>{card.blurb}</p>
+                <span class="stock-card-cta">Browse →</span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="who-we-serve section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Who we serve</p>
+        <h2>From weekend markets to corporate launches</h2>
+      </header>
+      <div class="icp-grid">
+        {icpCards.map((card) => (
+          <a href={card.href} class="icp-card">
+            <h3>{card.title}</h3>
+            <p>{card.body}</p>
+            <span class="icp-arrow" aria-hidden="true">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <BrendaIntro variant="home" />
+
+  <section class="social-proof section-tight">
+    <div class="container container-narrow">
+      <p class="eyebrow">From the community</p>
+      <h2>Reviews launching soon.</h2>
+      <p class="muted">As Brenda builds the local portfolio, real reviews land here. We won't fabricate.</p>
+    </div>
+  </section>
+
+  <section class="cta-strip section">
+    <div class="container container-narrow text-center">
+      <h2>Tell us about your event.</h2>
+      <p class="lede">Send your date, venue, and a rough budget. Brenda will reply within 24 hours with a custom quote.</p>
+      <div class="cta-strip-buttons">
+        <CTAButton href="/quote" variant="primary" size="lg">Get a quote</CTAButton>
+        <CTAButton href="/portfolio" variant="secondary" size="lg">Browse the portfolio</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+  .section-head .eyebrow {
+    width: 100%;
+    margin-bottom: 0;
+  }
+  .section-head h2 {
+    margin-bottom: 0;
+    flex: 1;
+  }
+  .section-link {
+    color: var(--color-accent-deep);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    margin-bottom: var(--space-2);
+  }
+  .browse-stock-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1fr;
+  }
+  .browse-stock-grid li {
+    margin: 0;
+  }
+  .stock-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 100%;
+    color: var(--color-ink);
+    transition: transform var(--duration-base) var(--ease), box-shadow var(--duration-base) var(--ease);
+  }
+  .stock-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+  .stock-card-image {
+    aspect-ratio: 4 / 5;
+    background: var(--color-paper-edge);
+    overflow: hidden;
+  }
+  .stock-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .stock-card-body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+  .stock-card-body h3 {
+    font-size: var(--font-size-xl);
+    margin: 0;
+  }
+  .stock-card-body p {
+    color: var(--color-ink-soft);
+    font-size: var(--font-size-sm);
+    flex: 1;
+    margin: 0;
+  }
+  .stock-card-cta {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--color-accent-deep);
+    margin-top: var(--space-3);
+  }
+  @media (min-width: 540px) {
+    .browse-stock-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 960px) {
+    .browse-stock-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+  .portfolio-grid-home {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .portfolio-grid-home li {
+    margin: 0;
+  }
+  .portfolio-grid-home a {
+    display: block;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    background: var(--color-paper-edge);
+  }
+  .portfolio-grid-home img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-base) var(--ease);
+  }
+  .portfolio-grid-home a:hover img {
+    transform: scale(1.04);
+  }
+  .portfolio-grid-meta {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: var(--space-4);
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    color: white;
+    font-size: var(--font-size-sm);
+  }
+  .icp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .icp-card {
+    display: block;
+    padding: var(--space-6);
+    background: var(--color-paper-soft);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line);
+    color: var(--color-ink);
+    position: relative;
+    transition: all var(--duration-base) var(--ease);
+  }
+  .icp-card:hover {
+    transform: translateY(-2px);
+    background: var(--color-paper);
+  }
+  .icp-card h3 {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-3);
+  }
+  .icp-card p {
+    color: var(--color-ink-soft);
+    margin: 0;
+  }
+  .icp-arrow {
+    position: absolute;
+    top: var(--space-5);
+    right: var(--space-5);
+    color: var(--color-accent-deep);
+    font-size: var(--font-size-xl);
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-center p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-strip {
+    background: var(--color-paper-soft);
+  }
+  .cta-strip h2 {
+    margin-bottom: var(--space-4);
+  }
+  .cta-strip-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-6);
+  }
+  @media (min-width: 540px) {
+    .portfolio-grid-home {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 768px) {
+    .icp-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 960px) {
+    .portfolio-grid-home {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .icp-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,142 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { faqPageSchema } from '../../lib/schema/faqPage';
+import { serviceSchema } from '../../lib/schema/service';
+import '../../styles/quote-form.css';
+
+const entry = await getEntry('icp', 'weddings');
+if (!entry) throw new Error('Missing icp/weddings');
+const { Content } = await render(entry);
+
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('weddings'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
+const portfolio = (await getCollection('portfolio'))
+  .filter((p) => p.data.eventType === 'weddings')
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 6);
+
+const schemas = [
+  faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
+  serviceSchema({
+    name: 'Wedding balloon decor',
+    description: 'Custom wedding balloon installations including ceremony arches, reception backdrops, garland centerpieces, and ceiling displays.',
+    startingPrice: 499,
+    url: '/services/weddings',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Wedding Balloon Decor"
+  description={entry.data.metaDescription}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Weddings', url: '/services/weddings' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Weddings"
+    headline={entry.data.title}
+    subhead={`Pricing range: $${entry.data.pricingMin} to $${entry.data.pricingMax} for most weddings.`}
+    primaryCta={{ href: '/quote?type=Wedding', label: 'Start a wedding quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See wedding work' }}
+    image={entry.data.heroImage}
+    imageAlt={entry.data.heroAlt}
+    variant="page"
+  />
+
+  <section class="icp-body section">
+    <div class="container container-narrow prose">
+      <Content />
+    </div>
+  </section>
+
+  {portfolio.length > 0 && (
+    <section class="icp-portfolio section">
+      <div class="container">
+        <p class="eyebrow">Recent weddings</p>
+        <h2>Wedding work</h2>
+        <ul class="portfolio-grid-icp">
+          {portfolio.map((item) => (
+            <li>
+              <img src={item.data.image} alt={item.data.alt} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+        <a class="section-link" href="/portfolio">See full portfolio →</a>
+      </div>
+    </section>
+  )}
+
+  <section class="icp-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Get started</p>
+        <h2>Tell us about your wedding</h2>
+        <p class="lede">A few minutes now saves a back-and-forth later. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load initialEventType="Wedding" />
+    </div>
+  </section>
+
+  <FAQAccordion heading="Wedding FAQs" faqs={faqs} />
+</BaseLayout>
+
+<style>
+  .prose h2 {
+    margin-top: var(--space-7);
+  }
+  .prose ul {
+    color: var(--color-ink-soft);
+  }
+  .portfolio-grid-icp {
+    list-style: none;
+    margin: var(--space-5) 0 var(--space-5);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  .portfolio-grid-icp li {
+    margin: 0;
+  }
+  .portfolio-grid-icp img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-paper-edge);
+  }
+  .section-link {
+    color: var(--color-accent-deep);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .section-head {
+    margin-bottom: var(--space-6);
+  }
+  .icp-quote {
+    background: var(--color-paper-soft);
+  }
+  @media (min-width: 640px) {
+    .portfolio-grid-icp {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 960px) {
+    .portfolio-grid-icp {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+</style>

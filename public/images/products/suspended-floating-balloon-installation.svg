@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#3a3a3a"/>
+  <g><circle cx="245.3" cy="506.7" r="44.2" fill="#efc6b9" opacity="0.84"/><circle cx="564.1" cy="92.4" r="36.4" fill="#fbf9f5" opacity="0.82"/><circle cx="379.1" cy="530.1" r="31.9" fill="#efc6b9" opacity="0.81"/><circle cx="587.4" cy="392.1" r="37.2" fill="#fbf9f5" opacity="0.96"/><circle cx="596.3" cy="629.1" r="36.5" fill="#efc6b9" opacity="0.96"/><circle cx="478.8" cy="224.3" r="44.0" fill="#fbf9f5" opacity="0.88"/><circle cx="49.2" cy="190.4" r="40.4" fill="#efc6b9" opacity="0.97"/><circle cx="160.1" cy="160.8" r="32.9" fill="#fbf9f5" opacity="0.71"/><circle cx="578.9" cy="478.6" r="45.5" fill="#efc6b9" opacity="0.73"/><circle cx="26.6" cy="596.9" r="42.9" fill="#fbf9f5" opacity="0.97"/><circle cx="704.8" cy="477.9" r="45.2" fill="#efc6b9" opacity="0.73"/><circle cx="711.0" cy="459.1" r="45.1" fill="#fbf9f5" opacity="0.87"/><circle cx="529.7" cy="113.7" r="45.6" fill="#efc6b9" opacity="0.97"/><circle cx="378.2" cy="48.1" r="41.0" fill="#fbf9f5" opacity="0.84"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Suspended Floating Installation</text>
+</svg>

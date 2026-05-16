@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/quote/ContactForm.tsx';
+import ScheduleCallButton from '../components/ScheduleCallButton.astro';
+import { business } from '../data/business';
+import '../styles/quote-form.css';
+
+const phone = business.phone;
+const phoneTel = phone ? `tel:${phone.replace(/[^0-9+]/g, '')}` : '';
+---
+
+<BaseLayout
+  topic="Contact"
+  description="Get in touch with Balloonia Events. Phone, email, and a discovery call link. Mon-Fri 9-6, Sat 11-6. Service area: London Ontario plus 50km."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Contact', url: '/contact' },
+  ]}
+>
+  <section class="contact-hero section">
+    <div class="container container-narrow">
+      <p class="eyebrow">Contact</p>
+      <h1>The fastest way to a quote.</h1>
+      <p class="lede">
+        Send a message, book a discovery call, or call directly. Brenda replies to messages within 24 hours.
+      </p>
+    </div>
+  </section>
+
+  <section class="contact-grid section">
+    <div class="container">
+      <div class="contact-cols">
+        <div class="contact-info">
+          <h2>Reach us directly</h2>
+          <ul class="contact-list">
+            <li>
+              <span class="contact-label">Email</span>
+              <a href={`mailto:${business.email}`}>{business.email}</a>
+            </li>
+            {phone && (
+              <li>
+                <span class="contact-label">Phone</span>
+                <a href={phoneTel}>{phone}</a>
+              </li>
+            )}
+            <li>
+              <span class="contact-label">Hours</span>
+              <span>{business.hoursDisplay}</span>
+            </li>
+            <li>
+              <span class="contact-label">Service area</span>
+              <span>{business.serviceArea.city} plus {business.serviceArea.radiusKm}km. Travel beyond on request.</span>
+            </li>
+          </ul>
+
+          <div class="contact-schedule">
+            <h3>Lock in a discovery call</h3>
+            <p>15 minutes, free, no commitment. Talk through your event with Brenda.</p>
+            <ScheduleCallButton variant="primary" />
+          </div>
+        </div>
+
+        <div class="contact-form-wrap">
+          <h2>Send a quick message</h2>
+          <p class="muted">For longer requests, use the <a href="/quote">full quote form</a>.</p>
+          <ContactForm client:load />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-7);
+  }
+  .contact-list {
+    list-style: none;
+    margin: var(--space-5) 0;
+    padding: 0;
+  }
+  .contact-list li {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-line);
+    margin: 0;
+  }
+  .contact-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-1);
+  }
+  .contact-list a:hover {
+    color: var(--color-accent-deep);
+  }
+  .contact-schedule {
+    margin-top: var(--space-7);
+    padding: var(--space-5);
+    background: var(--color-paper-soft);
+    border-radius: var(--radius-lg);
+  }
+  .contact-schedule h3 {
+    font-size: var(--font-size-xl);
+  }
+  .contact-form-wrap {
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+  .contact-success {
+    padding: var(--space-5);
+    background: #f0f9f0;
+    border: 1px solid #c8e6c8;
+    border-radius: var(--radius-md);
+  }
+  @media (min-width: 768px) {
+    .contact-cols {
+      grid-template-columns: 1fr 1.4fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

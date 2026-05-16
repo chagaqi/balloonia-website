@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#d28b75"/>
+  <g><circle cx="359.6" cy="235.6" r="43.4" fill="#1a1a1a" opacity="0.92"/><circle cx="787.5" cy="211.2" r="45.4" fill="#fbf9f5" opacity="0.93"/><circle cx="537.2" cy="527.6" r="29.5" fill="#1a1a1a" opacity="0.98"/><circle cx="712.4" cy="488.3" r="44.3" fill="#fbf9f5" opacity="0.98"/><circle cx="304.7" cy="394.0" r="31.9" fill="#1a1a1a" opacity="0.86"/><circle cx="360.2" cy="292.7" r="33.5" fill="#fbf9f5" opacity="0.92"/><circle cx="519.4" cy="144.3" r="40.6" fill="#1a1a1a" opacity="0.90"/><circle cx="611.2" cy="92.7" r="33.7" fill="#fbf9f5" opacity="0.91"/><circle cx="397.7" cy="134.0" r="30.9" fill="#1a1a1a" opacity="0.95"/><circle cx="132.6" cy="375.2" r="41.1" fill="#fbf9f5" opacity="0.78"/><circle cx="351.3" cy="132.5" r="45.5" fill="#1a1a1a" opacity="0.93"/><circle cx="88.2" cy="129.0" r="39.5" fill="#fbf9f5" opacity="0.99"/><circle cx="534.3" cy="177.1" r="35.7" fill="#1a1a1a" opacity="0.88"/><circle cx="35.7" cy="120.5" r="30.4" fill="#fbf9f5" opacity="0.75"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Photo Booth Backdrop</text>
+</svg>

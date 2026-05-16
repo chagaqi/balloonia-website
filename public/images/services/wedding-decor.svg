@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#fbf9f5"/>
+  <g><circle cx="540.5" cy="303.4" r="35.3" fill="#efc6b9" opacity="0.97"/><circle cx="785.1" cy="406.3" r="42.6" fill="#1a1a1a" opacity="0.80"/><circle cx="577.3" cy="255.8" r="43.7" fill="#efc6b9" opacity="0.85"/><circle cx="735.7" cy="22.6" r="36.6" fill="#1a1a1a" opacity="0.85"/><circle cx="498.9" cy="232.6" r="40.3" fill="#efc6b9" opacity="0.83"/><circle cx="395.7" cy="183.7" r="43.1" fill="#1a1a1a" opacity="0.87"/><circle cx="210.5" cy="472.3" r="33.6" fill="#efc6b9" opacity="0.74"/><circle cx="722.4" cy="191.6" r="38.3" fill="#1a1a1a" opacity="0.91"/><circle cx="400.0" cy="189.8" r="41.6" fill="#efc6b9" opacity="0.91"/><circle cx="314.3" cy="319.5" r="28.6" fill="#1a1a1a" opacity="0.82"/><circle cx="337.6" cy="440.4" r="34.8" fill="#efc6b9" opacity="0.85"/><circle cx="60.3" cy="126.8" r="35.0" fill="#1a1a1a" opacity="0.87"/><circle cx="340.8" cy="475.8" r="41.6" fill="#efc6b9" opacity="0.82"/><circle cx="586.6" cy="197.0" r="43.9" fill="#1a1a1a" opacity="0.85"/></g>
+  <text x="400" y="582" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Wedding Decor</text>
+</svg>

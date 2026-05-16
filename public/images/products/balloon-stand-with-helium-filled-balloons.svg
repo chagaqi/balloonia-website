@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#fbf9f5"/>
+  <g><circle cx="550.0" cy="91.1" r="42.6" fill="#efc6b9" opacity="0.91"/><circle cx="228.2" cy="613.3" r="38.3" fill="#b06a55" opacity="0.98"/><circle cx="533.2" cy="103.8" r="40.1" fill="#efc6b9" opacity="0.79"/><circle cx="598.6" cy="454.7" r="42.6" fill="#b06a55" opacity="0.84"/><circle cx="521.8" cy="372.9" r="40.4" fill="#efc6b9" opacity="0.93"/><circle cx="147.3" cy="242.2" r="37.4" fill="#b06a55" opacity="0.87"/><circle cx="687.3" cy="331.4" r="29.0" fill="#efc6b9" opacity="0.84"/><circle cx="30.5" cy="204.3" r="44.5" fill="#b06a55" opacity="0.82"/><circle cx="622.2" cy="455.3" r="28.5" fill="#efc6b9" opacity="0.99"/><circle cx="91.9" cy="140.3" r="35.6" fill="#b06a55" opacity="0.86"/><circle cx="61.1" cy="49.6" r="40.7" fill="#efc6b9" opacity="0.89"/><circle cx="269.1" cy="661.9" r="33.7" fill="#b06a55" opacity="0.97"/><circle cx="447.2" cy="581.3" r="45.3" fill="#efc6b9" opacity="0.72"/><circle cx="547.8" cy="116.4" r="43.5" fill="#b06a55" opacity="0.80"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Balloon Stand (Helium-Filled)</text>
+</svg>

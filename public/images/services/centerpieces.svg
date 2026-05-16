@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#fbf9f5"/>
+  <g><circle cx="798.6" cy="314.9" r="42.4" fill="#efc6b9" opacity="0.90"/><circle cx="583.6" cy="201.1" r="32.5" fill="#b06a55" opacity="0.81"/><circle cx="67.2" cy="487.4" r="40.1" fill="#efc6b9" opacity="0.85"/><circle cx="56.5" cy="281.0" r="33.4" fill="#b06a55" opacity="0.84"/><circle cx="469.1" cy="125.4" r="31.2" fill="#efc6b9" opacity="0.85"/><circle cx="88.4" cy="454.0" r="34.7" fill="#b06a55" opacity="0.73"/><circle cx="152.7" cy="242.2" r="39.1" fill="#efc6b9" opacity="0.78"/><circle cx="798.6" cy="452.3" r="41.3" fill="#b06a55" opacity="0.97"/><circle cx="432.1" cy="11.3" r="33.4" fill="#efc6b9" opacity="0.74"/><circle cx="259.2" cy="282.3" r="45.9" fill="#b06a55" opacity="0.82"/><circle cx="31.3" cy="314.4" r="40.6" fill="#efc6b9" opacity="0.82"/><circle cx="765.7" cy="194.5" r="38.7" fill="#b06a55" opacity="0.83"/><circle cx="509.6" cy="461.3" r="45.0" fill="#efc6b9" opacity="0.75"/><circle cx="297.5" cy="456.6" r="40.0" fill="#b06a55" opacity="0.78"/></g>
+  <text x="400" y="582" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Centerpieces</text>
+</svg>

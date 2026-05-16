@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#b06a55"/>
+  <g><circle cx="251.6" cy="104.6" r="32.0" fill="#efc6b9" opacity="0.85"/><circle cx="540.8" cy="131.1" r="39.0" fill="#fbf9f5" opacity="0.97"/><circle cx="12.8" cy="473.9" r="33.5" fill="#efc6b9" opacity="0.70"/><circle cx="319.3" cy="67.2" r="41.5" fill="#fbf9f5" opacity="0.96"/><circle cx="65.1" cy="98.7" r="35.5" fill="#efc6b9" opacity="1.00"/><circle cx="701.4" cy="48.4" r="29.5" fill="#fbf9f5" opacity="0.82"/><circle cx="509.7" cy="285.5" r="38.2" fill="#efc6b9" opacity="0.70"/><circle cx="350.3" cy="67.9" r="37.7" fill="#fbf9f5" opacity="0.72"/><circle cx="25.6" cy="419.7" r="44.1" fill="#efc6b9" opacity="0.74"/><circle cx="109.4" cy="266.0" r="40.3" fill="#fbf9f5" opacity="0.93"/><circle cx="15.5" cy="64.4" r="39.9" fill="#efc6b9" opacity="0.88"/><circle cx="615.0" cy="9.0" r="32.6" fill="#fbf9f5" opacity="0.85"/><circle cx="161.7" cy="98.1" r="35.2" fill="#efc6b9" opacity="0.74"/><circle cx="326.2" cy="41.6" r="44.8" fill="#fbf9f5" opacity="0.92"/></g>
+  <text x="400" y="582" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Custom Themed</text>
+</svg>

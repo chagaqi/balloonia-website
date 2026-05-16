@@ -1,0 +1,76 @@
+---
+import { shopCollectionUrl, type ShopCollection } from '../data/shopCollections';
+
+type Props = {
+  collection: ShopCollection;
+  showThumb?: boolean;
+};
+
+const { collection, showThumb = true } = Astro.props;
+const href = shopCollectionUrl(collection.handle);
+---
+
+<a class="collection-card" href={href} target="_blank" rel="noopener noreferrer">
+  {showThumb && collection.thumb && (
+    <div class="collection-thumb">
+      <img src={collection.thumb} alt="" loading="lazy" />
+    </div>
+  )}
+  <div class="collection-body">
+    <h3>{collection.title}</h3>
+    <p class="blurb">{collection.blurb}</p>
+    <span class="cta">Browse all <span aria-hidden="true">↗</span></span>
+  </div>
+</a>
+
+<style>
+  .collection-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 100%;
+    color: var(--color-ink);
+    transition: transform var(--duration-base) var(--ease), box-shadow var(--duration-base) var(--ease);
+  }
+  .collection-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+  .collection-thumb {
+    aspect-ratio: 4 / 3;
+    background: var(--color-paper-edge);
+  }
+  .collection-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .collection-body {
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+  .collection-body h3 {
+    font-size: var(--font-size-xl);
+    margin: 0;
+  }
+  .blurb {
+    color: var(--color-ink-soft);
+    font-size: var(--font-size-sm);
+    flex: 1;
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin-top: var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-accent-deep);
+  }
+</style>

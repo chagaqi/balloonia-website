@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#b06a55"/>
+  <g><circle cx="202.6" cy="22.7" r="42.3" fill="#efc6b9" opacity="0.88"/><circle cx="207.8" cy="562.6" r="30.2" fill="#fbf9f5" opacity="0.83"/><circle cx="243.4" cy="268.2" r="36.3" fill="#efc6b9" opacity="0.99"/><circle cx="115.0" cy="67.3" r="34.2" fill="#fbf9f5" opacity="0.90"/><circle cx="796.1" cy="412.3" r="37.9" fill="#efc6b9" opacity="0.85"/><circle cx="19.7" cy="633.3" r="34.7" fill="#fbf9f5" opacity="0.79"/><circle cx="172.3" cy="611.1" r="36.1" fill="#efc6b9" opacity="0.90"/><circle cx="470.4" cy="353.4" r="41.5" fill="#fbf9f5" opacity="0.80"/><circle cx="512.2" cy="59.6" r="38.8" fill="#efc6b9" opacity="0.88"/><circle cx="670.9" cy="630.1" r="38.0" fill="#fbf9f5" opacity="0.80"/><circle cx="67.4" cy="189.0" r="36.6" fill="#efc6b9" opacity="0.93"/><circle cx="558.5" cy="212.3" r="42.6" fill="#fbf9f5" opacity="0.71"/><circle cx="350.7" cy="379.9" r="29.4" fill="#efc6b9" opacity="0.93"/><circle cx="780.3" cy="406.7" r="31.5" fill="#fbf9f5" opacity="0.92"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Elegant Grad Decor</text>
+</svg>

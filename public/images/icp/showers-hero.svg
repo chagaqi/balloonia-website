@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#efc6b9"/>
+  <g><circle cx="46.2" cy="74.3" r="43.0" fill="#fbf9f5" opacity="0.88"/><circle cx="99.3" cy="415.1" r="30.4" fill="#e7e1d6" opacity="0.91"/><circle cx="1260.5" cy="333.1" r="39.8" fill="#fbf9f5" opacity="0.87"/><circle cx="398.7" cy="668.6" r="36.0" fill="#e7e1d6" opacity="0.83"/><circle cx="511.1" cy="532.4" r="29.3" fill="#fbf9f5" opacity="0.87"/><circle cx="538.4" cy="390.6" r="39.1" fill="#e7e1d6" opacity="0.89"/><circle cx="1388.9" cy="78.2" r="37.5" fill="#fbf9f5" opacity="0.80"/><circle cx="1502.3" cy="520.9" r="43.4" fill="#e7e1d6" opacity="0.92"/><circle cx="1022.9" cy="187.9" r="45.1" fill="#fbf9f5" opacity="0.72"/><circle cx="909.1" cy="28.6" r="34.7" fill="#e7e1d6" opacity="0.75"/><circle cx="1516.3" cy="223.0" r="35.4" fill="#fbf9f5" opacity="0.99"/><circle cx="1235.1" cy="115.8" r="45.9" fill="#e7e1d6" opacity="0.77"/><circle cx="1559.8" cy="345.2" r="40.7" fill="#fbf9f5" opacity="0.98"/><circle cx="11.2" cy="552.2" r="38.5" fill="#e7e1d6" opacity="0.84"/></g>
+  <text x="800" y="882" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Showers</text>
+</svg>

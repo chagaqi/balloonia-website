@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#d28b75"/>
+  <g><circle cx="395.1" cy="326.8" r="42.5" fill="#1a1a1a" opacity="0.98"/><circle cx="298.2" cy="346.2" r="46.0" fill="#fbf9f5" opacity="0.96"/><circle cx="128.4" cy="401.4" r="38.6" fill="#1a1a1a" opacity="0.77"/><circle cx="474.2" cy="276.6" r="36.6" fill="#fbf9f5" opacity="0.77"/><circle cx="329.0" cy="371.2" r="40.1" fill="#1a1a1a" opacity="0.84"/><circle cx="220.6" cy="288.3" r="38.6" fill="#fbf9f5" opacity="0.90"/><circle cx="135.4" cy="467.1" r="37.2" fill="#1a1a1a" opacity="0.87"/><circle cx="633.9" cy="176.5" r="29.5" fill="#fbf9f5" opacity="0.71"/><circle cx="29.7" cy="314.5" r="33.6" fill="#1a1a1a" opacity="0.79"/><circle cx="436.2" cy="468.5" r="28.7" fill="#fbf9f5" opacity="0.73"/><circle cx="331.6" cy="416.9" r="42.4" fill="#1a1a1a" opacity="0.95"/><circle cx="482.4" cy="323.3" r="34.6" fill="#fbf9f5" opacity="0.79"/><circle cx="358.9" cy="11.9" r="32.0" fill="#1a1a1a" opacity="0.80"/><circle cx="725.2" cy="398.3" r="29.9" fill="#fbf9f5" opacity="0.80"/></g>
+  <text x="400" y="582" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Photo Booth</text>
+</svg>

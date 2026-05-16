@@ -1,0 +1,120 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { faqPageSchema } from '../../lib/schema/faqPage';
+import { serviceSchema } from '../../lib/schema/service';
+import '../../styles/quote-form.css';
+
+const entry = await getEntry('icp', 'showers');
+if (!entry) throw new Error('Missing icp/showers');
+const { Content } = await render(entry);
+
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('showers'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
+const portfolio = (await getCollection('portfolio'))
+  .filter((p) => p.data.eventType === 'showers')
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 6);
+
+const schemas = [
+  faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
+  serviceSchema({
+    name: 'Baby and bridal shower balloon decor',
+    description: 'Custom shower packages including arches, walls, centerpieces, and accent arrangements.',
+    startingPrice: 300,
+    url: '/services/showers',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Baby and Bridal Shower Decor"
+  description={entry.data.metaDescription}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Showers', url: '/services/showers' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Showers"
+    headline={entry.data.title}
+    subhead={`Pricing typically lands $${entry.data.pricingMin} to $${entry.data.pricingMax}. Setup, breakdown, and palette match included.`}
+    primaryCta={{ href: '/quote?type=Shower', label: 'Start a shower quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See shower work' }}
+    image={entry.data.heroImage}
+    imageAlt={entry.data.heroAlt}
+    variant="page"
+  />
+
+  <section class="icp-body section">
+    <div class="container container-narrow prose">
+      <Content />
+    </div>
+  </section>
+
+  {portfolio.length > 0 && (
+    <section class="icp-portfolio section">
+      <div class="container">
+        <p class="eyebrow">Recent showers</p>
+        <h2>Shower work</h2>
+        <ul class="portfolio-grid-icp">
+          {portfolio.map((item) => (
+            <li>
+              <img src={item.data.image} alt={item.data.alt} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="icp-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Get a quote</p>
+        <h2>Tell us about the shower</h2>
+      </header>
+      <QuoteForm client:load initialEventType="Shower" />
+    </div>
+  </section>
+
+  <FAQAccordion heading="Shower FAQs" faqs={faqs} />
+</BaseLayout>
+
+<style>
+  .prose h2 {
+    margin-top: var(--space-7);
+  }
+  .portfolio-grid-icp {
+    list-style: none;
+    margin: var(--space-5) 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  .portfolio-grid-icp li { margin: 0; }
+  .portfolio-grid-icp img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-paper-edge);
+  }
+  .section-head { margin-bottom: var(--space-6); }
+  .icp-quote { background: var(--color-paper-soft); }
+  @media (min-width: 640px) {
+    .portfolio-grid-icp { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 960px) {
+    .portfolio-grid-icp { grid-template-columns: repeat(6, 1fr); }
+  }
+</style>

@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CollectionCard from '../components/CollectionCard.astro';
+import CTAButton from '../components/CTAButton.astro';
+import { shopCollections, eventCollections, shopAllUrl } from '../data/shopCollections';
+
+const installType = shopCollections.filter((c) => c.group === 'install-type');
+const specialty = shopCollections.filter((c) => c.group === 'specialty');
+---
+
+<BaseLayout
+  topic="Order Online"
+  description="Browse stock balloon decor SKUs by category. Arches, walls, centerpieces, ceiling installs, themed setups, and more. Order direct from the Balloonia shop."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Order Online', url: '/shop' },
+  ]}
+>
+  <section class="shop-hero section">
+    <div class="container container-narrow">
+      <p class="eyebrow">Order Online</p>
+      <h1>Stock balloon decor, ready to order.</h1>
+      <p class="lede">
+        Browse the catalog by category and order direct from the Balloonia shop. Stock items ship and set up locally. For full custom event installs, send a quote request and Brenda will design from scratch.
+      </p>
+      <div class="shop-hero-cta">
+        <CTAButton href={shopAllUrl()} variant="primary" size="lg" external>Browse the full shop</CTAButton>
+        <CTAButton href="/quote" variant="secondary" size="lg">Need custom? Get a quote</CTAButton>
+      </div>
+    </div>
+  </section>
+
+  <section class="shop-section section">
+    <div class="container">
+      <header class="shop-section-head">
+        <p class="eyebrow">By install type</p>
+        <h2>Pick the format that fits your event</h2>
+      </header>
+      <ul class="shop-grid">
+        {installType.map((c) => (
+          <li><CollectionCard collection={c} /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="shop-section section">
+    <div class="container">
+      <header class="shop-section-head">
+        <p class="eyebrow">By event</p>
+        <h2>Browse stock items by occasion</h2>
+        <p class="muted">For full custom event design, send a <a href="/quote">quote request</a> instead.</p>
+      </header>
+      <ul class="shop-grid shop-grid-compact">
+        {eventCollections.map((c) => (
+          <li><CollectionCard collection={c} showThumb={false} /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="shop-section section">
+    <div class="container">
+      <header class="shop-section-head">
+        <p class="eyebrow">Specialty and seasonal</p>
+        <h2>Themed, seasonal, and accent items</h2>
+      </header>
+      <ul class="shop-grid shop-grid-compact">
+        {specialty.map((c) => (
+          <li><CollectionCard collection={c} showThumb={false} /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta-strip section">
+    <div class="container container-narrow text-center">
+      <h2>Don't see what you need?</h2>
+      <p class="lede">Custom builds are our normal, not an upgrade. Brenda quotes within 24 hours.</p>
+      <div class="cta-buttons">
+        <CTAButton href="/quote" variant="primary" size="lg">Get a custom quote</CTAButton>
+        <CTAButton href="/services" variant="secondary" size="lg">Browse services</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .shop-hero h1 {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+  .shop-hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .shop-section-head {
+    margin-bottom: var(--space-6);
+  }
+  .shop-section-head h2 {
+    margin: 0 0 var(--space-2);
+  }
+  .shop-section-head .muted {
+    margin: 0;
+  }
+  .shop-section-head .muted a {
+    color: var(--color-accent-deep);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .shop-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  .shop-grid li {
+    margin: 0;
+  }
+  .shop-grid-compact {
+    grid-template-columns: 1fr;
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-center p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-6);
+  }
+  .cta-strip {
+    background: var(--color-paper-soft);
+  }
+  @media (min-width: 540px) {
+    .shop-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .shop-grid-compact {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 960px) {
+    .shop-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .shop-grid-compact {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

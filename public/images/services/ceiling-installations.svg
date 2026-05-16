@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#3a3a3a"/>
+  <g><circle cx="61.7" cy="411.2" r="37.9" fill="#efc6b9" opacity="0.76"/><circle cx="514.5" cy="158.9" r="35.2" fill="#fbf9f5" opacity="0.90"/><circle cx="303.4" cy="226.3" r="30.2" fill="#efc6b9" opacity="0.76"/><circle cx="424.4" cy="437.9" r="42.4" fill="#fbf9f5" opacity="0.70"/><circle cx="244.2" cy="2.6" r="44.8" fill="#efc6b9" opacity="0.92"/><circle cx="636.8" cy="192.2" r="39.7" fill="#fbf9f5" opacity="0.88"/><circle cx="796.2" cy="403.6" r="40.7" fill="#efc6b9" opacity="0.83"/><circle cx="92.4" cy="376.7" r="29.4" fill="#fbf9f5" opacity="0.92"/><circle cx="254.9" cy="152.5" r="31.6" fill="#efc6b9" opacity="0.73"/><circle cx="655.2" cy="383.1" r="42.0" fill="#fbf9f5" opacity="0.87"/><circle cx="174.2" cy="10.6" r="44.6" fill="#efc6b9" opacity="0.80"/><circle cx="723.8" cy="429.4" r="37.2" fill="#fbf9f5" opacity="0.78"/><circle cx="36.7" cy="75.0" r="34.6" fill="#efc6b9" opacity="0.78"/><circle cx="687.1" cy="407.5" r="31.6" fill="#fbf9f5" opacity="0.85"/></g>
+  <text x="400" y="582" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Ceiling Installs</text>
+</svg>

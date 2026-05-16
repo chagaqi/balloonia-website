@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#efc6b9"/>
+  <g><circle cx="772.6" cy="232.0" r="35.0" fill="#d28b75" opacity="0.84"/><circle cx="93.0" cy="211.8" r="29.4" fill="#fbf9f5" opacity="0.83"/><circle cx="358.3" cy="621.2" r="40.3" fill="#d28b75" opacity="0.92"/><circle cx="88.4" cy="469.3" r="34.9" fill="#fbf9f5" opacity="0.70"/><circle cx="10.8" cy="147.8" r="40.1" fill="#d28b75" opacity="0.74"/><circle cx="676.3" cy="320.9" r="40.9" fill="#fbf9f5" opacity="0.75"/><circle cx="720.4" cy="423.6" r="44.6" fill="#d28b75" opacity="0.88"/><circle cx="663.0" cy="653.9" r="45.8" fill="#fbf9f5" opacity="0.98"/><circle cx="618.5" cy="450.7" r="41.3" fill="#d28b75" opacity="0.98"/><circle cx="29.0" cy="561.8" r="32.0" fill="#fbf9f5" opacity="0.98"/><circle cx="426.6" cy="609.2" r="45.7" fill="#d28b75" opacity="0.98"/><circle cx="729.7" cy="366.8" r="29.8" fill="#fbf9f5" opacity="0.77"/><circle cx="638.2" cy="600.2" r="41.7" fill="#d28b75" opacity="0.97"/><circle cx="232.3" cy="617.8" r="31.3" fill="#fbf9f5" opacity="0.89"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Modern Organic Arch Display</text>
+</svg>

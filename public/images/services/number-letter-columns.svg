@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <g><circle cx="323.4" cy="93.7" r="44.2" fill="#d28b75" opacity="0.74"/><circle cx="284.2" cy="309.0" r="39.1" fill="#fbf9f5" opacity="0.84"/><circle cx="290.4" cy="193.2" r="39.8" fill="#d28b75" opacity="0.82"/><circle cx="0.9" cy="210.7" r="34.4" fill="#fbf9f5" opacity="0.82"/><circle cx="414.2" cy="130.7" r="33.5" fill="#d28b75" opacity="0.96"/><circle cx="259.5" cy="367.1" r="30.3" fill="#fbf9f5" opacity="0.75"/><circle cx="12.5" cy="14.5" r="40.0" fill="#d28b75" opacity="0.74"/><circle cx="129.6" cy="101.2" r="30.6" fill="#fbf9f5" opacity="0.83"/><circle cx="286.9" cy="267.3" r="32.3" fill="#d28b75" opacity="0.93"/><circle cx="685.7" cy="357.3" r="28.5" fill="#fbf9f5" opacity="0.94"/><circle cx="461.0" cy="57.3" r="41.1" fill="#d28b75" opacity="0.73"/><circle cx="779.9" cy="57.9" r="31.0" fill="#fbf9f5" opacity="0.93"/><circle cx="416.0" cy="442.7" r="31.4" fill="#d28b75" opacity="0.94"/><circle cx="127.2" cy="357.8" r="44.7" fill="#fbf9f5" opacity="0.77"/></g>
+  <text x="400" y="582" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Number Columns</text>
+</svg>

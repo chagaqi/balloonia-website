@@ -1,0 +1,142 @@
+export type NavItem = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
+export type MegaColumn = {
+  heading: string;
+  items: NavItem[];
+};
+
+export type MegaFeature = {
+  eyebrow: string;
+  title: string;
+  body: string;
+  href: string;
+  image?: string;
+  imageAlt?: string;
+};
+
+export type PrimaryNavItem =
+  | (NavItem & { mega?: undefined })
+  | (NavItem & {
+      mega: {
+        columns: MegaColumn[];
+        feature?: MegaFeature;
+        compact?: boolean;
+      };
+    });
+
+export const primaryNav: PrimaryNavItem[] = [
+  {
+    label: 'Services',
+    href: '/services',
+    mega: {
+      columns: [
+        {
+          heading: 'By event',
+          items: [
+            { label: 'Weddings', href: '/services/weddings' },
+            { label: 'Corporate', href: '/services/corporate' },
+            { label: 'Baby and bridal showers', href: '/services/showers' },
+            { label: 'Birthdays', href: '/services/birthdays' },
+            { label: 'Graduations', href: '/services/graduations' },
+          ],
+        },
+        {
+          heading: 'By install type',
+          items: [
+            { label: 'Arches and garlands', href: '/services#balloon-arches' },
+            { label: 'Walls and backdrops', href: '/services#balloon-walls' },
+            { label: 'Centerpieces', href: '/services#centerpieces' },
+            { label: 'Number and letter columns', href: '/services#number-letter-columns' },
+            { label: 'Ceiling installs', href: '/services#ceiling-installations' },
+            { label: 'Photo booth setups', href: '/services#photo-booth' },
+          ],
+        },
+        {
+          heading: 'For B2B',
+          items: [
+            { label: 'Corporate packages', href: '/services#corporate-packages' },
+            { label: 'Custom themed installs', href: '/services#custom-themed' },
+            { label: 'Corporate offerings (PDF)', href: '/corporate-offerings.pdf', external: true },
+            { label: 'Book a discovery call', href: '/contact' },
+          ],
+        },
+      ],
+      feature: {
+        eyebrow: 'Featured',
+        title: 'Tell us about your event',
+        body: 'Six quick steps. Brenda quotes within 24 hours.',
+        href: '/quote',
+        image: '/images/icp/weddings-hero.svg',
+        imageAlt: 'Custom balloon arch in cream and pampas tones',
+      },
+    },
+  },
+  {
+    label: 'Order Online',
+    href: '/shop',
+    mega: {
+      columns: [
+        {
+          heading: 'By install type',
+          items: [
+            { label: 'Arches and garlands', href: 'https://shop.balloonia.events/collections/arches-garlands', external: true },
+            { label: 'Walls and backdrops', href: 'https://shop.balloonia.events/collections/walls-backdrops', external: true },
+            { label: 'Centerpieces and columns', href: 'https://shop.balloonia.events/collections/centerpieces-columns', external: true },
+            { label: 'Ceiling installations', href: 'https://shop.balloonia.events/collections/ceiling-installations', external: true },
+            { label: 'Bouquets', href: 'https://shop.balloonia.events/collections/bouquets', external: true },
+          ],
+        },
+        {
+          heading: 'Themed and seasonal',
+          items: [
+            { label: 'Themed setups', href: 'https://shop.balloonia.events/collections/themed-setups', external: true },
+            { label: 'Holiday and seasonal', href: 'https://shop.balloonia.events/collections/holiday-seasonal', external: true },
+            { label: 'Specialty', href: 'https://shop.balloonia.events/collections/specialty', external: true },
+            { label: 'Add-ons and rentals', href: 'https://shop.balloonia.events/collections/add-ons-rentals', external: true },
+          ],
+        },
+      ],
+      feature: {
+        eyebrow: 'Order Online',
+        title: 'Browse the full catalog',
+        body: 'Stock items, ready to order. Custom builds via quote.',
+        href: '/shop',
+        image: '/images/services/balloon-arches.svg',
+        imageAlt: 'Balloon arch in pastel palette',
+      },
+    },
+  },
+  {
+    label: 'About',
+    href: '/about',
+    mega: {
+      compact: true,
+      columns: [
+        {
+          heading: '',
+          items: [
+            { label: 'About us', href: '/about' },
+            { label: 'Portfolio', href: '/portfolio' },
+          ],
+        },
+      ],
+    },
+  },
+  { label: 'Contact', href: '/contact' },
+];
+
+export const footerNav: NavItem[] = [
+  { label: 'Weddings', href: '/services/weddings' },
+  { label: 'Corporate', href: '/services/corporate' },
+  { label: 'Showers', href: '/services/showers' },
+  { label: 'Birthdays', href: '/services/birthdays' },
+  { label: 'Graduations', href: '/services/graduations' },
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Get a quote', href: '/quote' },
+];

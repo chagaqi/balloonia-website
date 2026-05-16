@@ -1,0 +1,302 @@
+[
+  {
+    "id": "balloon-garlands-for-events",
+    "handle": "balloon-garlands-for-events",
+    "title": "Balloon Garland for Events",
+    "description": "Custom organic garlands built to your colors and venue dimensions. The catch-all garland SKU for weddings, showers, birthdays, and corporate events.",
+    "category": "arches",
+    "startingPrice": 160,
+    "image": { "src": "/images/products/balloon-garlands-for-events.svg", "alt": "Custom organic balloon garland for events" },
+    "tags": ["featured-home", "weddings", "showers", "birthdays"]
+  },
+  {
+    "id": "full-balloon-arch",
+    "handle": "full-balloon-arch",
+    "title": "Full Balloon Arch",
+    "description": "Wedding and ceremony arch in your color palette. Built on-site, photographs well at any angle.",
+    "category": "arches",
+    "startingPrice": 499,
+    "image": { "src": "/images/products/full-balloon-arch.svg", "alt": "Full balloon ceremony arch" },
+    "tags": ["featured-home", "weddings"]
+  },
+  {
+    "id": "organic-balloon-arch",
+    "handle": "organic-balloon-arch",
+    "title": "Organic Balloon Arch",
+    "description": "Modern organic-style arch with mixed sizes and pastel or jewel-tone palettes.",
+    "category": "arches",
+    "startingPrice": 499,
+    "image": { "src": "/images/products/organic-balloon-arch.svg", "alt": "Modern organic balloon arch" },
+    "tags": ["weddings", "showers"]
+  },
+  {
+    "id": "modern-organic-balloon-arch-display",
+    "handle": "modern-organic-balloon-arch-display",
+    "title": "Modern Organic Arch Display",
+    "description": "Premium organic arch with structural elements. For larger venues and statement installs.",
+    "category": "arches",
+    "startingPrice": 599,
+    "image": { "src": "/images/products/modern-organic-balloon-arch-display.svg", "alt": "Premium organic balloon arch display" },
+    "tags": ["weddings"]
+  },
+  {
+    "id": "metal-round-arch-with-balloons",
+    "handle": "metal-round-arch-with-balloons",
+    "title": "Metal Round Arch with Balloons",
+    "description": "Geometric round arch with balloon accents. Modern wedding ceremony look.",
+    "category": "arches",
+    "startingPrice": 599,
+    "image": { "src": "/images/products/metal-round-arch-with-balloons.svg", "alt": "Geometric round metal arch with balloon accents" },
+    "tags": ["weddings"]
+  },
+  {
+    "id": "luxury-balloon-garland",
+    "handle": "luxury-balloon-garland",
+    "title": "Luxury Balloon Garland",
+    "description": "Premium garland with hand-mixed shades and metallic accents.",
+    "category": "arches",
+    "startingPrice": 400,
+    "image": { "src": "/images/products/luxury-balloon-garland.svg", "alt": "Luxury balloon garland" },
+    "tags": ["weddings", "corporate"]
+  },
+  {
+    "id": "balloon-heart-wall",
+    "handle": "balloon-heart-wall",
+    "title": "Balloon Heart Wall",
+    "description": "Photo-op heart wall in your color palette. Popular for engagements, weddings, and milestone birthdays.",
+    "category": "walls",
+    "startingPrice": 200,
+    "image": { "src": "/images/products/balloon-heart-wall.svg", "alt": "Balloon heart wall photo backdrop" },
+    "tags": ["featured-home", "weddings"]
+  },
+  {
+    "id": "magical-unicorn-balloon-backdrop",
+    "handle": "magical-unicorn-balloon-backdrop",
+    "title": "Unicorn Backdrop",
+    "description": "Themed backdrop for kid birthdays. Pastel palette, photo-ready.",
+    "category": "walls",
+    "startingPrice": 300,
+    "image": { "src": "/images/products/magical-unicorn-balloon-backdrop.svg", "alt": "Unicorn-themed balloon backdrop" },
+    "tags": ["birthdays"]
+  },
+  {
+    "id": "telephone-photo-booth-backdrop",
+    "handle": "telephone-photo-booth-backdrop",
+    "title": "Photo Booth Backdrop",
+    "description": "Dedicated photo booth balloon backdrop, sized to your booth area.",
+    "category": "photo-booth",
+    "startingPrice": 200,
+    "image": { "src": "/images/products/telephone-photo-booth-backdrop.svg", "alt": "Photo booth balloon backdrop" },
+    "tags": ["weddings", "birthdays"]
+  },
+  {
+    "id": "balloon-stand-with-helium-filled-balloons",
+    "handle": "balloon-stand-with-helium-filled-balloons",
+    "title": "Balloon Stand (Helium-Filled)",
+    "description": "Entry-tier helium balloon stand. Single-table accent for showers, dinners, and small events.",
+    "category": "centerpieces",
+    "startingPrice": 60,
+    "image": { "src": "/images/products/balloon-stand-with-helium-filled-balloons.svg", "alt": "Helium balloon stand centerpiece" },
+    "tags": ["showers", "birthdays"]
+  },
+  {
+    "id": "elegant-number-balloon-arrangement",
+    "handle": "elegant-number-balloon-arrangement",
+    "title": "Elegant Number Arrangement",
+    "description": "Premium number column for milestone birthdays and anniversaries.",
+    "category": "columns",
+    "startingPrice": 150,
+    "image": { "src": "/images/products/elegant-number-balloon-arrangement.svg", "alt": "Elegant number balloon arrangement" },
+    "tags": ["birthdays"]
+  },
+  {
+    "id": "10-balloon-bouquet",
+    "handle": "10-balloon-bouquet",
+    "title": "10-Balloon Bouquet",
+    "description": "Standard 10-balloon bouquet in your color palette. Quick, photo-ready, deliverable.",
+    "category": "centerpieces",
+    "startingPrice": 40,
+    "image": { "src": "/images/products/10-balloon-bouquet.svg", "alt": "10-balloon bouquet" },
+    "tags": ["birthdays"]
+  },
+  {
+    "id": "engagement-balloon-bouquet",
+    "handle": "engagement-balloon-bouquet",
+    "title": "Engagement Bouquet",
+    "description": "Engagement-celebration balloon bouquet. Romantic palette, deliverable to home or venue.",
+    "category": "centerpieces",
+    "startingPrice": 65,
+    "image": { "src": "/images/products/engagement-balloon-bouquet.svg", "alt": "Engagement balloon bouquet" },
+    "tags": ["weddings"]
+  },
+  {
+    "id": "graduation-balloon-bouquet",
+    "handle": "graduation-balloon-bouquet",
+    "title": "Graduation Bouquet",
+    "description": "Class-of balloon bouquet in school colors.",
+    "category": "centerpieces",
+    "startingPrice": 50,
+    "image": { "src": "/images/products/graduation-balloon-bouquet.svg", "alt": "Graduation balloon bouquet" },
+    "tags": ["graduations"]
+  },
+  {
+    "id": "suspended-floating-balloon-installation",
+    "handle": "suspended-floating-balloon-installation",
+    "title": "Suspended Floating Installation",
+    "description": "Premium overhead balloon install. Transforms a room ceiling for weddings, corporate events, and large celebrations.",
+    "category": "ceiling",
+    "startingPrice": 599,
+    "image": { "src": "/images/products/suspended-floating-balloon-installation.svg", "alt": "Suspended floating ceiling balloon installation" },
+    "tags": ["featured-home", "weddings", "corporate"]
+  },
+  {
+    "id": "balloon-drop-celebration-experience",
+    "handle": "balloon-drop-celebration-experience",
+    "title": "Balloon Drop",
+    "description": "Event-finale balloon drop. Coordinated overhead release at the right moment.",
+    "category": "ceiling",
+    "startingPrice": 400,
+    "image": { "src": "/images/products/balloon-drop-celebration-experience.svg", "alt": "Balloon drop celebration release" },
+    "tags": ["corporate"]
+  },
+  {
+    "id": "graduation-balloon-setup",
+    "handle": "graduation-balloon-setup",
+    "title": "Graduation Setup",
+    "description": "Standard graduation party setup. Arch, numbers, and bouquet in school colors.",
+    "category": "custom",
+    "startingPrice": 160,
+    "image": { "src": "/images/products/graduation-balloon-setup.svg", "alt": "Graduation balloon setup" },
+    "tags": ["graduations"]
+  },
+  {
+    "id": "graduation-balloon-garland",
+    "handle": "graduation-balloon-garland",
+    "title": "Graduation Garland",
+    "description": "Grad-specific garland in school colors with metallic accents.",
+    "category": "arches",
+    "startingPrice": 200,
+    "image": { "src": "/images/products/graduation-balloon-garland.svg", "alt": "Graduation balloon garland" },
+    "tags": ["graduations"]
+  },
+  {
+    "id": "elegant-graduation-balloon-decor",
+    "handle": "elegant-graduation-balloon-decor",
+    "title": "Elegant Grad Decor",
+    "description": "Premium grad-party decor including arch, ceiling accents, and table arrangements.",
+    "category": "custom",
+    "startingPrice": 400,
+    "image": { "src": "/images/products/elegant-graduation-balloon-decor.svg", "alt": "Elegant graduation balloon decor" },
+    "tags": ["graduations"]
+  },
+  {
+    "id": "corporate-balloon-columns",
+    "handle": "corporate-balloon-columns",
+    "title": "Corporate Balloon Columns",
+    "description": "Branded freestanding balloon columns for office events, brand activations, and grand openings.",
+    "category": "corporate",
+    "startingPrice": 200,
+    "image": { "src": "/images/products/corporate-balloon-columns.svg", "alt": "Corporate balloon columns" },
+    "tags": ["featured-home", "corporate"]
+  },
+  {
+    "id": "grand-opening-package",
+    "handle": "grand-opening-package",
+    "title": "Grand Opening Package",
+    "description": "Storefront launch installation. Branded backdrop, columns, and ribbon-cut accent.",
+    "category": "corporate",
+    "startingPrice": 400,
+    "image": { "src": "/images/products/grand-opening-package.svg", "alt": "Grand opening balloon package" },
+    "tags": ["corporate"]
+  },
+  {
+    "id": "luxury-gala-balloon-set-up",
+    "handle": "luxury-gala-balloon-set-up",
+    "title": "Luxury Gala Setup",
+    "description": "Full-venue corporate gala installation. Backdrop, ceiling treatment, table accents, photo wall.",
+    "category": "corporate",
+    "startingPrice": 1000,
+    "image": { "src": "/images/products/luxury-gala-balloon-set-up.svg", "alt": "Luxury gala balloon installation" },
+    "tags": ["featured-home", "corporate"]
+  },
+  {
+    "id": "branded-orbz-balloon-with-tassel-tail",
+    "handle": "branded-orbz-balloon-with-tassel-tail",
+    "title": "Branded Orbz with Tassel Tail",
+    "description": "Custom-branded orbz balloon with tassel tail. Add-on accent for office and brand events.",
+    "category": "corporate",
+    "startingPrice": 80,
+    "image": { "src": "/images/products/branded-orbz-balloon-with-tassel-tail.svg", "alt": "Branded orbz balloon with tassel tail" },
+    "tags": ["corporate"]
+  },
+  {
+    "id": "new-baby-born-balloon-decor",
+    "handle": "new-baby-born-balloon-decor",
+    "title": "New Baby Decor",
+    "description": "Welcome-home balloon setup for the new baby. Pastel palette and photo-ready.",
+    "category": "showers",
+    "startingPrice": 200,
+    "image": { "src": "/images/products/new-baby-born-balloon-decor.svg", "alt": "New baby balloon decor" },
+    "tags": ["showers"]
+  },
+  {
+    "id": "baby-in-bloom-balloon-setup",
+    "handle": "baby-in-bloom-balloon-setup",
+    "title": "Baby in Bloom Setup",
+    "description": "Floral baby-shower setup. Garland, backdrop, and accent centerpieces.",
+    "category": "showers",
+    "startingPrice": 250,
+    "image": { "src": "/images/products/baby-in-bloom-balloon-setup.svg", "alt": "Baby in bloom balloon setup" },
+    "tags": ["showers"]
+  },
+  {
+    "id": "bride-decor",
+    "handle": "bride-decor",
+    "title": "Bride Decor",
+    "description": "Bridal-shower or bachelorette balloon accent set.",
+    "category": "weddings",
+    "startingPrice": 200,
+    "image": { "src": "/images/products/bride-decor.svg", "alt": "Bride balloon decor" },
+    "tags": ["weddings", "showers"]
+  },
+  {
+    "id": "bride-wow-decor",
+    "handle": "bride-wow-decor",
+    "title": "Premium Bride Decor",
+    "description": "Premium bridal-shower decor including arch, backdrop, and centerpieces.",
+    "category": "weddings",
+    "startingPrice": 400,
+    "image": { "src": "/images/products/bride-wow-decor.svg", "alt": "Premium bride decor" },
+    "tags": ["weddings", "showers"]
+  },
+  {
+    "id": "boho-balloon-garland",
+    "handle": "boho-balloon-garland",
+    "title": "Boho Balloon Garland",
+    "description": "Boho-style organic garland with neutral palette and pampas accent option.",
+    "category": "arches",
+    "startingPrice": 200,
+    "image": { "src": "/images/products/boho-balloon-garland.svg", "alt": "Boho balloon garland" },
+    "tags": ["weddings", "showers"]
+  },
+  {
+    "id": "spring-floral-balloon-garland",
+    "handle": "spring-floral-balloon-garland",
+    "title": "Spring Floral Garland",
+    "description": "Floral-accent garland for spring weddings and showers.",
+    "category": "arches",
+    "startingPrice": 300,
+    "image": { "src": "/images/products/spring-floral-balloon-garland.svg", "alt": "Spring floral balloon garland" },
+    "tags": ["weddings", "showers"]
+  },
+  {
+    "id": "carnival-balloon-arch-bubble-house",
+    "handle": "carnival-balloon-arch-bubble-house",
+    "title": "Carnival Balloon Arch",
+    "description": "Themed carnival-style arch for kid birthdays and school events.",
+    "category": "arches",
+    "startingPrice": 499,
+    "image": { "src": "/images/products/carnival-balloon-arch-bubble-house.svg", "alt": "Carnival themed balloon arch" },
+    "tags": ["birthdays"]
+  }
+]

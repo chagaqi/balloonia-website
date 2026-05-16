@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTAButton from '../components/CTAButton.astro';
+---
+
+<BaseLayout
+  topic="Page Not Found"
+  description="The page you were looking for moved or never existed. Browse our services or get a quote."
+  noindex
+>
+  <section class="not-found section">
+    <div class="container container-narrow text-center">
+      <p class="eyebrow">404</p>
+      <h1>That page floated away.</h1>
+      <p class="lede">The page you wanted moved or never existed. Try one of these instead.</p>
+      <div class="cta-buttons">
+        <CTAButton href="/" variant="primary" size="lg">Back to home</CTAButton>
+        <CTAButton href="/services" variant="secondary" size="lg">Browse services</CTAButton>
+        <CTAButton href="/quote" variant="ghost">Get a quote</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: var(--space-10) 0;
+  }
+  .text-center { text-align: center; }
+  .text-center p { margin-left: auto; margin-right: auto; }
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-7);
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import { buildTitle, canonicalFor } from '../lib/seo';
+
+type Props = {
+  topic: string;
+  description: string;
+  ogImage?: string;
+  noindex?: boolean;
+};
+
+const { topic, description, ogImage = '/og-default.svg', noindex = false } = Astro.props;
+const title = buildTitle(topic);
+const canonical = canonicalFor(Astro.url.pathname);
+const og = new URL(ogImage, Astro.site ?? 'https://balloonia.events').toString();
+const ga4Id = import.meta.env.PUBLIC_GA4_ID;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex" />}
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={og} />
+<meta property="og:locale" content="en_CA" />
+<meta property="og:site_name" content="Balloonia Events" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={og} />
+<meta name="theme-color" content="#fbf9f5" />
+
+{ga4Id && (
+  <>
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+    <script is:inline define:vars={{ ga4Id }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', ga4Id, { anonymize_ip: true });
+    </script>
+  </>
+)}

@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PortfolioGrid from '../components/PortfolioGrid.astro';
+import CTAButton from '../components/CTAButton.astro';
+
+const items = (await getCollection('portfolio')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+  topic="Portfolio"
+  description="Recent balloon installations by Balloonia Events in London Ontario. Weddings, showers, corporate events, birthdays, and graduations."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Portfolio', url: '/portfolio' },
+  ]}
+>
+  <section class="portfolio-hero section">
+    <div class="container container-narrow">
+      <p class="eyebrow">Portfolio</p>
+      <h1>Every install is custom. Here's a sample.</h1>
+      <p class="lede">
+        Recent work from Balloonia Events. Filter by event type below. New photos land here as Brenda books and shoots installs across London Ontario.
+      </p>
+    </div>
+  </section>
+
+  <section class="portfolio-section section">
+    <div class="container">
+      <PortfolioGrid items={items} filterable />
+    </div>
+  </section>
+
+  <a class="quote-floater" href="/quote">Get a quote</a>
+
+  <section class="cta-strip section">
+    <div class="container container-narrow text-center">
+      <h2>Ready to book?</h2>
+      <p class="lede">Send your event details and Brenda will quote within 24 hours.</p>
+      <div class="cta-buttons">
+        <CTAButton href="/quote" variant="primary" size="lg">Get a quote</CTAButton>
+        <CTAButton href="/services" variant="secondary" size="lg">View services</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .quote-floater {
+    position: fixed;
+    bottom: var(--space-5);
+    right: var(--space-5);
+    z-index: 40;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transition: transform var(--duration-fast) var(--ease);
+  }
+  .quote-floater:hover {
+    background: var(--color-accent-deep);
+    transform: translateY(-2px);
+  }
+  .text-center { text-align: center; }
+  .text-center p { margin-left: auto; margin-right: auto; }
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-6);
+  }
+  .cta-strip { background: var(--color-paper-soft); }
+</style>

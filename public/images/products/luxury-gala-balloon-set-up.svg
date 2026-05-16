@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#1a1a1a"/>
+  <g><circle cx="251.9" cy="60.9" r="28.0" fill="#d28b75" opacity="0.71"/><circle cx="737.4" cy="233.6" r="43.7" fill="#3a3a3a" opacity="0.79"/><circle cx="778.5" cy="222.8" r="37.1" fill="#d28b75" opacity="0.84"/><circle cx="614.8" cy="83.7" r="31.4" fill="#3a3a3a" opacity="0.88"/><circle cx="550.0" cy="142.0" r="43.4" fill="#d28b75" opacity="0.84"/><circle cx="791.5" cy="425.4" r="39.9" fill="#3a3a3a" opacity="0.71"/><circle cx="731.8" cy="500.2" r="42.6" fill="#d28b75" opacity="0.81"/><circle cx="475.0" cy="504.9" r="41.2" fill="#3a3a3a" opacity="0.75"/><circle cx="23.1" cy="610.3" r="41.1" fill="#d28b75" opacity="0.78"/><circle cx="734.8" cy="479.9" r="40.5" fill="#3a3a3a" opacity="0.97"/><circle cx="156.2" cy="56.4" r="38.1" fill="#d28b75" opacity="0.85"/><circle cx="782.3" cy="446.4" r="44.0" fill="#3a3a3a" opacity="0.86"/><circle cx="245.7" cy="181.9" r="40.1" fill="#d28b75" opacity="0.76"/><circle cx="187.8" cy="550.3" r="45.0" fill="#3a3a3a" opacity="0.74"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Luxury Gala Setup</text>
+</svg>

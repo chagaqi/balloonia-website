@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#efc6b9"/>
+  <g><circle cx="1411.5" cy="552.3" r="33.4" fill="#d28b75" opacity="0.72"/><circle cx="294.2" cy="205.9" r="30.1" fill="#1a1a1a" opacity="0.99"/><circle cx="1104.2" cy="640.5" r="44.5" fill="#d28b75" opacity="0.73"/><circle cx="915.3" cy="33.3" r="43.3" fill="#1a1a1a" opacity="0.90"/><circle cx="961.5" cy="679.9" r="40.6" fill="#d28b75" opacity="0.83"/><circle cx="1199.8" cy="248.2" r="32.2" fill="#1a1a1a" opacity="0.74"/><circle cx="1431.8" cy="288.7" r="39.0" fill="#d28b75" opacity="0.93"/><circle cx="17.2" cy="605.5" r="35.3" fill="#1a1a1a" opacity="0.92"/><circle cx="1019.6" cy="696.9" r="44.2" fill="#d28b75" opacity="0.94"/><circle cx="357.0" cy="191.9" r="33.9" fill="#1a1a1a" opacity="0.75"/><circle cx="1175.5" cy="500.4" r="45.0" fill="#d28b75" opacity="0.96"/><circle cx="441.0" cy="142.8" r="43.7" fill="#1a1a1a" opacity="0.74"/><circle cx="1517.1" cy="529.2" r="36.3" fill="#d28b75" opacity="0.73"/><circle cx="379.2" cy="176.0" r="37.3" fill="#1a1a1a" opacity="0.92"/></g>
+  <text x="800" y="882" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Birthdays</text>
+</svg>

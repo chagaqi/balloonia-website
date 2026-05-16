@@ -1,0 +1,150 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { faqPageSchema } from '../../lib/schema/faqPage';
+import { serviceSchema } from '../../lib/schema/service';
+import '../../styles/quote-form.css';
+
+const entry = await getEntry('icp', 'corporate');
+if (!entry) throw new Error('Missing icp/corporate');
+const { Content } = await render(entry);
+
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('corporate'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
+const portfolio = (await getCollection('portfolio'))
+  .filter((p) => p.data.eventType === 'corporate')
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 6);
+
+const schemas = [
+  faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
+  serviceSchema({
+    name: 'Corporate balloon installations',
+    description: 'Branded balloon installations for grand openings, brand activations, holiday parties, and office events.',
+    startingPrice: 300,
+    url: '/services/corporate',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Corporate Balloon Installations"
+  description={entry.data.metaDescription}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Corporate', url: '/services/corporate' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Corporate"
+    headline={entry.data.title}
+    subhead={`Most office events run $${entry.data.pricingMin} to $${entry.data.pricingMax}. Brand-color matching and contract rates available.`}
+    primaryCta={{ href: '/quote?type=Corporate', label: 'Start a corporate quote' }}
+    secondaryCta={{ href: '/corporate-offerings.pdf', label: 'Download offerings PDF', external: true }}
+    image={entry.data.heroImage}
+    imageAlt={entry.data.heroAlt}
+    variant="page"
+  />
+
+  <section class="icp-body section">
+    <div class="container container-narrow prose">
+      <Content />
+    </div>
+  </section>
+
+  {portfolio.length > 0 && (
+    <section class="icp-portfolio section">
+      <div class="container">
+        <p class="eyebrow">Recent corporate</p>
+        <h2>Corporate work</h2>
+        <ul class="portfolio-grid-icp">
+          {portfolio.map((item) => (
+            <li>
+              <img src={item.data.image} alt={item.data.alt} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+        <a class="section-link" href="/portfolio">See full portfolio →</a>
+      </div>
+    </section>
+  )}
+
+  <section class="icp-trusted-by section">
+    <div class="container container-narrow">
+      <p class="eyebrow">Trusted by</p>
+      <h2>London Ontario businesses</h2>
+      <p class="muted">Logos and testimonials populate as we land accounts. We won't fabricate.</p>
+    </div>
+  </section>
+
+  <section class="icp-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Get a quote</p>
+        <h2>Tell us about your event</h2>
+        <p class="lede">Send the date, brand colors, headcount, and venue. Brenda will reply within 24 hours.</p>
+      </header>
+      <QuoteForm client:load initialEventType="Corporate" />
+    </div>
+  </section>
+
+  <FAQAccordion heading="Corporate FAQs" faqs={faqs} />
+</BaseLayout>
+
+<style>
+  .prose h2 {
+    margin-top: var(--space-7);
+  }
+  .prose ul {
+    color: var(--color-ink-soft);
+  }
+  .portfolio-grid-icp {
+    list-style: none;
+    margin: var(--space-5) 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  .portfolio-grid-icp li {
+    margin: 0;
+  }
+  .portfolio-grid-icp img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-paper-edge);
+  }
+  .section-link {
+    color: var(--color-accent-deep);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .section-head {
+    margin-bottom: var(--space-6);
+  }
+  .icp-quote {
+    background: var(--color-paper-soft);
+  }
+  @media (min-width: 640px) {
+    .portfolio-grid-icp {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 960px) {
+    .portfolio-grid-icp {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+</style>

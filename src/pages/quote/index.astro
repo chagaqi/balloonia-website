@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import '../../styles/quote-form.css';
+---
+
+<BaseLayout
+  topic="Get a Quote"
+  description="Tell us about your event and Brenda will send a custom quote within 24 hours. Six steps, mobile-friendly. No commitment."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Get a quote', url: '/quote' },
+  ]}
+>
+  <section class="quote-hero section">
+    <div class="container container-narrow">
+      <p class="eyebrow">Get a quote</p>
+      <h1>Tell us about your event.</h1>
+      <p class="lede">
+        Six quick steps. Brenda quotes within 24 hours, no pressure to book.
+      </p>
+    </div>
+  </section>
+
+  <section class="quote-section">
+    <div class="container container-narrow">
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .quote-section {
+    padding-bottom: var(--space-9);
+  }
+</style>

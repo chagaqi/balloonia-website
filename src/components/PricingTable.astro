@@ -1,0 +1,58 @@
+---
+import { pricingRows } from '../data/pricing';
+---
+
+<section class="pricing-table section">
+  <div class="container-narrow">
+    <h2>Starting prices</h2>
+    <p class="lede">Every install is custom. Final pricing depends on size, palette, and venue. Request a quote for an exact number.</p>
+    <table class="pricing">
+      <thead>
+        <tr>
+          <th scope="col">Service</th>
+          <th scope="col">Starting at</th>
+        </tr>
+      </thead>
+      <tbody>
+        {pricingRows.map((row) => (
+          <tr>
+            <td>{row.service}</td>
+            <td class="price">${row.startingPrice}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .pricing {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--space-6);
+    font-size: var(--font-size-base);
+  }
+  .pricing th,
+  .pricing td {
+    padding: var(--space-4) var(--space-3);
+    text-align: left;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .pricing th {
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-ink-muted);
+  }
+  .pricing td.price {
+    font-weight: 600;
+    color: var(--color-accent-deep);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .pricing tbody tr:hover {
+    background: var(--color-paper-soft);
+  }
+</style>

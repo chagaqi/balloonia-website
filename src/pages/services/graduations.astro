@@ -1,0 +1,120 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { faqPageSchema } from '../../lib/schema/faqPage';
+import { serviceSchema } from '../../lib/schema/service';
+import '../../styles/quote-form.css';
+
+const entry = await getEntry('icp', 'graduations');
+if (!entry) throw new Error('Missing icp/graduations');
+const { Content } = await render(entry);
+
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('graduations'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
+const portfolio = (await getCollection('portfolio'))
+  .filter((p) => p.data.eventType === 'graduations')
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 6);
+
+const schemas = [
+  faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
+  serviceSchema({
+    name: 'Graduation balloon decor',
+    description: 'Class-of number columns, garlands, photo backdrops, and full setups in school colors.',
+    startingPrice: 160,
+    url: '/services/graduations',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Graduation Balloon Decor"
+  description={entry.data.metaDescription}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Graduations', url: '/services/graduations' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Graduations"
+    headline={entry.data.title}
+    subhead={`Backyard arches start at $${entry.data.pricingMin}. Full school events run up to $${entry.data.pricingMax}.`}
+    primaryCta={{ href: '/quote?type=Graduation', label: 'Start a grad quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See grad work' }}
+    image={entry.data.heroImage}
+    imageAlt={entry.data.heroAlt}
+    variant="page"
+  />
+
+  <section class="icp-body section">
+    <div class="container container-narrow prose">
+      <Content />
+    </div>
+  </section>
+
+  {portfolio.length > 0 && (
+    <section class="icp-portfolio section">
+      <div class="container">
+        <p class="eyebrow">Recent grads</p>
+        <h2>Graduation work</h2>
+        <ul class="portfolio-grid-icp">
+          {portfolio.map((item) => (
+            <li>
+              <img src={item.data.image} alt={item.data.alt} loading="lazy" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="icp-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Get a quote</p>
+        <h2>Tell us about the grad</h2>
+      </header>
+      <QuoteForm client:load initialEventType="Graduation" />
+    </div>
+  </section>
+
+  <FAQAccordion heading="Graduation FAQs" faqs={faqs} />
+</BaseLayout>
+
+<style>
+  .prose h2 {
+    margin-top: var(--space-7);
+  }
+  .portfolio-grid-icp {
+    list-style: none;
+    margin: var(--space-5) 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  .portfolio-grid-icp li { margin: 0; }
+  .portfolio-grid-icp img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--color-paper-edge);
+  }
+  .section-head { margin-bottom: var(--space-6); }
+  .icp-quote { background: var(--color-paper-soft); }
+  @media (min-width: 640px) {
+    .portfolio-grid-icp { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 960px) {
+    .portfolio-grid-icp { grid-template-columns: repeat(6, 1fr); }
+  }
+</style>

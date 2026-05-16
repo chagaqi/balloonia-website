@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ScheduleCallButton from '../../components/ScheduleCallButton.astro';
+import CTAButton from '../../components/CTAButton.astro';
+---
+
+<BaseLayout
+  topic="Quote Received"
+  description="Thanks for sending your event details. Brenda will be in touch within 24 hours."
+  noindex
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Get a quote', url: '/quote' },
+    { name: 'Thanks', url: '/quote/thanks' },
+  ]}
+>
+  <section class="thanks section">
+    <div class="container container-narrow text-center">
+      <p class="eyebrow">Quote received</p>
+      <h1>Got it. Brenda will be in touch within 24 hours.</h1>
+      <p class="lede">
+        While you wait, you can lock in a 15-minute discovery call to talk through your event.
+      </p>
+      <div class="thanks-cta">
+        <ScheduleCallButton variant="primary" />
+        <CTAButton href="/portfolio" variant="secondary">Browse the portfolio</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    window.gtag('event', 'quote_submitted', { send_to: window.dataLayer });
+  }
+</script>
+
+<style>
+  .text-center { text-align: center; }
+  .text-center p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .thanks h1 {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+  .thanks-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-7);
+  }
+</style>

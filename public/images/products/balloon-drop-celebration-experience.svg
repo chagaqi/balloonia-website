@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#3a3a3a"/>
+  <g><circle cx="583.9" cy="452.4" r="33.0" fill="#efc6b9" opacity="0.99"/><circle cx="497.9" cy="72.8" r="37.2" fill="#fbf9f5" opacity="0.97"/><circle cx="653.3" cy="474.2" r="32.8" fill="#efc6b9" opacity="0.82"/><circle cx="395.3" cy="594.7" r="28.2" fill="#fbf9f5" opacity="0.92"/><circle cx="225.0" cy="465.1" r="45.8" fill="#efc6b9" opacity="0.74"/><circle cx="629.9" cy="118.6" r="41.3" fill="#fbf9f5" opacity="0.97"/><circle cx="601.1" cy="14.2" r="39.2" fill="#efc6b9" opacity="0.77"/><circle cx="566.1" cy="122.6" r="35.4" fill="#fbf9f5" opacity="0.92"/><circle cx="683.5" cy="142.4" r="30.8" fill="#efc6b9" opacity="0.80"/><circle cx="384.4" cy="304.9" r="33.5" fill="#fbf9f5" opacity="0.98"/><circle cx="212.3" cy="272.3" r="28.5" fill="#efc6b9" opacity="0.81"/><circle cx="787.1" cy="556.7" r="40.4" fill="#fbf9f5" opacity="0.72"/><circle cx="155.2" cy="574.8" r="41.4" fill="#efc6b9" opacity="0.74"/><circle cx="636.1" cy="253.6" r="38.1" fill="#fbf9f5" opacity="0.78"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Balloon Drop</text>
+</svg>

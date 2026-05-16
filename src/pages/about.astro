@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BrendaIntro from '../components/BrendaIntro.astro';
+import CTAButton from '../components/CTAButton.astro';
+---
+
+<BaseLayout
+  topic="About Brenda"
+  description="Brenda is London Ontario's formally trained balloon artist, with an active mentor in Toronto. Custom installations for weddings, showers, corporate, birthdays, and graduations."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'About', url: '/about' },
+  ]}
+>
+  <section class="about-hero section">
+    <div class="container container-narrow">
+      <p class="eyebrow">The artist</p>
+      <h1>Brenda built this as a craft.</h1>
+      <p class="lede">
+        Most balloon vendors in London Ontario are self-taught. Brenda went to school for balloon artistry and stayed in active mentorship with one of Toronto's top balloon artists. Every install on Balloonia Events comes from that training.
+      </p>
+    </div>
+  </section>
+
+  <BrendaIntro variant="about" />
+
+  <section class="about-body section">
+    <div class="container container-narrow">
+      <h2>How Brenda works</h2>
+      <p>
+        Every booking starts with a written quote. Color palette, venue dimensions, materials, delivery time. Brenda reviews the details before she ever picks up a balloon, so the install matches what the customer planned.
+      </p>
+      <p>
+        On the day, she arrives 2 to 3 hours before the event start, builds on-site, and leaves before guests show up. For ceiling installs and larger weddings, that runs 3 to 4 hours. Cleanup after the event can be added at booking.
+      </p>
+
+      <h2>The Toronto mentorship</h2>
+      <p>
+        The mentor relationship is live, not a course Brenda finished and shelved. It means she has direct access to technique escalation when a customer wants a structural geometric arch, an unusual ceiling install, or a custom themed build that most local vendors turn down. London hasn't seen that range of capability before.
+      </p>
+
+      <h2>The team behind the art</h2>
+      <p>
+        Brenda is the sole artist. Blake handles operations, scheduling, and customer communication during phone hours (Mon-Fri 9-6, Sat 11-6). It's a small operation. We don't pretend otherwise.
+      </p>
+
+      <div class="about-cta">
+        <CTAButton href="/quote" variant="primary" size="lg">Work with Brenda</CTAButton>
+        <CTAButton href="/portfolio" variant="secondary" size="lg">See the work</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-7);
+  }
+</style>

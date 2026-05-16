@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#efc6b9"/>
+  <g><circle cx="610.2" cy="341.5" r="28.7" fill="#d28b75" opacity="0.96"/><circle cx="507.9" cy="400.0" r="37.3" fill="#fbf9f5" opacity="0.84"/><circle cx="71.9" cy="37.9" r="33.7" fill="#d28b75" opacity="0.75"/><circle cx="362.1" cy="221.5" r="36.1" fill="#fbf9f5" opacity="0.96"/><circle cx="344.2" cy="308.2" r="41.0" fill="#d28b75" opacity="0.75"/><circle cx="518.8" cy="520.7" r="35.3" fill="#fbf9f5" opacity="0.81"/><circle cx="759.9" cy="459.8" r="36.9" fill="#d28b75" opacity="0.75"/><circle cx="328.7" cy="271.1" r="41.7" fill="#fbf9f5" opacity="0.90"/><circle cx="359.0" cy="515.1" r="38.6" fill="#d28b75" opacity="0.99"/><circle cx="613.6" cy="605.5" r="34.1" fill="#fbf9f5" opacity="0.98"/><circle cx="353.4" cy="0.7" r="28.3" fill="#d28b75" opacity="0.75"/><circle cx="568.4" cy="626.6" r="35.0" fill="#fbf9f5" opacity="0.87"/><circle cx="675.6" cy="660.8" r="44.9" fill="#d28b75" opacity="0.73"/><circle cx="668.7" cy="14.6" r="37.0" fill="#fbf9f5" opacity="0.74"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Full Balloon Arch</text>
+</svg>

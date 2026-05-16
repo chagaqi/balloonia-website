@@ -1,0 +1,313 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import CTAButton from '../../components/CTAButton.astro';
+import { faqPageSchema } from '../../lib/schema/faqPage';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import type { Product } from '../../data/catalog/types';
+
+type Section = {
+  anchor: string;
+  title: string;
+  description: string;
+  tagsAny: string[];
+  collectionHandle: string | null;
+  descriptiveOnly?: boolean;
+};
+
+const sections: Section[] = [
+  {
+    anchor: 'arches-garlands',
+    title: 'Balloon arches and garlands',
+    description:
+      'Custom organic garland arches, classic hoop arches, and geometric designs. Built to your colors and venue dimensions for weddings, showers, birthdays, and more.',
+    tagsAny: ['arch', 'garland'],
+    collectionHandle: 'arches-garlands',
+  },
+  {
+    anchor: 'walls-backdrops',
+    title: 'Balloon walls and backdrops',
+    description:
+      'Full balloon walls for photo backdrops, ceremony backgrounds, and event focal points. Available in any color palette. Popular for bridal showers, baby showers, and milestone birthdays.',
+    tagsAny: ['wall', 'backdrop'],
+    collectionHandle: 'walls-backdrops',
+  },
+  {
+    anchor: 'centerpieces',
+    title: 'Centerpieces and table arrangements',
+    description:
+      'Custom table centerpieces and balloon arrangements that match your color theme and event style. One-per-table or one accent piece, delivered and placed.',
+    tagsAny: ['centerpiece'],
+    collectionHandle: 'centerpieces-columns',
+  },
+  {
+    anchor: 'columns',
+    title: 'Number and letter columns',
+    description:
+      'Freestanding number and letter columns for milestone events. Class of 2026, Sweet 16, milestone birthdays, anniversaries. Built in your choice of colors.',
+    tagsAny: ['column'],
+    collectionHandle: 'centerpieces-columns',
+  },
+  {
+    anchor: 'ceiling',
+    title: 'Ceiling installations',
+    description:
+      'Custom ceiling balloon clusters, canopies, and overhead displays. Great for indoor weddings, corporate events, and large celebrations. Venue coordination included.',
+    tagsAny: ['ceiling'],
+    collectionHandle: 'ceiling-installations',
+  },
+  {
+    anchor: 'photo-booth',
+    title: 'Photo booth setups',
+    description:
+      'Balloon backdrops, arches, and props designed around photo booth areas. Sized for your booth and lit so the photos read clean.',
+    tagsAny: ['backdrop', 'themed'],
+    collectionHandle: 'walls-backdrops',
+  },
+  {
+    anchor: 'bouquets',
+    title: 'Bouquets',
+    description:
+      'Entry-tier helium bouquets and accent clusters. Deliverable around London for surprise parties, small celebrations, and add-ons to a larger install.',
+    tagsAny: ['bouquet'],
+    collectionHandle: 'bouquets',
+  },
+  {
+    anchor: 'showers',
+    title: 'Baby and bridal shower packages',
+    description:
+      'Full shower packages including arches, centerpieces, walls, and accent arrangements. Designed to match your theme and color palette. Setup included.',
+    tagsAny: ['shower'],
+    collectionHandle: 'showers',
+  },
+  {
+    anchor: 'weddings',
+    title: 'Wedding balloon decor',
+    description:
+      'Ceremony arches, reception backdrops, garland centerpieces, and ceiling displays. Built for your venue and color scheme.',
+    tagsAny: ['wedding'],
+    collectionHandle: 'weddings',
+  },
+  {
+    anchor: 'corporate',
+    title: 'Corporate event packages',
+    description:
+      'Branded installations for grand openings, holiday parties, brand activations, and office events. Brand-color matching, delivery, setup, and cleanup included.',
+    tagsAny: ['corporate', 'branded'],
+    collectionHandle: 'corporate',
+  },
+  {
+    anchor: 'custom',
+    title: 'Custom themed installations',
+    description:
+      'Fully custom balloon builds for any theme, color, or concept. Quinceañeras, brand activations, and one-of-a-kind installs. Brenda designs from scratch.',
+    tagsAny: [],
+    collectionHandle: null,
+    descriptiveOnly: true,
+  },
+];
+
+const allProducts = await getAllProducts();
+
+function filterByTagsAny(products: Product[], tagsAny: string[]): Product[] {
+  if (tagsAny.length === 0) return [];
+  const set = new Set(tagsAny);
+  return products.filter((p) => p.tags.some((t) => set.has(t)));
+}
+
+const sectionsWithProducts = sections.map((s) => ({
+  ...s,
+  products: s.descriptiveOnly ? [] : filterByTagsAny(allProducts, s.tagsAny).slice(0, 6),
+}));
+
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('services'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
+const schemas = [
+  faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
+  ...sections.filter((s) => !s.descriptiveOnly).map((s) =>
+    serviceSchema({
+      name: s.title,
+      description: s.description,
+      startingPrice: 0,
+      url: `/services#${s.anchor}`,
+    })
+  ),
+];
+
+function collectionUrl(handle: string): string {
+  return `https://shop.balloonia.events/collections/${handle}`;
+}
+---
+
+<BaseLayout
+  topic="Services and Catalog"
+  description="Balloon services and catalog in London Ontario. Arches, walls, centerpieces, ceiling installs, wedding decor, corporate packages, bouquets. Browse by category."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+  ]}
+  schemas={schemas}
+>
+  <section class="services-hero section">
+    <div class="container container-narrow">
+      <p class="eyebrow">Services and catalog</p>
+      <h1>Browse our balloon catalog by category.</h1>
+      <p class="lede">
+        Browse our balloon catalog by category. Every product is also available custom-built. Send your event details for a tailored quote.
+      </p>
+    </div>
+  </section>
+
+  {sectionsWithProducts.map((s) => (
+    <section id={s.anchor} class="service-section section">
+      <div class="container">
+        <header class="service-section-head">
+          <h2>{s.title}</h2>
+          <p class="service-section-desc">{s.description}</p>
+        </header>
+
+        {s.descriptiveOnly ? (
+          <div class="custom-cta">
+            <p class="lede">
+              Send a reference photo, mood board, or theme. Brenda quotes within 24 hours.
+            </p>
+            <CTAButton href="/quote" variant="primary" size="lg">Get a custom quote</CTAButton>
+          </div>
+        ) : s.products.length > 0 ? (
+          <>
+            <ProductGrid products={s.products} columns={3} />
+            {s.collectionHandle && (
+              <div class="service-section-link">
+                <a href={collectionUrl(s.collectionHandle)} target="_blank" rel="noopener noreferrer">
+                  View all {s.title.toLowerCase()} <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            )}
+          </>
+        ) : (
+          <div class="service-section-empty">
+            <p class="muted">More items in this category land here soon.</p>
+            {s.collectionHandle && (
+              <a class="service-section-link-inline" href={collectionUrl(s.collectionHandle)} target="_blank" rel="noopener noreferrer">
+                Browse on Shopify <span aria-hidden="true">↗</span>
+              </a>
+            )}
+            <CTAButton href="/quote" variant="ghost">Or get a custom quote</CTAButton>
+          </div>
+        )}
+
+        <p class="service-section-custom-note">
+          Every product is also available custom-built to your colors and venue dimensions. <a href="/quote">Send your event details</a> for a tailored quote.
+        </p>
+      </div>
+    </section>
+  ))}
+
+  <FAQAccordion heading="FAQs" faqs={faqs} />
+
+  <section class="cta-strip section">
+    <div class="container container-narrow text-center">
+      <h2>Ready to talk?</h2>
+      <p class="lede">Brenda replies to every quote within 24 hours.</p>
+      <div class="cta-buttons">
+        <CTAButton href="/quote" variant="primary" size="lg">Get a quote</CTAButton>
+        <CTAButton href="/contact" variant="secondary" size="lg">Contact us</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .services-hero h1 {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+  .service-section {
+    padding-top: var(--space-7);
+    padding-bottom: var(--space-7);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .service-section:last-of-type {
+    border-bottom: 0;
+  }
+  .service-section-head {
+    margin-bottom: var(--space-6);
+    max-width: 56rem;
+  }
+  .service-section-head h2 {
+    margin-bottom: var(--space-3);
+  }
+  .service-section-desc {
+    color: var(--color-ink-soft);
+    max-width: 60ch;
+  }
+  .service-section-link {
+    margin-top: var(--space-5);
+  }
+  .service-section-link a,
+  .service-section-link-inline {
+    color: var(--color-accent-deep);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+  .service-section-empty {
+    padding: var(--space-6) var(--space-5);
+    background: var(--color-paper-soft);
+    border: 1px dashed var(--color-line);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .service-section-empty p {
+    margin: 0;
+  }
+  .service-section-custom-note {
+    margin-top: var(--space-5);
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-muted);
+  }
+  .service-section-custom-note a {
+    color: var(--color-accent-deep);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .custom-cta {
+    padding: var(--space-7);
+    background: var(--color-paper-soft);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-line);
+  }
+  .custom-cta .lede {
+    margin-bottom: var(--space-5);
+  }
+  .text-center {
+    text-align: center;
+  }
+  .text-center p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-6);
+  }
+  .cta-strip {
+    background: var(--color-paper-soft);
+  }
+</style>

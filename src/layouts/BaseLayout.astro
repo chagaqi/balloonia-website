@@ -1,0 +1,71 @@
+---
+import '../styles/globals.css';
+import SEOHead from '../components/SEOHead.astro';
+import JsonLd from '../components/JsonLd.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { utmCaptureScript } from '../lib/utm';
+import { localBusinessSchema } from '../lib/schema/localBusiness';
+import { breadcrumbsSchema, type Crumb } from '../lib/schema/breadcrumbs';
+
+type Props = {
+  topic: string;
+  description: string;
+  ogImage?: string;
+  noindex?: boolean;
+  schemas?: Record<string, unknown>[];
+  breadcrumbs?: Crumb[];
+};
+
+const { topic, description, ogImage, noindex, schemas = [], breadcrumbs } = Astro.props;
+
+const allSchemas: Record<string, unknown>[] = [localBusinessSchema()];
+if (breadcrumbs && breadcrumbs.length > 1) {
+  allSchemas.push(breadcrumbsSchema(breadcrumbs));
+}
+allSchemas.push(...schemas);
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <SEOHead topic={topic} description={description} ogImage={ogImage} noindex={noindex} />
+    <script is:inline set:html={utmCaptureScript} />
+    <JsonLd schema={allSchemas} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <style is:global>
+      .skip-link {
+        position: absolute;
+        top: -100px;
+        left: var(--space-4);
+        background: var(--color-ink);
+        color: var(--color-paper);
+        padding: var(--space-2) var(--space-4);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-sm);
+        transition: top var(--duration-fast) var(--ease);
+        z-index: 100;
+      }
+      .skip-link:focus {
+        top: var(--space-4);
+      }
+    </style>
+  </body>
+</html>

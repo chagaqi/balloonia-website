@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <rect width="800" height="800" fill="#efc6b9"/>
+  <g><circle cx="484.2" cy="81.4" r="28.7" fill="#d28b75" opacity="0.94"/><circle cx="593.4" cy="172.5" r="44.1" fill="#fbf9f5" opacity="0.88"/><circle cx="646.8" cy="268.4" r="34.8" fill="#d28b75" opacity="0.81"/><circle cx="281.2" cy="291.2" r="36.0" fill="#fbf9f5" opacity="0.99"/><circle cx="219.6" cy="563.4" r="40.5" fill="#d28b75" opacity="0.71"/><circle cx="622.1" cy="444.4" r="33.9" fill="#fbf9f5" opacity="0.92"/><circle cx="190.5" cy="95.0" r="37.8" fill="#d28b75" opacity="0.75"/><circle cx="474.2" cy="646.4" r="40.7" fill="#fbf9f5" opacity="0.71"/><circle cx="532.1" cy="287.3" r="38.4" fill="#d28b75" opacity="0.90"/><circle cx="57.9" cy="573.2" r="39.3" fill="#fbf9f5" opacity="0.83"/><circle cx="306.1" cy="199.6" r="43.2" fill="#d28b75" opacity="0.70"/><circle cx="559.6" cy="326.3" r="28.6" fill="#fbf9f5" opacity="0.91"/><circle cx="22.8" cy="229.8" r="33.1" fill="#d28b75" opacity="0.95"/><circle cx="118.1" cy="14.4" r="39.2" fill="#fbf9f5" opacity="0.70"/></g>
+  <text x="400" y="782" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Carnival Balloon Arch</text>
+</svg>

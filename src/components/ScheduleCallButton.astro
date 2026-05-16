@@ -1,0 +1,15 @@
+---
+import { business } from '../data/business';
+import CTAButton from './CTAButton.astro';
+
+type Props = {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  label?: string;
+};
+
+const { variant = 'secondary', label = 'Book a discovery call' } = Astro.props;
+---
+
+<CTAButton href={business.honeybookScheduler} variant={variant} external>
+  {label}
+</CTAButton>

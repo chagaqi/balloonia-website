@@ -1,0 +1,71 @@
+---
+type Props = {
+  variant?: 'home' | 'about';
+};
+
+const { variant = 'home' } = Astro.props;
+---
+
+<section class={`brenda section brenda-${variant}`}>
+  <div class="container brenda-grid">
+    <div class="brenda-image" aria-hidden="true">
+      <svg viewBox="0 0 200 250" preserveAspectRatio="xMidYMid slice">
+        <rect width="200" height="250" fill="#efc6b9" />
+        <circle cx="100" cy="100" r="40" fill="#d28b75" />
+        <path d="M40 230 Q100 160 160 230" fill="#d28b75" />
+        <text x="100" y="245" text-anchor="middle" font-family="serif" font-size="10" fill="#3a3a3a">Brenda, portrait coming soon</text>
+      </svg>
+    </div>
+    <div class="brenda-text">
+      <p class="eyebrow">The artist</p>
+      <h2>Brenda is the most credentialed balloon artist in London Ontario.</h2>
+      <p>
+        Most local balloon vendors are self-taught. Brenda completed formal professional balloon artistry training and keeps an active mentorship with one of Toronto's top balloon artists. That training shows up in the structural work, the color mixes, and the technical builds most local vendors turn down.
+      </p>
+      {variant === 'home' && (
+        <p>
+          <a class="brenda-link" href="/about">Read Brenda's story →</a>
+        </p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .brenda-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  .brenda-image {
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-paper-edge);
+  }
+  .brenda-image svg {
+    width: 100%;
+    height: 100%;
+  }
+  .brenda-text h2 {
+    max-width: 22ch;
+  }
+  .brenda-text p {
+    color: var(--color-ink-soft);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-relaxed);
+  }
+  .brenda-link {
+    color: var(--color-accent-deep);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  @media (min-width: 768px) {
+    .brenda-grid {
+      grid-template-columns: 1fr 1.4fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

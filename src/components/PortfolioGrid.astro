@@ -1,0 +1,249 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+type Props = {
+  items: CollectionEntry<'portfolio'>[];
+  filterable?: boolean;
+};
+
+const { items, filterable = false } = Astro.props;
+
+const eventTypes = filterable
+  ? Array.from(new Set(items.map((i) => i.data.eventType))).sort()
+  : [];
+---
+
+<section class="portfolio">
+  {filterable && eventTypes.length > 0 && (
+    <div class="portfolio-filters" role="tablist" aria-label="Filter portfolio">
+      <button class="filter active" data-filter="all" role="tab" aria-selected="true">All</button>
+      {eventTypes.map((type) => (
+        <button class="filter" data-filter={type} role="tab" aria-selected="false">
+          {type === 'corporate' ? 'Corporate' : type[0].toUpperCase() + type.slice(1)}
+        </button>
+      ))}
+    </div>
+  )}
+  <ul class="portfolio-grid">
+    {items.map((item) => (
+      <li class="portfolio-tile" data-event-type={item.data.eventType}>
+        <button
+          class="portfolio-button"
+          type="button"
+          data-image={item.data.image}
+          data-alt={item.data.alt}
+          data-title={item.data.title}
+          aria-label={`View larger image: ${item.data.title}`}
+        >
+          <img src={item.data.image} alt={item.data.alt} loading="lazy" />
+          <span class="portfolio-meta">
+            <span class="portfolio-title">{item.data.title}</span>
+            <span class="portfolio-event">{item.data.eventType}</span>
+          </span>
+        </button>
+      </li>
+    ))}
+  </ul>
+  <p class="portfolio-empty" data-portfolio-empty hidden>
+    More coming soon. Brenda shoots installs as they happen — check back as the calendar fills.
+  </p>
+</section>
+
+<dialog class="portfolio-lightbox" aria-label="Image preview">
+  <button class="lightbox-close" type="button" aria-label="Close">×</button>
+  <figure>
+    <img src="" alt="" />
+    <figcaption></figcaption>
+  </figure>
+</dialog>
+
+<style>
+  .portfolio-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+  .filter {
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-line);
+    background: transparent;
+    font-size: var(--font-size-sm);
+    color: var(--color-ink-soft);
+    transition: all var(--duration-fast) var(--ease);
+  }
+  .filter:hover {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+  .filter.active {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  .portfolio-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  .portfolio-tile {
+    margin: 0;
+  }
+  .portfolio-tile.hidden {
+    display: none;
+  }
+  .portfolio-button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    background: var(--color-paper-edge);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    position: relative;
+    cursor: pointer;
+    transition: transform var(--duration-base) var(--ease);
+  }
+  .portfolio-button:hover {
+    transform: scale(1.02);
+  }
+  .portfolio-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .portfolio-meta {
+    position: absolute;
+    inset: auto 0 0 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    padding: var(--space-5) var(--space-4) var(--space-3);
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-align: left;
+    gap: 2px;
+  }
+  .portfolio-title {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+  }
+  .portfolio-event {
+    font-size: var(--font-size-xs);
+    text-transform: capitalize;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .portfolio-empty {
+    margin: var(--space-7) 0;
+    padding: var(--space-6) var(--space-5);
+    text-align: center;
+    color: var(--color-ink-muted);
+    background: var(--color-paper-soft);
+    border: 1px dashed var(--color-line);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+  }
+  .portfolio-lightbox {
+    border: 0;
+    background: rgba(0, 0, 0, 0.92);
+    color: var(--color-paper);
+    padding: 0;
+    max-width: 100%;
+    max-height: 100vh;
+    width: 100%;
+    height: 100%;
+  }
+  .portfolio-lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.92);
+  }
+  .portfolio-lightbox figure {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    padding: var(--space-5);
+  }
+  .portfolio-lightbox img {
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+  }
+  .portfolio-lightbox figcaption {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: var(--font-size-sm);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-4);
+    color: var(--color-paper);
+    font-size: 2rem;
+    line-height: 1;
+    z-index: 1;
+  }
+
+  @media (min-width: 640px) {
+    .portfolio-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+    }
+  }
+  @media (min-width: 960px) {
+    .portfolio-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('.portfolio-filters .filter');
+  const tiles = document.querySelectorAll<HTMLElement>('.portfolio-tile');
+  const emptyMsg = document.querySelector<HTMLElement>('[data-portfolio-empty]');
+  filters.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      filters.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      let visible = 0;
+      tiles.forEach((tile) => {
+        const t = tile.dataset.eventType;
+        const hidden = filter !== 'all' && filter !== t;
+        tile.classList.toggle('hidden', hidden);
+        if (!hidden) visible++;
+      });
+      if (emptyMsg) {
+        if (visible === 0) emptyMsg.removeAttribute('hidden');
+        else emptyMsg.setAttribute('hidden', '');
+      }
+    });
+  });
+
+  const lightbox = document.querySelector<HTMLDialogElement>('.portfolio-lightbox');
+  const lightboxImg = lightbox?.querySelector<HTMLImageElement>('img');
+  const lightboxCap = lightbox?.querySelector<HTMLElement>('figcaption');
+  const closeBtn = lightbox?.querySelector<HTMLButtonElement>('.lightbox-close');
+
+  document.querySelectorAll<HTMLButtonElement>('.portfolio-button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!lightbox || !lightboxImg || !lightboxCap) return;
+      lightboxImg.src = btn.dataset.image ?? '';
+      lightboxImg.alt = btn.dataset.alt ?? '';
+      lightboxCap.textContent = btn.dataset.title ?? '';
+      lightbox.showModal();
+    });
+  });
+
+  closeBtn?.addEventListener('click', () => lightbox?.close());
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) lightbox.close();
+  });
+</script>

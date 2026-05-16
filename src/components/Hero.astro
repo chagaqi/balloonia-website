@@ -1,0 +1,208 @@
+---
+import CTAButton from './CTAButton.astro';
+
+type Props = {
+  eyebrow?: string;
+  headline: string;
+  subhead: string;
+  primaryCta?: { href: string; label: string };
+  secondaryCta?: { href: string; label: string; external?: boolean };
+  image?: string;
+  imageAlt?: string;
+  variant?: 'home' | 'page' | 'bleed';
+};
+
+const {
+  eyebrow,
+  headline,
+  subhead,
+  primaryCta,
+  secondaryCta,
+  image,
+  imageAlt,
+  variant = 'home',
+} = Astro.props;
+---
+
+{variant === 'bleed' ? (
+  <section class="hero hero-bleed">
+    {image && (
+      <div class="hero-bleed-image">
+        <img src={image} alt={imageAlt ?? ''} loading="eager" fetchpriority="high" />
+        <div class="hero-bleed-overlay" aria-hidden="true"></div>
+      </div>
+    )}
+    <div class="container hero-bleed-inner">
+      <div class="hero-bleed-text">
+        {eyebrow && <p class="eyebrow eyebrow-light">{eyebrow}</p>}
+        <h1>{headline}</h1>
+        <p class="lede">{subhead}</p>
+        {(primaryCta || secondaryCta) && (
+          <div class="hero-ctas">
+            {primaryCta && <CTAButton href={primaryCta.href} variant="primary" size="lg">{primaryCta.label}</CTAButton>}
+            {secondaryCta && (
+              <CTAButton href={secondaryCta.href} variant="secondary" size="lg" external={secondaryCta.external}>
+                {secondaryCta.label}
+              </CTAButton>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+) : (
+  <section class={`hero hero-${variant}`}>
+    <div class="container hero-grid">
+      <div class="hero-text">
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        <h1>{headline}</h1>
+        <p class="lede">{subhead}</p>
+        {(primaryCta || secondaryCta) && (
+          <div class="hero-ctas">
+            {primaryCta && <CTAButton href={primaryCta.href} variant="primary" size="lg">{primaryCta.label}</CTAButton>}
+            {secondaryCta && (
+              <CTAButton href={secondaryCta.href} variant="secondary" size="lg" external={secondaryCta.external}>
+                {secondaryCta.label}
+              </CTAButton>
+            )}
+          </div>
+        )}
+      </div>
+      {image && (
+        <div class="hero-image">
+          <img src={image} alt={imageAlt ?? ''} loading="eager" />
+        </div>
+      )}
+    </div>
+  </section>
+)}
+
+<style>
+  .hero {
+    background: var(--color-paper);
+    padding: var(--space-8) 0;
+  }
+  .hero-home {
+    background: linear-gradient(180deg, var(--color-paper) 0%, var(--color-paper-soft) 100%);
+    padding: var(--space-9) 0;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-7);
+    align-items: center;
+  }
+  .hero-text h1 {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-5);
+    max-width: 18ch;
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+  .hero-image {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-paper-edge);
+  }
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Full-bleed variant */
+  .hero-bleed {
+    position: relative;
+    padding: 0;
+    background: var(--color-ink);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-bleed-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-bleed-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+  }
+  .hero-bleed-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0%, rgba(0, 0, 0, 0.05) 30%, rgba(0, 0, 0, 0.10) 60%, rgba(0, 0, 0, 0.55) 100%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.0) 100%);
+  }
+  .hero-bleed-inner {
+    position: relative;
+    z-index: 1;
+    min-height: 78vh;
+    display: flex;
+    align-items: center;
+    padding-top: var(--space-9);
+    padding-bottom: var(--space-9);
+  }
+  .hero-bleed-text {
+    max-width: 36rem;
+    color: var(--color-paper);
+  }
+  .hero-bleed-text h1 {
+    color: var(--color-paper);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-5);
+    max-width: 18ch;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+  }
+  .hero-bleed-text .lede {
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 36ch;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+  }
+  .eyebrow-light {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* On-dark CTA overrides for bleed hero: primary becomes white-on-dark for max contrast,
+     secondary becomes white outline on translucent dark so it reads against the photo. */
+  .hero-bleed :global(.cta-primary) {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .hero-bleed :global(.cta-primary:hover) {
+    background: var(--color-accent-soft);
+    color: var(--color-ink);
+  }
+  .hero-bleed :global(.cta-secondary) {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--color-paper);
+    border-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(2px);
+  }
+  .hero-bleed :global(.cta-secondary:hover) {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+
+  @media (min-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1.05fr 1fr;
+      gap: var(--space-8);
+    }
+    .hero-home {
+      padding: var(--space-10) 0 var(--space-9);
+    }
+    .hero-bleed-inner {
+      min-height: 82vh;
+    }
+  }
+</style>

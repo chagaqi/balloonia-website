@@ -1,0 +1,12 @@
+---
+type Props = {
+  schema: Record<string, unknown> | Record<string, unknown>[];
+};
+
+const { schema } = Astro.props;
+const items = Array.isArray(schema) ? schema : [schema];
+---
+
+{items.map((item) => (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(item)} />
+))}

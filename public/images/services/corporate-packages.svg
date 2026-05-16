@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <g><circle cx="523.8" cy="314.9" r="31.7" fill="#d28b75" opacity="0.76"/><circle cx="655.5" cy="37.4" r="42.5" fill="#3a3a3a" opacity="1.00"/><circle cx="728.1" cy="225.4" r="39.7" fill="#d28b75" opacity="0.89"/><circle cx="294.3" cy="372.4" r="41.0" fill="#3a3a3a" opacity="0.72"/><circle cx="700.3" cy="303.5" r="39.3" fill="#d28b75" opacity="0.75"/><circle cx="395.7" cy="25.0" r="36.9" fill="#3a3a3a" opacity="0.88"/><circle cx="646.9" cy="333.7" r="41.5" fill="#d28b75" opacity="0.95"/><circle cx="17.9" cy="18.5" r="42.5" fill="#3a3a3a" opacity="0.71"/><circle cx="131.9" cy="5.8" r="37.7" fill="#d28b75" opacity="0.94"/><circle cx="376.3" cy="97.6" r="32.5" fill="#3a3a3a" opacity="1.00"/><circle cx="383.6" cy="235.0" r="31.4" fill="#d28b75" opacity="0.88"/><circle cx="478.8" cy="327.0" r="42.7" fill="#3a3a3a" opacity="0.72"/><circle cx="561.8" cy="156.1" r="32.1" fill="#d28b75" opacity="0.71"/><circle cx="319.7" cy="16.3" r="41.3" fill="#3a3a3a" opacity="0.74"/></g>
+  <text x="400" y="582" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Corporate Events</text>
+</svg>

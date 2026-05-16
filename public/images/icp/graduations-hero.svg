@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
+  <rect width="1600" height="900" fill="#1a1a1a"/>
+  <g><circle cx="220.5" cy="183.7" r="45.0" fill="#d28b75" opacity="0.78"/><circle cx="1274.9" cy="655.3" r="43.0" fill="#fbf9f5" opacity="0.82"/><circle cx="612.6" cy="570.0" r="35.9" fill="#d28b75" opacity="1.00"/><circle cx="1220.8" cy="405.6" r="33.8" fill="#fbf9f5" opacity="0.81"/><circle cx="1569.0" cy="9.3" r="37.6" fill="#d28b75" opacity="0.87"/><circle cx="450.5" cy="170.5" r="40.0" fill="#fbf9f5" opacity="0.97"/><circle cx="1366.9" cy="60.1" r="41.5" fill="#d28b75" opacity="0.74"/><circle cx="26.2" cy="325.9" r="29.1" fill="#fbf9f5" opacity="1.00"/><circle cx="1494.3" cy="83.3" r="41.6" fill="#d28b75" opacity="0.94"/><circle cx="907.8" cy="447.5" r="28.9" fill="#fbf9f5" opacity="0.85"/><circle cx="964.9" cy="32.9" r="37.4" fill="#d28b75" opacity="0.75"/><circle cx="202.9" cy="254.3" r="31.8" fill="#fbf9f5" opacity="0.76"/><circle cx="1351.1" cy="79.8" r="33.8" fill="#d28b75" opacity="0.88"/><circle cx="1571.8" cy="671.2" r="40.5" fill="#fbf9f5" opacity="1.00"/></g>
+  <text x="800" y="882" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#3a3a3a" opacity="0.6">Graduations</text>
+</svg>
