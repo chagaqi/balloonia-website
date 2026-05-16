@@ -6,10 +6,9 @@ type State =
   | { kind: 'success' }
   | { kind: 'error'; mailtoHref: string; message: string };
 
-// Formsubmit.co forwards form POSTs straight to this inbox.
-// First submission triggers a verification email; click the link inside it to activate.
-// After activation, every submission lands in contact@balloonia.events.
-const FORMSUBMIT_ENDPOINT = 'https://formsubmit.co/ajax/contact@balloonia.events';
+// Posts to our Vercel serverless function (/api/contact), which sends via Resend
+// from noreply@mail.balloonia.events to contact@balloonia.events.
+const CONTACT_ENDPOINT = '/api/contact';
 
 export default function ContactForm() {
   const [name, setName] = useState('');
@@ -29,19 +28,15 @@ export default function ContactForm() {
     setState({ kind: 'submitting' });
 
     try {
-      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+      const res = await fetch(CONTACT_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          message,
-          _subject: `Website message from ${name}`,
-          _template: 'table',
-          _captcha: 'false',
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
       });
-      if (!res.ok) throw new Error(`Formsubmit returned ${res.status}`);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: `Server returned ${res.status}` }));
+        throw new Error(err.error || `Server returned ${res.status}`);
+      }
       setState({ kind: 'success' });
       setName('');
       setEmail('');
