@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('centerpiece')).slice(0, 9);
+
+const schemas = [
+  serviceSchema({
+    name: 'Balloon centerpieces',
+    description: 'Custom balloon centerpieces and table arrangements for events in London Ontario.',
+    startingPrice: 60,
+    url: '/services/centerpieces',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Balloon Centerpieces"
+  description="Custom balloon centerpieces and table arrangements in London Ontario. Delivered, placed, removed. From $60 per table."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Centerpieces', url: '/services/centerpieces' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Balloon centerpieces"
+    subhead="Table centerpieces and balloon arrangements that match your event theme. One per table or a single statement piece."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See centerpiece work' }}
+    image="/images/categories/centerpieces.png"
+    imageAlt="Balloon centerpiece in soft tones"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        Centerpieces are the cheapest way to make a room feel set. A single balloon arrangement per table, weighted, anchored, in your palette. Guests sit down and the room already feels finished.
+      </p>
+      <p>
+        Brenda builds short, tall, or asymmetric. Single-color, gradient, or theme-mixed. Delivered to the venue, placed, and collected at the end of the night.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Centerpieces in the catalog</h2>
+          <p class="lede">Stock designs and base options. Custom palettes built on request.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/centerpieces-columns">View all centerpieces →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Custom centerpiece set?</h2>
+        <p class="lede">Send your table count, palette, and theme. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .section-head { margin-bottom: var(--space-6); }
+  .install-quote { background: var(--color-paper-soft); }
+  .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+  .section-link-wrap { margin-top: var(--space-5); }
+</style>

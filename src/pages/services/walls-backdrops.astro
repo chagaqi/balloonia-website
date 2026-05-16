@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('wall') || p.tags.includes('backdrop')).slice(0, 9);
+
+const schemas = [
+  serviceSchema({
+    name: 'Balloon walls and backdrops',
+    description: 'Custom balloon walls and event backdrops in London Ontario. Photo-ready, sized to your venue.',
+    startingPrice: 300,
+    url: '/services/walls-backdrops',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Balloon Walls and Backdrops"
+  description="Custom balloon walls and backdrops in London Ontario. Photo-ready focal points sized to your venue and built in any palette. From $300."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Walls and backdrops', url: '/services/walls-backdrops' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Balloon walls and backdrops"
+    subhead="Full balloon walls for photo backdrops, ceremony backgrounds, and event focal points. Sized to your photographer's frame, any palette."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See backdrop work' }}
+    image="/images/categories/walls-backdrops.png"
+    imageAlt="Balloon wall backdrop in soft pastels"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        A balloon wall does what a banner can't. It frames your event's photo moment with depth, color, and texture, and it carries the photos for the rest of the night.
+      </p>
+      <p>
+        Popular for showers, milestone birthdays, brand activations, and small intimate weddings. Brenda builds them in any color combination, with name accents, neon signs, or floral inserts if you want.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Walls and backdrops in the catalog</h2>
+          <p class="lede">Pick a stock build or use it as a base for a custom version.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/walls-backdrops">View all walls and backdrops →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Want a custom wall?</h2>
+        <p class="lede">Send your dimensions, palette, and any references. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .section-head { margin-bottom: var(--space-6); }
+  .install-quote { background: var(--color-paper-soft); }
+  .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+  .section-link-wrap { margin-top: var(--space-5); }
+</style>

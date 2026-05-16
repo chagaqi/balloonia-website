@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('themed') || p.tags.includes('custom')).slice(0, 9);
+
+const schemas = [
+  serviceSchema({
+    name: 'Custom themed balloon installations',
+    description: 'Fully custom themed balloon installations for any concept or palette in London Ontario.',
+    startingPrice: 500,
+    url: '/services/custom-themed',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Custom Themed Balloon Installs"
+  description="Fully custom themed balloon installations in London Ontario. Quinceañeras, brand activations, themed kid parties. From $500."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Custom themed', url: '/services/custom-themed' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Custom themed installations"
+    subhead="Fully custom builds for any theme or concept. Quinceañeras, brand activations, themed kid parties, one-of-a-kind installs."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See custom work' }}
+    image="/images/categories/centerpieces.png"
+    imageAlt="Custom themed balloon installation"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        This is the "I have a specific vision and I can't find anyone who can build it" tier. Themed kid parties with jungle canopies, quinceañera ballroom installs, brand activations with custom logo cutouts, one-of-a-kind concepts.
+      </p>
+      <p>
+        Send a reference photo, a mood board, or a description. Brenda quotes within 24 hours and walks through what's feasible at your budget and timeline.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Reference builds</p>
+          <h2>Themed work in the catalog</h2>
+          <p class="lede">Examples of themed and custom builds Brenda has done. Use any as the starting point for your version.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/themed-setups">View all themed setups →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Tell us about the theme</h2>
+        <p class="lede">Reference photos, mood boards, event date, venue. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .section-head { margin-bottom: var(--space-6); }
+  .install-quote { background: var(--color-paper-soft); }
+  .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+  .section-link-wrap { margin-top: var(--space-5); }
+</style>

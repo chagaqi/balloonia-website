@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('arch') || p.tags.includes('garland')).slice(0, 9);
+
+const schemas = [
+  serviceSchema({
+    name: 'Balloon arches and garlands',
+    description: 'Custom organic, hoop, and geometric balloon arches and garlands built for events in London Ontario.',
+    startingPrice: 200,
+    url: '/services/arches-garlands',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Balloon Arches and Garlands"
+  description="Custom balloon arches and garlands in London Ontario. Organic, hoop, geometric. Built fresh to your colors and venue. From $200."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Arches and garlands', url: '/services/arches-garlands' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Balloon arches and garlands"
+    subhead="Organic, hoop, geometric. Single-arch or multi-element. Built to your venue's measurements and color palette."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See arch work' }}
+    image="/images/categories/arches-garlands.png"
+    imageAlt="Custom balloon arch in pastel tones"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        Arches are the photo most events remember. Brenda builds organic, hoop, and geometric versions in any color and any scale. Most arches run 6 to 10 feet tall. Structural builds for ballrooms and outdoor venues go larger.
+      </p>
+      <p>
+        Garlands work as a single accent piece or as the structural base for a larger install. Wrapped along stair rails, draped across head tables, anchored to backdrops, suspended from ceilings.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Arches and garlands in the catalog</h2>
+          <p class="lede">Pick a stock build or use one as the starting point for a custom version.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/arches-garlands">View all arches and garlands →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Need something specific?</h2>
+        <p class="lede">Send your venue, colors, and reference photo. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p {
+    color: var(--color-ink-soft);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-relaxed);
+  }
+  .section-head {
+    margin-bottom: var(--space-6);
+  }
+  .install-quote {
+    background: var(--color-paper-soft);
+  }
+  .section-link {
+    color: var(--color-accent-deep);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .section-link-wrap {
+    margin-top: var(--space-5);
+  }
+</style>

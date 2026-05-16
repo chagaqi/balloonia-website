@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('bouquet')).slice(0, 9);
+
+const schemas = [
+  serviceSchema({
+    name: 'Balloon bouquets',
+    description: 'Helium balloon bouquets and accent clusters delivered around London Ontario.',
+    startingPrice: 35,
+    url: '/services/bouquets',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Balloon Bouquets"
+  description="Helium balloon bouquets and accent clusters in London Ontario. Surprise parties, small celebrations, and add-ons. From $35."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Bouquets', url: '/services/bouquets' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Balloon bouquets"
+    subhead="Helium bouquets and accent clusters. Surprise parties, small celebrations, and add-ons to a larger install."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: 'https://shop.balloonia.events/collections/bouquets', label: 'Shop bouquets' }}
+    image="/images/categories/bouquets.png"
+    imageAlt="Helium balloon bouquet"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        Bouquets are the entry-tier option: small, mobile, deliverable around London. Birthdays, baby reveals, surprise parties, anniversaries, hospital congrats. Or as an accent piece to a larger build.
+      </p>
+      <p>
+        Built in any palette. Weighted with a matching base. Delivered within the 50km London service area.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Bouquets in the catalog</h2>
+          <p class="lede">Stock bouquets, ready to order with quick delivery. Custom palettes available on request.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/bouquets">View all bouquets →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Custom bouquet?</h2>
+        <p class="lede">Send your palette, size, and delivery date. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .section-head { margin-bottom: var(--space-6); }
+  .install-quote { background: var(--color-paper-soft); }
+  .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+  .section-link-wrap { margin-top: var(--space-5); }
+</style>

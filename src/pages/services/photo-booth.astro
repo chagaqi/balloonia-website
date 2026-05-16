@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('themed') || p.tags.includes('backdrop')).slice(0, 9);
+
+const schemas = [
+  serviceSchema({
+    name: 'Photo booth balloon setups',
+    description: 'Custom balloon backdrops, arches, and props for photo booth areas in London Ontario.',
+    startingPrice: 250,
+    url: '/services/photo-booth',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Photo Booth Balloon Setups"
+  description="Custom balloon backdrops and props for photo booths in London Ontario. Sized to your booth and lit so photos read clean. From $250."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Photo booth setups', url: '/services/photo-booth' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Photo booth setups"
+    subhead="Balloon backdrops, arches, and props designed around photo booth areas. Sized for your booth and lit so the photos read clean."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See photo booth work' }}
+    image="/images/categories/walls-backdrops.png"
+    imageAlt="Photo booth balloon backdrop"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        Photo booth backdrops have one job: make every photo look intentional. Sized to your booth's frame, color-matched to your event, and lit so the shots don't shadow weirdly.
+      </p>
+      <p>
+        Themed builds, branded backdrops, custom letter or name accents. Built before the event opens, broken down after the last photo.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Photo booth setups in the catalog</h2>
+          <p class="lede">Themed and styled builds, ready to order. Custom backdrops sized to your booth on request.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/themed-setups">View all themed setups →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Custom photo booth setup?</h2>
+        <p class="lede">Send your booth dimensions, theme, and event date. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .section-head { margin-bottom: var(--space-6); }
+  .install-quote { background: var(--color-paper-soft); }
+  .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+  .section-link-wrap { margin-top: var(--space-5); }
+</style>

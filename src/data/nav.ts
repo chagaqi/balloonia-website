@@ -47,19 +47,20 @@ export const primaryNav: PrimaryNavItem[] = [
         {
           heading: 'By install type',
           items: [
-            { label: 'Arches and garlands', href: '/services#arches-garlands' },
-            { label: 'Walls and backdrops', href: '/services#walls-backdrops' },
-            { label: 'Centerpieces', href: '/services#centerpieces' },
-            { label: 'Number and letter columns', href: '/services#columns' },
-            { label: 'Ceiling installs', href: '/services#ceiling' },
-            { label: 'Photo booth setups', href: '/services#photo-booth' },
+            { label: 'Arches and garlands', href: '/services/arches-garlands' },
+            { label: 'Walls and backdrops', href: '/services/walls-backdrops' },
+            { label: 'Centerpieces', href: '/services/centerpieces' },
+            { label: 'Number and letter columns', href: '/services/columns' },
+            { label: 'Ceiling installs', href: '/services/ceiling' },
+            { label: 'Photo booth setups', href: '/services/photo-booth' },
+            { label: 'Bouquets', href: '/services/bouquets' },
           ],
         },
         {
           heading: 'For B2B',
           items: [
-            { label: 'Corporate packages', href: '/services#corporate' },
-            { label: 'Custom themed installs', href: '/services#custom' },
+            { label: 'Corporate packages', href: '/services/corporate' },
+            { label: 'Custom themed installs', href: '/services/custom-themed' },
             { label: 'Corporate offerings', href: 'https://corp.balloonia.events' },
             { label: 'Book a discovery call', href: '/contact' },
           ],

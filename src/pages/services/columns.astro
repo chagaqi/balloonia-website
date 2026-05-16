@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('column')).slice(0, 9);
+
+const schemas = [
+  serviceSchema({
+    name: 'Balloon number and letter columns',
+    description: 'Custom freestanding number and letter columns for milestone events in London Ontario.',
+    startingPrice: 160,
+    url: '/services/columns',
+  }),
+];
+---
+
+<BaseLayout
+  topic="Number and Letter Balloon Columns"
+  description="Custom freestanding number and letter columns in London Ontario. Class of 2026, milestone birthdays, anniversaries. From $160 per column."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Number and letter columns', url: '/services/columns' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Number and letter columns"
+    subhead="Freestanding number and letter columns for milestone events. Class of 2026, Sweet 16, anniversaries, brand activations."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See column work' }}
+    image="/images/categories/centerpieces.png"
+    imageAlt="Number column balloon display"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        Columns are the milestone-event workhorse. Number columns for birthdays and anniversaries, "Class of" letters for grad parties, brand letters or numbers for corporate launches.
+      </p>
+      <p>
+        Built freestanding so they can sit anywhere in the room. Any color combination, any height. Delivered, set up, and broken down by Brenda.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Columns in the catalog</h2>
+          <p class="lede">Stock builds, ready to order. Custom numbers and color combinations on request.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/centerpieces-columns">View all columns →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Custom column?</h2>
+        <p class="lede">Send the number or letters, palette, and event date. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .section-head { margin-bottom: var(--space-6); }
+  .install-quote { background: var(--color-paper-soft); }
+  .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
+  .section-link-wrap { margin-top: var(--space-5); }
+</style>
