@@ -12,6 +12,9 @@ export function composeStyleField(text: string, link: string): string {
 
 export function buildPayload(data: QuoteData) {
   const utm = readUtm();
+  const first = (data.firstName || '').trim();
+  const last = (data.lastName || '').trim();
+  const fullName = [first, last].filter(Boolean).join(' ');
   return {
     event_type: data.eventType || '',
     event_date: data.eventDate || '',
@@ -19,8 +22,10 @@ export function buildPayload(data: QuoteData) {
     city: data.city || 'London',
     budget_range: data.budgetRange || '',
     style_or_theme: composeStyleField(data.styleText, data.styleLink),
-    first_name: data.firstName || '',
-    last_name: data.lastName || '',
+    first_name: first,
+    last_name: last,
+    full_name: fullName,
+    name: fullName,
     email: data.email || '',
     phone: data.phone || '',
     utm_source: utm.utm_source ?? '',
