@@ -9,6 +9,8 @@ type Props = {
   secondaryCta?: { href: string; label: string; external?: boolean };
   image?: string;
   imageAlt?: string;
+  imageHref?: string;
+  imageOverlay?: string;
   variant?: 'home' | 'page' | 'bleed';
 };
 
@@ -20,6 +22,8 @@ const {
   secondaryCta,
   image,
   imageAlt,
+  imageHref,
+  imageOverlay,
   variant = 'home',
 } = Astro.props;
 ---
@@ -69,9 +73,21 @@ const {
         )}
       </div>
       {image && (
-        <div class="hero-image">
-          <img src={image} alt={imageAlt ?? ''} loading="eager" />
-        </div>
+        imageHref ? (
+          <a class="hero-image hero-image-link" href={imageHref}>
+            <img src={image} alt={imageAlt ?? ''} loading="eager" />
+            {imageOverlay && (
+              <div class="hero-image-overlay">
+                <span>{imageOverlay}</span>
+                <span class="hero-image-overlay-arrow" aria-hidden="true">→</span>
+              </div>
+            )}
+          </a>
+        ) : (
+          <div class="hero-image">
+            <img src={image} alt={imageAlt ?? ''} loading="eager" />
+          </div>
+        )
       )}
     </div>
   </section>
@@ -109,11 +125,43 @@ const {
     border-radius: var(--radius-lg);
     overflow: hidden;
     background: var(--color-paper-edge);
+    display: block;
   }
   .hero-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform var(--duration-base) var(--ease);
+  }
+  .hero-image-link {
+    cursor: pointer;
+    color: var(--color-ink);
+  }
+  .hero-image-link:hover img {
+    transform: scale(1.04);
+  }
+  .hero-image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.78) 100%);
+    color: var(--color-paper);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .hero-image-overlay-arrow {
+    font-size: var(--font-size-xl);
+    transition: transform var(--duration-base) var(--ease);
+  }
+  .hero-image-link:hover .hero-image-overlay-arrow {
+    transform: translateX(4px);
   }
 
   /* Full-bleed variant */

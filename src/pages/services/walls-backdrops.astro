@@ -4,7 +4,7 @@ import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
-import { getAllProducts } from '../../data/catalog/shopify';
+import { getAllProducts, shopUrlFor } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
@@ -36,8 +36,10 @@ const schemas = [
     subhead="Full balloon walls for photo backdrops, ceremony backgrounds, and event focal points. Sized to your photographer's frame, any palette."
     primaryCta={{ href: '/quote', label: 'Start a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See backdrop work' }}
-    image="/images/categories/walls-backdrops.png"
-    imageAlt="Balloon wall backdrop in soft pastels"
+    image={products[0]?.image.src ?? '/images/categories/walls-backdrops.png'}
+    imageAlt={products[0]?.image.alt ?? 'Balloon wall backdrop in soft pastels'}
+    imageHref={products[0] ? shopUrlFor(products[0].handle) : undefined}
+    imageOverlay={products[0] ? 'Click to order online' : undefined}
     variant="page"
   />
 
