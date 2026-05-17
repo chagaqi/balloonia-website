@@ -10,18 +10,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     { name: 'Get a quote', url: '/quote' },
   ]}
 >
-  <section class="quote-hero section">
-    <div class="container container-narrow">
-      <p class="eyebrow">Get a quote</p>
-      <h1>Tell us about your event.</h1>
-      <p class="lede">
-        Send your date, your venue, and a rough idea of your colours and budget. Brenda replies within 24 hours with a custom quote.
-      </p>
-    </div>
-  </section>
-
   <section class="quote-section">
-    <div class="container container-narrow">
+    <div class="container">
       <div class="hb-p-69f56e21f1100d21e791fe5c-2"></div>
       <img height="1" width="1" style="display:none" src="https://www.honeybook.com/p.png?pid=69f56e21f1100d21e791fe5c" alt="" />
       <script is:inline>
@@ -42,6 +32,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <style>
   .quote-section {
+    padding-top: var(--space-7);
     padding-bottom: var(--space-9);
   }
 </style>
