@@ -481,9 +481,15 @@ function isActive(item: PrimaryNavItem): boolean {
     display: none;
     border-top: 1px solid var(--color-line);
     padding: var(--space-4) var(--space-5);
+    background: var(--color-paper);
   }
   .mobile-nav.open {
     display: block;
+    max-height: calc(100dvh - 80px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-bottom: var(--space-7);
   }
   .mobile-list {
     list-style: none;
@@ -708,7 +714,8 @@ function isActive(item: PrimaryNavItem): boolean {
     closePanel(openWrap, true);
   });
 
-  // Mobile nav toggle.
+  // Mobile nav toggle. Locks body scroll while open so touch-scrolling inside the
+  // mobile nav doesn't bleed through to the page.
   const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
   const mobileNav = document.querySelector<HTMLElement>('.mobile-nav');
   if (toggle && mobileNav) {
@@ -716,6 +723,8 @@ function isActive(item: PrimaryNavItem): boolean {
       const open = mobileNav.classList.toggle('open');
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      document.body.style.overflow = open ? 'hidden' : '';
+      document.documentElement.style.overflow = open ? 'hidden' : '';
     });
   }
 </script>
