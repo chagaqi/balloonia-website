@@ -8,16 +8,15 @@ const year = new Date().getFullYear();
 
 const socials = [
   business.social.instagram && { label: 'Instagram', href: business.social.instagram, icon: 'ig' },
-  business.social.tiktok && { label: 'TikTok', href: business.social.tiktok, icon: 'tt' },
   business.social.pinterest && { label: 'Pinterest', href: business.social.pinterest, icon: 'pin' },
-].filter(Boolean) as { label: string; href: string; icon: 'ig' | 'tt' | 'pin' }[];
+].filter(Boolean) as { label: string; href: string; icon: 'ig' | 'pin' }[];
 ---
 
 <footer class="site-footer">
   <div class="container footer-grid">
     <div class="footer-brand">
       <p class="footer-name">Balloonia Events</p>
-      <p class="footer-pitch">Custom balloon installations in London Ontario. Built fresh for your event, delivered, installed, cleaned up.</p>
+      <p class="footer-pitch">Custom balloon installations in London Ontario. Built fresh, delivered, installed, cleaned up. One artist, every build.</p>
       {socials.length > 0 && (
         <ul class="footer-socials" aria-label="Social media">
           {socials.map((s) => (
@@ -28,12 +27,6 @@ const socials = [
                     <rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="1.6"/>
                     <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/>
                     <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor"/>
-                  </svg>
-                )}
-                {s.icon === 'tt' && (
-                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                    <path d="M14 3v10.2a3.3 3.3 0 1 1-3.3-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M14 3c.4 2.4 2.2 4.2 4.6 4.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 )}
                 {s.icon === 'pin' && (
@@ -64,7 +57,8 @@ const socials = [
         <li><a href={`mailto:${business.email}`}>{business.email}</a></li>
         {phone && <li><a href={phoneTel}>{phone}</a></li>}
         <li>{business.hoursDisplay}</li>
-        <li>Service area: {business.serviceArea.city} + {business.serviceArea.radiusKm}km</li>
+        <li>{business.address.streetAddress}</li>
+        <li>{business.address.addressLocality}, {business.address.addressRegion} {business.address.postalCode}</li>
       </ul>
     </div>
 

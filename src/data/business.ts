@@ -29,9 +29,8 @@ export const business = {
   ],
   hoursDisplay: 'Mon-Fri 9-6, Sat 11-6, Sun closed',
   social: {
-    instagram: 'https://instagram.com/balloonia.events',
-    tiktok: 'https://tiktok.com/@balloonia.events',
-    pinterest: 'https://pinterest.com/balloonia_events',
+    instagram: 'https://instagram.com/balloonia.co',
+    pinterest: 'https://ca.pinterest.com/ballooniaeventscanada/',
     facebook: '',
     googleBusiness: '',
   },

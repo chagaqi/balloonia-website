@@ -5,9 +5,11 @@ import Hero from '../../components/Hero.astro';
 import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import ProductGrid from '../../components/ProductGrid.astro';
+import ReviewsSlider from '../../components/ReviewsSlider.astro';
 import { faqPageSchema } from '../../lib/schema/faqPage';
 import { serviceSchema } from '../../lib/schema/service';
 import { getAllProducts } from '../../data/catalog/shopify';
+import { reviewsByTag } from '../../data/reviews';
 import '../../styles/quote-form.css';
 
 const entry = await getEntry('icp', 'graduations');
@@ -26,6 +28,7 @@ const portfolio = (await getCollection('portfolio'))
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('graduation')).slice(0, 6);
+const gradReviews = reviewsByTag('graduations');
 
 const schemas = [
   faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
@@ -106,6 +109,10 @@ const schemas = [
       <QuoteForm client:load initialEventType="Graduation" />
     </div>
   </section>
+
+  {gradReviews.length > 0 && (
+    <ReviewsSlider reviews={gradReviews} heading="What past grad clients have said." />
+  )}
 
   <FAQAccordion heading="Graduation FAQs" faqs={faqs} />
 </BaseLayout>

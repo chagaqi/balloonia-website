@@ -6,7 +6,9 @@ import ValueProp from '../components/ValueProp.astro';
 import ProductGrid from '../components/ProductGrid.astro';
 import BrendaIntro from '../components/BrendaIntro.astro';
 import CTAButton from '../components/CTAButton.astro';
+import ReviewsSlider from '../components/ReviewsSlider.astro';
 import { getFeaturedProducts } from '../data/catalog/shopify';
+import { reviews } from '../data/reviews';
 
 const portfolio = (await getCollection('portfolio'))
   .filter((p) => p.data.featured)
@@ -17,52 +19,52 @@ const featuredProducts = (await getFeaturedProducts()).slice(0, 8);
 
 const browseStockCards = [
   {
-    title: '[Card 1 — install type label]',
-    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Arches and Garlands',
+    blurb: 'Organic, hoop, and geometric arches. Stock-ready or built to your colour brief.',
     image: '/images/categories/arches-garlands.png',
     href: '/services/arches-garlands',
   },
   {
-    title: '[Card 2 — install type label]',
-    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Walls and Backdrops',
+    blurb: 'Branded photo walls, ceremony focal points, and event hero pieces.',
     image: '/images/categories/walls-backdrops.png',
     href: '/services/walls-backdrops',
   },
   {
-    title: '[Card 3 — install type label]',
-    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Centerpieces and Columns',
+    blurb: 'Table centerpieces, milestone number columns, and accent stands.',
     image: '/images/categories/centerpieces.png',
     href: '/services/centerpieces',
   },
   {
-    title: '[Card 4 — install type label]',
-    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Ceiling Installations',
+    blurb: 'Overhead clusters, canopies, and suspended floating displays.',
     image: '/images/categories/ceiling.png',
     href: '/services/ceiling',
   },
   {
-    title: '[Card 5 — install type label]',
-    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+    title: 'Bouquets',
+    blurb: 'Helium bouquets and accent clusters, delivered to London and surrounding area.',
     image: '/images/categories/bouquets.png',
     href: '/services/bouquets',
   },
 ];
 
 const icpCards = [
-  { title: '[ICP 1 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/weddings' },
-  { title: '[ICP 2 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/corporate' },
-  { title: '[ICP 3 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/showers' },
-  { title: '[ICP 4 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/birthdays' },
+  { title: 'Weddings', body: 'Ceremony arches, reception backdrops, suspended ceiling installs, custom centerpieces.', href: '/services/weddings' },
+  { title: 'Corporate', body: 'Grand openings, brand activations, product launches, holiday parties.', href: '/services/corporate' },
+  { title: 'Showers', body: 'Baby and bridal shower walls, garlands, themed accent setups.', href: '/services/showers' },
+  { title: 'Birthdays + Graduations', body: 'Milestone number arches, themed kids parties, Class-of-2026 grad columns.', href: '/services/birthdays' },
 ];
 ---
 
 <BaseLayout
-  topic="Balloon Decor London Ontario"
-  description="Custom balloon installations in London Ontario. Wedding arches, shower walls, corporate activations, kids birthdays, grad backdrops. Delivered and set up. From $60."
+  topic="Balloon Decor London Ontario | Custom Installs by Balloonia"
+  description="Custom balloon installations in London Ontario. Wedding arches, shower walls, corporate, birthdays, grads. Custom quote within 24 hours."
 >
   <Hero
-    headline="[Hero H1 — main brand value proposition]"
-    subhead="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    headline="Custom balloon installations, built fresh for your event."
+    subhead="Wedding arches, shower walls, corporate activations, kids birthdays, grad backdrops. Built to your colours, your venue, and your day. London and surrounding area. Custom quote back within 24 hours."
     primaryCta={{ href: '/quote', label: 'Get a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See recent work' }}
     image="/images/hero/peach-wedding-arch.jpg"
@@ -71,21 +73,21 @@ const icpCards = [
   />
 
   <ValueProp
-    eyebrow="[ValueProp eyebrow label]"
+    eyebrow="Why Balloonia"
     pillars={[
       {
-        title: '[Value prop 1 title]',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        title: 'Built for your event',
+        body: "Every Balloonia install starts fresh in your colours, your theme, and your venue's exact dimensions. No catalog arches sitting in a closet. No props recycled from last weekend's job.",
         icon: '✦',
       },
       {
-        title: '[Value prop 2 title]',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        title: 'Real structural work',
+        body: 'Hoops that hold their shape. Garlands that survive heat and wind. Ceiling installs that stay put. The structural side is the part you feel at the end of the night, when the room still looks finished.',
         icon: '◐',
       },
       {
-        title: '[Value prop 3 title]',
-        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        title: 'Delivered and installed',
+        body: 'We arrive before your event, build on site, and clean up after. You walk into a finished room.',
         icon: '↑',
       },
     ]}
@@ -94,8 +96,8 @@ const icpCards = [
   <section class="featured-portfolio section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">[Portfolio teaser eyebrow]</p>
-        <h2>[Portfolio teaser H2 — intro to recent installs grid]</h2>
+        <p class="eyebrow">Featured work</p>
+        <h2>Recent installs from the studio.</h2>
         <a class="section-link" href="/portfolio">See all work →</a>
       </header>
       <ul class="portfolio-grid-home">
@@ -114,8 +116,8 @@ const icpCards = [
   <section class="featured-products section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">[Featured products eyebrow]</p>
-        <h2>[Featured products H2 — intro to Shopify-fed product grid]</h2>
+        <p class="eyebrow">Shop the catalog</p>
+        <h2>Featured products.</h2>
         <a class="section-link" href="/shop">Browse all categories →</a>
       </header>
       <ProductGrid products={featuredProducts} columns={4} />
@@ -125,8 +127,8 @@ const icpCards = [
   <section class="order-online section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">[Browse-by-category eyebrow]</p>
-        <h2>[Browse-by-category H2 — intro to the 5 install-type cards]</h2>
+        <p class="eyebrow">Order Online</p>
+        <h2>Browse stock by category.</h2>
         <a class="section-link" href="/services">See all categories →</a>
       </header>
       <ul class="browse-stock-grid">
@@ -151,8 +153,8 @@ const icpCards = [
   <section class="who-we-serve section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">[Who we serve eyebrow]</p>
-        <h2>[Who we serve H2 — intro to the 4 ICP cards]</h2>
+        <p class="eyebrow">Who we serve</p>
+        <h2>From backyard birthdays to corporate brand activations.</h2>
       </header>
       <div class="icp-grid">
         {icpCards.map((card) => (
@@ -168,10 +170,12 @@ const icpCards = [
 
   <BrendaIntro variant="home" />
 
+  <ReviewsSlider reviews={reviews} />
+
   <section class="cta-strip section">
     <div class="container container-narrow text-center">
       <h2>Tell us about your event.</h2>
-      <p class="lede">Send your date, venue, and a rough budget. Brenda will reply within 24 hours with a custom quote.</p>
+      <p class="lede">Send your date, your venue, and a rough idea of your colours and budget. We'll reply within 24 hours with a custom quote.</p>
       <div class="cta-strip-buttons">
         <CTAButton href="/quote" variant="primary" size="lg">Get a quote</CTAButton>
         <CTAButton href="/portfolio" variant="secondary" size="lg">Browse the portfolio</CTAButton>

@@ -1,0 +1,331 @@
+---
+import type { Review } from '../data/reviews';
+import { getCollection } from 'astro:content';
+
+type Props = {
+  reviews: Review[];
+  eyebrow?: string;
+  heading?: string;
+};
+
+const { reviews, eyebrow = 'From the community', heading = 'What past clients have said.' } = Astro.props;
+
+// Optionally pull the matching portfolio image for each review (best-effort).
+const portfolio = await getCollection('portfolio');
+const portfolioBySlug = new Map(portfolio.map((p) => [p.id.replace(/\.md$/, ''), p.data]));
+
+const enriched = reviews.map((r) => {
+  const slugKey = r.portfolioSlug ?? '';
+  const port = portfolioBySlug.get(slugKey);
+  return {
+    ...r,
+    image: port?.image ?? null,
+    alt: port?.alt ?? r.installRef,
+  };
+});
+---
+
+<section class="reviews-section section">
+  <div class="container">
+    <header class="reviews-head">
+      <p class="eyebrow">{eyebrow}</p>
+      <h2>{heading}</h2>
+    </header>
+
+    <div class="reviews-slider" data-reviews-slider>
+      <button
+        class="reviews-btn reviews-btn-prev"
+        type="button"
+        aria-label="Previous review"
+        data-reviews-prev
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <ul class="reviews-track" data-reviews-track>
+        {enriched.map((r, i) => (
+          <li class="review-card" data-review-index={i} aria-roledescription="slide" aria-label={`Review ${i + 1} of ${enriched.length}`}>
+            {r.image && (
+              <div class="review-image">
+                <img src={r.image} alt={r.alt} loading="lazy" />
+              </div>
+            )}
+            <div class="review-body">
+              <div class="review-stars" aria-label={`${r.rating} out of 5 stars`}>
+                {Array.from({ length: r.rating }).map(() => (
+                  <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+                    <path d="M10 1l2.6 5.6 6.2.7-4.6 4.3 1.3 6.1L10 14.8l-5.5 2.9L5.8 11.6 1.2 7.3l6.2-.7L10 1z" fill="currentColor"/>
+                  </svg>
+                ))}
+              </div>
+              <blockquote class="review-quote">
+                <p>{r.quote}</p>
+              </blockquote>
+              <footer class="review-attrib">
+                <cite class="review-name">{r.reviewer}</cite>
+                <span class="review-install">{r.installRef}</span>
+              </footer>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        class="reviews-btn reviews-btn-next"
+        type="button"
+        aria-label="Next review"
+        data-reviews-next
+      >
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="reviews-dots" data-reviews-dots role="tablist" aria-label="Select review">
+        {enriched.map((_, i) => (
+          <button
+            class={`reviews-dot ${i === 0 ? 'active' : ''}`}
+            type="button"
+            role="tab"
+            aria-label={`Go to review ${i + 1}`}
+            data-reviews-dot={i}
+          ></button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reviews-section {
+    background: var(--color-paper-soft);
+  }
+  .reviews-head {
+    text-align: center;
+    margin-bottom: var(--space-7);
+  }
+  .reviews-head .eyebrow {
+    margin-bottom: var(--space-2);
+  }
+  .reviews-head h2 {
+    margin: 0;
+  }
+  .reviews-slider {
+    position: relative;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .reviews-track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: var(--space-5);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .reviews-track::-webkit-scrollbar { display: none; }
+
+  .review-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0;
+    min-height: 280px;
+  }
+  .review-image {
+    aspect-ratio: 4 / 3;
+    background: var(--color-paper-edge);
+    overflow: hidden;
+  }
+  .review-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .review-body {
+    padding: var(--space-6) var(--space-5) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .review-stars {
+    display: flex;
+    gap: 2px;
+    color: var(--color-accent);
+  }
+  .review-quote {
+    margin: 0;
+    flex: 1;
+  }
+  .review-quote p {
+    font-family: var(--font-display);
+    font-size: var(--font-size-xl);
+    line-height: 1.4;
+    color: var(--color-ink);
+    margin: 0;
+  }
+  .review-attrib {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin-top: var(--space-3);
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-4);
+  }
+  .review-name {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--color-ink);
+    font-size: var(--font-size-base);
+  }
+  .review-install {
+    color: var(--color-ink-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .reviews-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-ink);
+    cursor: pointer;
+    z-index: 2;
+    transition: background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  .reviews-btn:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    transform: translateY(-50%) scale(1.05);
+  }
+  .reviews-btn-prev { left: -22px; }
+  .reviews-btn-next { right: -22px; }
+
+  .reviews-dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+  .reviews-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 0;
+    background: var(--color-line);
+    padding: 0;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+  }
+  .reviews-dot:hover {
+    background: var(--color-ink-muted);
+  }
+  .reviews-dot.active {
+    background: var(--color-ink);
+    transform: scale(1.3);
+  }
+
+  @media (min-width: 768px) {
+    .review-card {
+      grid-template-columns: 1fr 1.2fr;
+      min-height: 360px;
+    }
+    .review-image {
+      aspect-ratio: auto;
+      height: 100%;
+    }
+    .review-body {
+      padding: var(--space-7) var(--space-6) var(--space-6);
+    }
+  }
+  @media (max-width: 768px) {
+    .reviews-btn-prev { left: 4px; }
+    .reviews-btn-next { right: 4px; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-reviews-slider]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-reviews-track]');
+    const prev = root.querySelector<HTMLElement>('[data-reviews-prev]');
+    const next = root.querySelector<HTMLElement>('[data-reviews-next]');
+    const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-reviews-dot]'));
+    if (!track || !prev || !next) return;
+
+    let autoTimer: number | null = null;
+    const AUTO_MS = 7000;
+
+    function scrollToIndex(i: number) {
+      const total = track!.children.length;
+      const idx = ((i % total) + total) % total;
+      const card = track!.children[idx] as HTMLElement;
+      if (!card) return;
+      track!.scrollTo({ left: card.offsetLeft - track!.offsetLeft, behavior: 'smooth' });
+      dots.forEach((d, di) => d.classList.toggle('active', di === idx));
+    }
+
+    function currentIndex(): number {
+      const cards = Array.from(track!.children) as HTMLElement[];
+      const x = track!.scrollLeft;
+      let best = 0;
+      let bestDist = Infinity;
+      cards.forEach((c, i) => {
+        const dist = Math.abs(c.offsetLeft - track!.offsetLeft - x);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = i;
+        }
+      });
+      return best;
+    }
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = window.setInterval(() => scrollToIndex(currentIndex() + 1), AUTO_MS);
+    }
+    function stopAuto() {
+      if (autoTimer) {
+        window.clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    prev.addEventListener('click', () => { scrollToIndex(currentIndex() - 1); stopAuto(); startAuto(); });
+    next.addEventListener('click', () => { scrollToIndex(currentIndex() + 1); stopAuto(); startAuto(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { scrollToIndex(i); stopAuto(); startAuto(); }));
+
+    let scrollTimer: number | null = null;
+    track.addEventListener('scroll', () => {
+      if (scrollTimer) window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(() => {
+        const idx = currentIndex();
+        dots.forEach((d, di) => d.classList.toggle('active', di === idx));
+      }, 80);
+    });
+
+    root.addEventListener('mouseenter', stopAuto);
+    root.addEventListener('mouseleave', startAuto);
+    root.addEventListener('focusin', stopAuto);
+
+    startAuto();
+  });
+</script>
