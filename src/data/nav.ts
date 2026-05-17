@@ -66,14 +66,6 @@ export const primaryNav: PrimaryNavItem[] = [
           ],
         },
       ],
-      feature: {
-        eyebrow: 'Featured',
-        title: 'Tell us about your event',
-        body: 'Six quick steps. Brenda quotes within 24 hours.',
-        href: '/quote',
-        image: '/images/icp/weddings-hero.svg',
-        imageAlt: 'Custom balloon arch in cream and pampas tones',
-      },
     },
   },
   {
@@ -101,14 +93,6 @@ export const primaryNav: PrimaryNavItem[] = [
           ],
         },
       ],
-      feature: {
-        eyebrow: 'Order Online',
-        title: 'Browse the full catalog',
-        body: 'Stock items, ready to order. Custom builds via quote.',
-        href: '/shop',
-        image: '/images/services/balloon-arches.svg',
-        imageAlt: 'Balloon arch in pastel palette',
-      },
     },
   },
   {
