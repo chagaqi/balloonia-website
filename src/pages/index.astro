@@ -17,42 +17,42 @@ const featuredProducts = (await getFeaturedProducts()).slice(0, 8);
 
 const browseStockCards = [
   {
-    title: 'Arches and Garlands',
-    blurb: 'Organic, hoop, geometric. Stock and custom.',
+    title: '[Card 1 — install type label]',
+    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     image: '/images/categories/arches-garlands.png',
-    href: '/services#arches-garlands',
+    href: '/services/arches-garlands',
   },
   {
-    title: 'Walls and Backdrops',
-    blurb: 'Branded backdrops, photo-op walls, event focal points.',
+    title: '[Card 2 — install type label]',
+    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     image: '/images/categories/walls-backdrops.png',
-    href: '/services#walls-backdrops',
+    href: '/services/walls-backdrops',
   },
   {
-    title: 'Centerpieces and Columns',
-    blurb: 'Table centerpieces, milestone number columns, accent stands.',
+    title: '[Card 3 — install type label]',
+    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     image: '/images/categories/centerpieces.png',
-    href: '/services#centerpieces',
+    href: '/services/centerpieces',
   },
   {
-    title: 'Ceiling Installations',
-    blurb: 'Overhead clusters, canopies, floating displays.',
+    title: '[Card 4 — install type label]',
+    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     image: '/images/categories/ceiling.png',
-    href: '/services#ceiling',
+    href: '/services/ceiling',
   },
   {
-    title: 'Bouquets',
-    blurb: 'Helium bouquets and accent clusters, deliverable around London.',
+    title: '[Card 5 — install type label]',
+    blurb: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     image: '/images/categories/bouquets.png',
-    href: '/services#bouquets',
+    href: '/services/bouquets',
   },
 ];
 
 const icpCards = [
-  { title: 'Weddings', body: 'Ceremony arches, reception backdrops, ceiling installs, centerpieces.', href: '/services/weddings' },
-  { title: 'Corporate', body: 'Grand openings, brand activations, holiday parties, office events.', href: '/services/corporate' },
-  { title: 'Showers', body: 'Baby and bridal shower packages, garlands, walls, accents.', href: '/services/showers' },
-  { title: 'Birthdays + Graduations', body: 'Milestone arches, themed kid parties, Class-of grad columns.', href: '/services/birthdays' },
+  { title: '[ICP 1 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/weddings' },
+  { title: '[ICP 2 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/corporate' },
+  { title: '[ICP 3 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/showers' },
+  { title: '[ICP 4 — event type label]', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', href: '/services/birthdays' },
 ];
 ---
 
@@ -61,8 +61,8 @@ const icpCards = [
   description="Custom balloon installations in London Ontario. Wedding arches, shower walls, corporate activations, kids birthdays, grad backdrops. Delivered and set up. From $60."
 >
   <Hero
-    headline="Custom balloon installations, built fresh for your event."
-    subhead="Wedding arches, shower walls, corporate activations, kids birthdays, grad backdrops. Built in your colors and venue dimensions, delivered around London Ontario. Quotes back within 24 hours."
+    headline="[Hero H1 — main brand value proposition]"
+    subhead="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
     primaryCta={{ href: '/quote', label: 'Get a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See recent work' }}
     image="/images/hero/peach-wedding-arch.jpg"
@@ -71,21 +71,21 @@ const icpCards = [
   />
 
   <ValueProp
-    eyebrow="Why Balloonia"
+    eyebrow="[ValueProp eyebrow label]"
     pillars={[
       {
-        title: 'Built for your event',
-        body: 'Every install is started fresh in your colors, theme, and venue dimensions. No catalog arches, no recycled props.',
+        title: '[Value prop 1 title]',
+        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         icon: '✦',
       },
       {
-        title: 'Real structural work',
-        body: 'Hoops that hold their shape, garlands that survive heat and wind, ceiling installs that stay put. The details that separate a build from a Pinterest pin.',
+        title: '[Value prop 2 title]',
+        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         icon: '◐',
       },
       {
-        title: 'Delivered and installed',
-        body: 'We arrive 2 to 3 hours before your event, build on-site, and clean up after. You walk in to a finished room.',
+        title: '[Value prop 3 title]',
+        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         icon: '↑',
       },
     ]}
@@ -94,8 +94,8 @@ const icpCards = [
   <section class="featured-portfolio section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Featured work</p>
-        <h2>Recent installs</h2>
+        <p class="eyebrow">[Portfolio teaser eyebrow]</p>
+        <h2>[Portfolio teaser H2 — intro to recent installs grid]</h2>
         <a class="section-link" href="/portfolio">See all work →</a>
       </header>
       <ul class="portfolio-grid-home">
@@ -114,8 +114,8 @@ const icpCards = [
   <section class="featured-products section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Shop the catalog</p>
-        <h2>Featured products</h2>
+        <p class="eyebrow">[Featured products eyebrow]</p>
+        <h2>[Featured products H2 — intro to Shopify-fed product grid]</h2>
         <a class="section-link" href="/shop">Browse all categories →</a>
       </header>
       <ProductGrid products={featuredProducts} columns={4} />
@@ -125,8 +125,8 @@ const icpCards = [
   <section class="order-online section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Order Online</p>
-        <h2>Browse stock by category</h2>
+        <p class="eyebrow">[Browse-by-category eyebrow]</p>
+        <h2>[Browse-by-category H2 — intro to the 5 install-type cards]</h2>
         <a class="section-link" href="/services">See all categories →</a>
       </header>
       <ul class="browse-stock-grid">
@@ -151,8 +151,8 @@ const icpCards = [
   <section class="who-we-serve section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Who we serve</p>
-        <h2>From weekend markets to corporate launches</h2>
+        <p class="eyebrow">[Who we serve eyebrow]</p>
+        <h2>[Who we serve H2 — intro to the 4 ICP cards]</h2>
       </header>
       <div class="icp-grid">
         {icpCards.map((card) => (
@@ -167,14 +167,6 @@ const icpCards = [
   </section>
 
   <BrendaIntro variant="home" />
-
-  <section class="social-proof section-tight">
-    <div class="container container-narrow">
-      <p class="eyebrow">From the community</p>
-      <h2>Reviews launching soon.</h2>
-      <p class="muted">As Brenda builds the local portfolio, real reviews land here. We won't fabricate.</p>
-    </div>
-  </section>
 
   <section class="cta-strip section">
     <div class="container container-narrow text-center">

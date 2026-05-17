@@ -53,7 +53,7 @@ const schemas = [
     headline={entry.data.title}
     subhead={`Most office events run $${entry.data.pricingMin} to $${entry.data.pricingMax}. Brand-color matching and contract rates available.`}
     primaryCta={{ href: '/quote?type=Corporate', label: 'Start a corporate quote' }}
-    secondaryCta={{ href: 'https://corp.balloonia.events', label: 'See corporate offerings' }}
+    secondaryCta={{ href: 'https://corp.balloonia.events', label: 'Download the corporate offerings PDF', external: true }}
     image={entry.data.heroImage}
     imageAlt={entry.data.heroAlt}
     variant="page"
@@ -97,14 +97,6 @@ const schemas = [
       </div>
     </section>
   )}
-
-  <section class="icp-trusted-by section">
-    <div class="container container-narrow">
-      <p class="eyebrow">Trusted by</p>
-      <h2>London Ontario businesses</h2>
-      <p class="muted">Logos and testimonials populate as we land accounts. We won't fabricate.</p>
-    </div>
-  </section>
 
   <section class="icp-quote section">
     <div class="container">

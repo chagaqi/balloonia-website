@@ -61,7 +61,7 @@ export const primaryNav: PrimaryNavItem[] = [
           items: [
             { label: 'Corporate packages', href: '/services/corporate' },
             { label: 'Custom themed installs', href: '/services/custom-themed' },
-            { label: 'Corporate offerings', href: 'https://corp.balloonia.events' },
+            { label: 'Corporate offerings', href: 'https://corp.balloonia.events', external: true },
             { label: 'Book a discovery call', href: '/contact' },
           ],
         },
