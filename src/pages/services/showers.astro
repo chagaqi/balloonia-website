@@ -3,12 +3,11 @@ import { getCollection, getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import FAQAccordion from '../../components/FAQAccordion.astro';
-import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import CTAButton from '../../components/CTAButton.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
 import { faqPageSchema } from '../../lib/schema/faqPage';
 import { serviceSchema } from '../../lib/schema/service';
 import { getAllProducts } from '../../data/catalog/shopify';
-import '../../styles/quote-form.css';
 
 const entry = await getEntry('icp', 'showers');
 if (!entry) throw new Error('Missing icp/showers');
@@ -99,13 +98,15 @@ const schemas = [
     </section>
   )}
 
-  <section class="icp-quote section">
-    <div class="container">
-      <header class="section-head">
-        <p class="eyebrow">Get a quote</p>
-        <h2>Tell us about the shower</h2>
-      </header>
-      <QuoteForm client:load initialEventType="Shower" />
+  <section class="icp-cta section">
+    <div class="container container-narrow text-center">
+      <p class="eyebrow">Get a quote</p>
+      <h2>Tell us about the shower.</h2>
+      <p class="lede">Send your date, palette, and a rough headcount. Brenda quotes within 24 hours.</p>
+      <div class="icp-cta-buttons">
+        <CTAButton href="/quote" variant="primary" size="lg">Start your quote</CTAButton>
+        <CTAButton href="/portfolio" variant="secondary" size="lg">See shower work</CTAButton>
+      </div>
     </div>
   </section>
 
@@ -133,7 +134,16 @@ const schemas = [
     background: var(--color-paper-edge);
   }
   .section-head { margin-bottom: var(--space-6); }
-  .icp-quote { background: var(--color-paper-soft); }
+  .icp-cta { background: var(--color-paper-soft); }
+  .text-center { text-align: center; }
+  .text-center p { margin-left: auto; margin-right: auto; }
+  .icp-cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-6);
+  }
   @media (min-width: 640px) {
     .portfolio-grid-icp { grid-template-columns: repeat(3, 1fr); }
   }

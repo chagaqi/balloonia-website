@@ -3,14 +3,13 @@ import { getCollection, getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import FAQAccordion from '../../components/FAQAccordion.astro';
-import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import CTAButton from '../../components/CTAButton.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
 import ReviewsSlider from '../../components/ReviewsSlider.astro';
 import { faqPageSchema } from '../../lib/schema/faqPage';
 import { serviceSchema } from '../../lib/schema/service';
 import { getAllProducts } from '../../data/catalog/shopify';
 import { reviewsByTag } from '../../data/reviews';
-import '../../styles/quote-form.css';
 
 const entry = await getEntry('icp', 'weddings');
 if (!entry) throw new Error('Missing icp/weddings');
@@ -103,14 +102,15 @@ const schemas = [
     </section>
   )}
 
-  <section class="icp-quote section">
-    <div class="container">
-      <header class="section-head">
-        <p class="eyebrow">Get started</p>
-        <h2>Tell us about your wedding</h2>
-        <p class="lede">A few minutes now saves a back-and-forth later. Brenda quotes within 24 hours.</p>
-      </header>
-      <QuoteForm client:load initialEventType="Wedding" />
+  <section class="icp-cta section">
+    <div class="container container-narrow text-center">
+      <p class="eyebrow">Get started</p>
+      <h2>Tell us about your wedding.</h2>
+      <p class="lede">A few minutes now saves a back-and-forth later. Brenda quotes within 24 hours.</p>
+      <div class="icp-cta-buttons">
+        <CTAButton href="/quote" variant="primary" size="lg">Start your quote</CTAButton>
+        <CTAButton href="/portfolio" variant="secondary" size="lg">See wedding work</CTAButton>
+      </div>
     </div>
   </section>
 
@@ -156,8 +156,17 @@ const schemas = [
   .section-head {
     margin-bottom: var(--space-6);
   }
-  .icp-quote {
+  .icp-cta {
     background: var(--color-paper-soft);
+  }
+  .text-center { text-align: center; }
+  .text-center p { margin-left: auto; margin-right: auto; }
+  .icp-cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    margin-top: var(--space-6);
   }
   @media (min-width: 640px) {
     .portfolio-grid-icp {
