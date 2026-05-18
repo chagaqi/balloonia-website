@@ -223,6 +223,16 @@ async function fetchQuoTranscript(callId: string): Promise<string> {
 }
 
 export default async function handler(req: Request): Promise<Response> {
+  // Log every hit so we can see in Vercel logs whether Quo is reaching us.
+  console.log('[quo-webhook] called, method:', req.method);
+  console.log('[quo-webhook] env check:', {
+    hasAnthropic: !!process.env.ANTHROPIC_API_KEY,
+    hasTgToken: !!process.env.TELEGRAM_BOT_TOKEN,
+    hasQuoKey: !!process.env.QUO_API_KEY,
+    hasBrendaChat: !!process.env.BRENDA_CHAT_ID,
+    hasDhChat: !!process.env.DH_CHAT_ID,
+  });
+
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }
@@ -231,12 +241,20 @@ export default async function handler(req: Request): Promise<Response> {
   try {
     body = await req.json();
   } catch {
+    console.error('[quo-webhook] invalid JSON');
     return new Response('Invalid JSON', { status: 400 });
   }
 
+  console.log('[quo-webhook] payload:', JSON.stringify(body).slice(0, 1000));
+
   const target = process.env.BRENDA_CHAT_ID || process.env.DH_CHAT_ID;
   if (!target) {
+    console.error('[quo-webhook] no chat target configured');
     return new Response('No target chat configured', { status: 500 });
+  }
+  if (!process.env.TELEGRAM_BOT_TOKEN) {
+    console.error('[quo-webhook] TELEGRAM_BOT_TOKEN missing');
+    return new Response('TELEGRAM_BOT_TOKEN missing', { status: 500 });
   }
 
   // Quo webhook payloads typically wrap the event data under `data.object`.
@@ -248,7 +266,11 @@ export default async function handler(req: Request): Promise<Response> {
     body?.callId;
 
   if (!callId) {
-    await sendTelegram(target, '⚠️ Quo webhook fired but no callId found in payload. Check webhook config.');
+    console.warn('[quo-webhook] no callId found in payload');
+    await sendTelegram(
+      target,
+      `⚠️ Quo webhook fired but no callId in payload.\n\nRaw payload:\n\`\`\`\n${JSON.stringify(body, null, 2).slice(0, 2000)}\n\`\`\``,
+    );
     return new Response('No callId', { status: 200 });
   }
 
