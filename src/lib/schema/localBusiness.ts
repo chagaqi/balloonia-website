@@ -33,7 +33,7 @@ export function localBusinessSchema() {
     description: business.description,
     url: business.url,
     email: business.email,
-    image: `${business.url}/og-default.svg`,
+    image: `${business.url}/images/hero/peach-wedding-arch.jpg`,
     priceRange: '$$',
     areaServed: {
       '@type': 'City',

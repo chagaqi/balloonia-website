@@ -8,7 +8,7 @@ type Props = {
   noindex?: boolean;
 };
 
-const { topic, description, ogImage = '/og-default.svg', noindex = false } = Astro.props;
+const { topic, description, ogImage = '/images/hero/peach-wedding-arch.jpg', noindex = false } = Astro.props;
 const title = buildTitle(topic);
 const canonical = canonicalFor(Astro.url.pathname);
 const og = new URL(ogImage, Astro.site ?? 'https://balloonia.events').toString();
