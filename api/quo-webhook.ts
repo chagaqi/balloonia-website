@@ -258,12 +258,17 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   // Quo v3 webhook payload shape:
-  //   { object: { type, data: { object: {...event-specific fields...}, deepLink? } } }
-  const event = body?.object ?? body;
-  const eventType: string = event?.type ?? '';
-  const eventData = event?.data?.object ?? {};
-  const deepLink: string | undefined = event?.data?.deepLink;
-  const callId: string | undefined = eventData?.callId ?? eventData?.id;
+  //   {
+  //     id, object: "event", type, createdAt, apiVersion,
+  //     data: { object: {...event-specific...}, deepLink? }
+  //   }
+  const eventType: string = body?.type ?? '';
+  const eventObj = body?.data?.object ?? {};
+  const deepLink: string | undefined = body?.data?.deepLink;
+
+  // call.summary.completed: data.object is a callSummary with .callId
+  // call.transcript.completed: data.object is a call (with .id) containing callTranscript
+  const callId: string | undefined = eventObj?.callId ?? eventObj?.id;
 
   console.log('[quo-webhook] parsed:', { eventType, callId, hasDeepLink: !!deepLink });
 
@@ -271,30 +276,44 @@ export default async function handler(req: Request): Promise<Response> {
     console.warn('[quo-webhook] no callId found');
     await sendTelegram(
       target,
-      `⚠️ Quo webhook fired but no callId.\n\nRaw payload:\n\`\`\`\n${JSON.stringify(body, null, 2).slice(0, 2500)}\n\`\`\``,
+      `⚠️ Quo webhook fired (${eventType}) but no callId.\n\n\`\`\`\n${JSON.stringify(body, null, 2).slice(0, 2500)}\n\`\`\``,
     );
     return new Response('No callId', { status: 200 });
   }
 
   try {
-    // Pull whatever's inline in the event, plus the full transcript via API.
-    // Different event types give us different things; combine everything available.
-    const inlineSummary: string[] | string = eventData?.summary ?? '';
-    const inlineNextSteps: string[] = eventData?.nextSteps ?? [];
-    const inlineDialogue = eventData?.dialogue;
-
+    // Collect every signal available from this payload + the previous event for the same call.
     let transcript = '';
-    if (inlineDialogue && Array.isArray(inlineDialogue)) {
-      transcript = inlineDialogue.map((d: any) => `${d.speaker || d.identifier || '?'}: ${d.content || d.text || ''}`).join('\n');
-    } else if (typeof eventData?.transcript === 'string') {
-      transcript = eventData.transcript;
-    } else {
-      // Fall back to fetching from Quo API
-      transcript = await fetchQuoTranscript(callId);
+    let summaryText = '';
+    let nextStepsText = '';
+
+    // call.transcript.completed: full dialogue inline at data.object.callTranscript.dialogue
+    const dialogue = eventObj?.callTranscript?.dialogue;
+    if (Array.isArray(dialogue)) {
+      transcript = dialogue
+        .map((d: any) => {
+          const who = d.speaker === 1 || d.userId ? 'Blake' : 'Prospect';
+          return `${who}: ${d.content || ''}`;
+        })
+        .join('\n');
+    } else if (typeof eventObj?.transcript === 'string') {
+      transcript = eventObj.transcript;
     }
 
-    const summaryText = Array.isArray(inlineSummary) ? inlineSummary.join('\n') : (inlineSummary || '');
-    const nextStepsText = inlineNextSteps.length ? inlineNextSteps.join('\n') : '';
+    // call.summary.completed: summary array + nextSteps array
+    if (Array.isArray(eventObj?.summary)) {
+      summaryText = eventObj.summary.join('\n');
+    } else if (typeof eventObj?.summary === 'string') {
+      summaryText = eventObj.summary;
+    }
+    if (Array.isArray(eventObj?.nextSteps)) {
+      nextStepsText = eventObj.nextSteps.join('\n');
+    }
+
+    // If neither came inline (or both arrived but were empty), pull transcript from API.
+    if (!transcript && !summaryText) {
+      transcript = await fetchQuoTranscript(callId);
+    }
 
     const fullText = [
       summaryText && `SUMMARY:\n${summaryText}`,
@@ -308,14 +327,18 @@ export default async function handler(req: Request): Promise<Response> {
 
     const lead = await extractFields(fullText);
 
-    const duration = eventData?.duration
-      ? `${Math.round(eventData.duration / 60)} min`
-      : undefined;
+    const mediaUrl = eventObj?.media?.[0]?.url;
+    const duration = eventObj?.media?.[0]?.duration ?? eventObj?.duration;
+    const durationStr = duration ? `${Math.round(duration / 60)} min` : undefined;
 
-    const message = buildTelegramMessage(lead, { id: callId, duration, recordingUrl: deepLink });
+    const message = buildTelegramMessage(lead, {
+      id: callId,
+      duration: durationStr,
+      recordingUrl: deepLink || mediaUrl,
+    });
     await sendTelegram(target, message);
 
-    return new Response(JSON.stringify({ ok: true, callId }), {
+    return new Response(JSON.stringify({ ok: true, callId, eventType }), {
       status: 200,
       headers: { 'content-type': 'application/json' },
     });
@@ -324,7 +347,7 @@ export default async function handler(req: Request): Promise<Response> {
     console.error('[quo-webhook] pipeline error:', msg);
     await sendTelegram(
       target,
-      `⚠️ Discovery pipeline error for call ${callId}: ${msg}\n\nManually review: ${deepLink || '(no deep link)'}`,
+      `⚠️ Discovery pipeline error for call ${callId} (${eventType}): ${msg}\n\nManually review: ${deepLink || '(no deep link)'}`,
     );
     // Return 200 so Quo doesn't retry endlessly on an error we already handled.
     return new Response(JSON.stringify({ error: msg }), {
