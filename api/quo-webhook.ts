@@ -206,20 +206,52 @@ async function fetchQuoTranscript(callId: string): Promise<string> {
   const key = process.env.QUO_API_KEY;
   if (!key) throw new Error('QUO_API_KEY missing');
 
-  const r = await fetch(`https://api.openphone.com/v1/calls/${callId}/transcriptions`, {
+  // Try transcript first, fall back to summary if transcript not ready.
+  const tr = await fetch(`https://api.openphone.com/v1/call-transcripts/${callId}`, {
     headers: { Authorization: key },
   });
-  if (!r.ok) throw new Error(`Quo transcript fetch ${r.status}: ${await r.text()}`);
-  const data = (await r.json()) as {
-    data?: { dialogue?: { speaker?: string; content?: string }[]; transcript?: string }[];
-  };
-  const tr = data.data?.[0];
-  if (!tr) return '(no transcript available)';
-  if (tr.transcript) return tr.transcript;
-  if (tr.dialogue) {
-    return tr.dialogue.map((d) => `${d.speaker || '?'}: ${d.content || ''}`).join('\n');
+  if (tr.ok) {
+    const body = (await tr.json()) as {
+      data?: {
+        dialogue?: { content?: string; userId?: string; identifier?: string }[];
+        transcript?: string;
+        status?: string;
+      };
+    };
+    const d = body.data;
+    if (d?.transcript) return d.transcript;
+    if (Array.isArray(d?.dialogue) && d!.dialogue!.length) {
+      return d!.dialogue!
+        .map((line) => {
+          const who = line.userId ? 'Blake' : 'Prospect';
+          return `${who}: ${line.content || ''}`;
+        })
+        .join('\n');
+    }
+  } else if (tr.status !== 404) {
+    throw new Error(`Quo transcript fetch ${tr.status}: ${await tr.text()}`);
   }
-  return JSON.stringify(tr);
+
+  // Transcript missing or 404 — fall back to AI summary.
+  const sm = await fetch(`https://api.openphone.com/v1/call-summaries/${callId}`, {
+    headers: { Authorization: key },
+  });
+  if (sm.ok) {
+    const body = (await sm.json()) as {
+      data?: { summary?: string[] | string; nextSteps?: string[] };
+    };
+    const d = body.data;
+    const summary = Array.isArray(d?.summary) ? d!.summary!.join('\n') : d?.summary || '';
+    const next = Array.isArray(d?.nextSteps) ? d!.nextSteps!.join('\n') : '';
+    const combined = [summary && `SUMMARY:\n${summary}`, next && `NEXT STEPS:\n${next}`]
+      .filter(Boolean)
+      .join('\n\n');
+    if (combined) return combined;
+  } else if (sm.status !== 404) {
+    throw new Error(`Quo summary fetch ${sm.status}: ${await sm.text()}`);
+  }
+
+  return '(no transcript or summary available yet — Quo may still be processing)';
 }
 
 export default async function handler(req: Request): Promise<Response> {
