@@ -1,0 +1,83 @@
+---
+export interface Differentiator {
+  headline: string;
+  body: string;
+}
+
+export interface Props {
+  sectionHeadline: string;
+  items: Differentiator[];
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+}
+const { sectionHeadline, items, primaryCtaLabel, primaryCtaHref } = Astro.props;
+---
+
+<section class="diff section-paper section">
+  <div class="container">
+    <h2 class="diff__headline">{sectionHeadline}</h2>
+    <div class="diff__grid">
+      {
+        items.map((d) => (
+          <article class="diff__card">
+            <h3 class="diff__cardh">{d.headline}</h3>
+            <p class="diff__cardb">{d.body}</p>
+          </article>
+        ))
+      }
+    </div>
+    <div class="diff__cta">
+      <a class="btn btn-primary btn-arrow" href={primaryCtaHref}>{primaryCtaLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .diff__headline {
+    font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto var(--space-xl);
+    line-height: 1.15;
+  }
+
+  .diff__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .diff__card {
+    background-color: var(--color-paper);
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .diff__cardh {
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+
+  .diff__cardb {
+    color: var(--color-ink-soft);
+    font-size: var(--type-small);
+    line-height: 1.6;
+  }
+
+  .diff__cta {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 900px) {
+    .diff__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

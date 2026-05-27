@@ -1,0 +1,38 @@
+---
+export interface Props {
+  label: string;
+  caption?: string;
+}
+const { label, caption } = Astro.props;
+---
+
+<section class="strip">
+  <div class="container">
+    <p class="strip__label">{label}</p>
+    {caption ? <p class="strip__caption">{caption}</p> : null}
+  </div>
+</section>
+
+<style>
+  .strip {
+    background-color: var(--color-paper);
+    border-block: 1px solid var(--color-rule);
+    padding-block: var(--space-md);
+    text-align: center;
+  }
+
+  .strip__label {
+    font-family: var(--font-sans);
+    font-size: var(--type-micro);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .strip__caption {
+    margin-top: 0.4rem;
+    font-size: var(--type-small);
+    color: var(--color-ink-muted);
+  }
+</style>

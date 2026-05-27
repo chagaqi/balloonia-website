@@ -1,0 +1,77 @@
+---
+// Founder credibility block. Portrait lives at public/images/founder/brenda.png
+---
+
+<section class="founder section-paper section">
+  <div class="container">
+    <div class="founder__grid">
+      <div class="founder__media">
+        <img
+          class="founder__img"
+          src="/images/founder/brenda.png"
+          alt="Brenda, founder and artist behind Balloonia Events"
+          loading="lazy"
+        />
+      </div>
+      <div class="founder__copy">
+        <p class="eyebrow eyebrow--muted">Meet The Founder</p>
+        <h2 class="founder__headline">Hi, I'm Brenda.</h2>
+        <p class="founder__body">
+          Growing up around my father's furniture remodeling business, I learned to appreciate sharp attention to detail early on. After studying interior design at university and styling events for a local nonprofit, I fell in love with creating immersive atmospheres. There is nothing better than turning a simple, ordinary room into a magical experience. When I am not transforming venues, I am focused on styling my own home, because I truly believe every space deserves to feel like a sanctuary.
+        </p>
+        <p class="founder__signoff">— Brenda</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .founder__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+
+  .founder__media {
+    position: relative;
+  }
+
+  .founder__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .founder__headline {
+    font-size: var(--type-h2);
+    margin-bottom: var(--space-md);
+  }
+
+  .founder__body {
+    color: var(--color-ink-soft);
+    line-height: 1.65;
+    margin-bottom: var(--space-md);
+  }
+
+  .founder__body:last-of-type {
+    margin-bottom: var(--space-lg);
+  }
+
+  .founder__signoff {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 768px) {
+    .founder__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

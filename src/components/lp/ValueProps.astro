@@ -1,0 +1,112 @@
+---
+export interface ValueProp {
+  eyebrow: string;
+  headline: string;
+  body: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  imageCaption?: string;
+}
+
+export interface Props {
+  items: ValueProp[];
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+}
+const { items, primaryCtaLabel, primaryCtaHref } = Astro.props;
+---
+
+<section class="vprops section-paper">
+  <div class="container-wide vprops__inner">
+    {
+      items.map((item, i) => (
+        <div class={`vprops__row ${i % 2 === 1 ? 'vprops__row--flipped' : ''}`}>
+          <div class="vprops__media">
+            {item.imageSrc ? (
+              <img src={item.imageSrc} alt={item.imageAlt ?? ''} loading="lazy" class="vprops__img" />
+            ) : (
+              <div class="placeholder" data-ratio="wide">
+                [Image / video that complements & reinforces this value prop]
+              </div>
+            )}
+            {item.imageCaption ? <p class="vprops__caption">{item.imageCaption}</p> : null}
+          </div>
+          <div class="vprops__copy">
+            <p class="eyebrow eyebrow--muted">{item.eyebrow}</p>
+            {item.tag ? <p class="vprops__tag">{item.tag}</p> : null}
+            <h2 class="vprops__h">{item.headline}</h2>
+            <p class="vprops__body">{item.body}</p>
+            <a class="btn btn-primary btn-arrow" href={primaryCtaHref}>{primaryCtaLabel}</a>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .vprops {
+    padding-block: var(--space-2xl);
+  }
+
+  .vprops__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+    padding-block: var(--space-xl);
+  }
+
+  .vprops__row + .vprops__row {
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .vprops__row--flipped .vprops__media {
+    order: 2;
+  }
+
+  .vprops__img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .vprops__caption {
+    margin-top: var(--space-sm);
+    font-size: var(--type-micro);
+    color: var(--color-ink-muted);
+  }
+
+  .vprops__tag {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-emerald-deep);
+    margin-bottom: var(--space-sm);
+  }
+
+  .vprops__h {
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    margin-bottom: var(--space-md);
+  }
+
+  .vprops__body {
+    color: var(--color-ink-soft);
+    line-height: 1.65;
+    margin-bottom: var(--space-lg);
+  }
+
+  @media (max-width: 900px) {
+    .vprops__row {
+      grid-template-columns: 1fr;
+    }
+    .vprops__row--flipped .vprops__media {
+      order: 0;
+    }
+  }
+</style>

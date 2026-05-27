@@ -1,0 +1,122 @@
+---
+import LPBase from './LPBase.astro';
+import TopNav from '../components/lp/TopNav.astro';
+import MicroTrust from '../components/lp/MicroTrust.astro';
+import Hero from '../components/lp/Hero.astro';
+import SocialStrip from '../components/lp/SocialStrip.astro';
+import SocialProof from '../components/lp/SocialProof.astro';
+import PainPoint from '../components/lp/PainPoint.astro';
+import ValueProps from '../components/lp/ValueProps.astro';
+import Differentiators from '../components/lp/Differentiators.astro';
+import Process from '../components/lp/Process.astro';
+import Founder from '../components/lp/Founder.astro';
+import Guarantee from '../components/lp/Guarantee.astro';
+import FAQ from '../components/lp/FAQ.astro';
+import LeadCaptureModal from '../components/lp/LeadCaptureModal.astro';
+import FinalCTA from '../components/lp/FinalCTA.astro';
+import Footer from '../components/lp/Footer.astro';
+import type { LPConfig } from '../content/lps';
+
+export interface Props {
+  config: LPConfig;
+}
+const { config } = Astro.props;
+const canonical = `https://balloonia.events${config.route}`;
+
+// Defaults if a config doesn't override
+const topNav = config.topNav ?? {
+  logoText: 'Balloonia Events',
+  phoneDisplay: '(226) 242-2244',
+  phoneTel: '+12262422244',
+  ctaLabel: 'Book a Call',
+};
+const socialStripLabel = config.socialStripLabel ?? 'Trusted by 200+ venues across London Ontario';
+const socialProof = config.socialProof ?? {
+  eyebrow: 'Trusted by',
+  headline: 'Organizations that book Balloonia.',
+  footnote: 'A small sample of organizations across hospitality, community, faith, and culture in London.',
+};
+---
+
+<LPBase title={config.title} description={config.metaDescription} canonical={canonical}>
+  <TopNav
+    logoText={topNav.logoText}
+    logoImage={topNav.logoImage}
+    phoneDisplay={topNav.phoneDisplay}
+    phoneTel={topNav.phoneTel}
+    ctaLabel={topNav.ctaLabel}
+    ctaHref={config.hero.primaryCtaHref}
+  />
+  <MicroTrust caption={config.microTrustCaption} avatars={config.microTrustAvatars} />
+  <Hero
+    eyebrow={config.hero.eyebrow}
+    headline={config.hero.headline}
+    subhead={config.hero.subhead}
+    primaryCtaLabel={config.hero.primaryCtaLabel}
+    primaryCtaHref={config.hero.primaryCtaHref}
+    secondaryCtaLabel={config.hero.secondaryCtaLabel}
+    secondaryCtaHref={config.hero.secondaryCtaHref}
+    frictionKiller={config.hero.frictionKiller}
+    imageCaption={config.hero.imageCaption}
+    heroImage={config.hero.heroImage}
+    heroImageAlt={config.hero.heroImageAlt}
+  />
+  <SocialStrip label={socialStripLabel} />
+  <SocialProof
+    logos={config.clientLogos}
+    eyebrow={socialProof.eyebrow}
+    headline={socialProof.headline}
+    footnote={socialProof.footnote}
+  />
+  <PainPoint
+    headline={config.painPoint.headline}
+    body={config.painPoint.body}
+    primaryCtaLabel={config.hero.primaryCtaLabel}
+    primaryCtaHref={config.hero.primaryCtaHref}
+  />
+  <ValueProps
+    items={config.valueProps}
+    primaryCtaLabel={config.hero.primaryCtaLabel}
+    primaryCtaHref={config.hero.primaryCtaHref}
+  />
+  <SocialStrip label={socialStripLabel} />
+  <Differentiators
+    sectionHeadline={config.differentiators.sectionHeadline}
+    items={config.differentiators.items}
+    primaryCtaLabel={config.hero.primaryCtaLabel}
+    primaryCtaHref={config.hero.primaryCtaHref}
+  />
+  <Process
+    sectionHeadline={config.process.sectionHeadline}
+    steps={config.process.steps}
+    primaryCtaLabel={config.hero.primaryCtaLabel}
+    primaryCtaHref={config.hero.primaryCtaHref}
+  />
+  <Founder />
+  <Guarantee
+    eyebrow={config.guarantee.eyebrow}
+    headline={config.guarantee.headline}
+    body={config.guarantee.body}
+    trustPoints={config.guarantee.trustPoints}
+    primaryCtaLabel={config.hero.primaryCtaLabel}
+    primaryCtaHref={config.hero.primaryCtaHref}
+  />
+  <SocialStrip label={socialStripLabel} />
+  <FAQ items={config.faq} />
+  <FinalCTA
+    eyebrow={config.finalCta.eyebrow}
+    headline={config.finalCta.headline}
+    body={config.finalCta.body}
+    bullets={config.finalCta.bullets}
+    primaryCtaLabel={config.hero.primaryCtaLabel}
+    primaryCtaHref={config.hero.primaryCtaHref}
+    frictionKiller={config.hero.frictionKiller}
+    imageSrc={config.finalCta.imageSrc}
+    imageAlt={config.finalCta.imageAlt}
+  />
+  <Footer />
+  <LeadCaptureModal
+    title={config.hero.primaryCtaLabel}
+    subtitle={config.hero.frictionKiller}
+  />
+</LPBase>

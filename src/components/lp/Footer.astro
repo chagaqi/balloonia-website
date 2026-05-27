@@ -1,0 +1,114 @@
+---
+const phoneDisplay = '(226) 242-2244';
+const phoneTel = '+12262422244';
+const email = 'contact@balloonia.events';
+---
+
+<footer class="footer section-ink">
+  <div class="container-wide footer__inner">
+    <div class="footer__col">
+      <p class="footer__brand">Balloonia Events</p>
+      <p class="footer__line">London, Ontario, Canada</p>
+      <p class="footer__line"><a href={`tel:${phoneTel}`}>{phoneDisplay}</a></p>
+      <p class="footer__line"><a href={`mailto:${email}`}>{email}</a></p>
+    </div>
+    <div class="footer__col">
+      <p class="footer__h">Social</p>
+      <ul role="list">
+        <li><a href="https://instagram.com/balloonia.events">Instagram</a></li>
+        <li><a href="https://linkedin.com/company/balloonia-events">LinkedIn</a></li>
+        <li><a href="https://pinterest.com/balloonia">Pinterest</a></li>
+      </ul>
+    </div>
+    <div class="footer__col">
+      <p class="footer__h">Links</p>
+      <ul role="list">
+        <li><a href="/pricing">Pricing</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p>© 2026 Balloonia Events</p>
+    <p>Made in London, ON</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-lg);
+  }
+
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .footer__col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .footer__col a {
+    color: rgba(251, 249, 245, 0.85);
+    text-decoration: none;
+    font-size: var(--type-small);
+  }
+
+  .footer__col a:hover {
+    color: var(--color-cream-on-dark);
+  }
+
+  .footer__brand {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.5rem;
+    color: var(--color-cream-on-dark);
+    margin-bottom: var(--space-sm);
+  }
+
+  .footer__line {
+    font-size: var(--type-small);
+    color: rgba(251, 249, 245, 0.7);
+    margin-bottom: var(--space-xs);
+  }
+
+  .footer__h {
+    font-family: var(--font-sans);
+    font-size: var(--type-micro);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(251, 249, 245, 0.5);
+    margin-bottom: var(--space-sm);
+  }
+
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    padding-top: var(--space-md);
+    border-top: 1px solid rgba(251, 249, 245, 0.1);
+    font-size: var(--type-micro);
+    color: rgba(251, 249, 245, 0.5);
+    padding-inline: var(--section-pad-x);
+  }
+
+  @media (max-width: 768px) {
+    .footer__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .footer__bottom {
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+  }
+</style>

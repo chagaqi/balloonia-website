@@ -1,0 +1,96 @@
+---
+export interface Avatar {
+  src: string;
+  alt: string;
+}
+
+export interface Props {
+  caption: string;
+  avatars?: Avatar[];
+}
+const { caption, avatars = [] } = Astro.props;
+---
+
+<section class="micro-trust">
+  <div class="container">
+    <div class="micro-trust__row">
+      {
+        avatars.length > 0 ? (
+          <div class="micro-trust__faces">
+            {avatars.map((a) => (
+              <img class="micro-trust__face" src={a.src} alt={a.alt} loading="lazy" />
+            ))}
+          </div>
+        ) : (
+          <div class="micro-trust__faces">
+            <span class="micro-trust__face placeholder-circle">A</span>
+            <span class="micro-trust__face placeholder-circle">B</span>
+            <span class="micro-trust__face placeholder-circle">C</span>
+            <span class="micro-trust__face placeholder-circle">D</span>
+          </div>
+        )
+      }
+      <p class="micro-trust__caption">{caption}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .micro-trust {
+    padding-block: var(--space-lg) var(--space-md);
+    background-color: var(--color-paper);
+  }
+
+  @media (max-width: 640px) {
+    .micro-trust {
+      padding-block: var(--space-md) var(--space-xs);
+    }
+  }
+
+  .micro-trust__row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .micro-trust__faces {
+    display: flex;
+    align-items: center;
+  }
+
+  .micro-trust__face {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: -10px;
+    object-fit: cover;
+    background-color: #ffffff;
+    border: 1.5px solid var(--color-ink);
+    outline: 2px solid var(--color-paper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    color: var(--color-ink-muted);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  }
+
+  .micro-trust__face:first-child {
+    margin-left: 0;
+  }
+
+  .micro-trust__caption {
+    font-size: var(--type-small);
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  @media (max-width: 540px) {
+    .micro-trust__faces {
+      transform: scale(0.85);
+    }
+  }
+</style>

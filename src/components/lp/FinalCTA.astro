@@ -1,0 +1,131 @@
+---
+export interface Props {
+  eyebrow?: string;
+  headline: string;
+  body: string;
+  bullets: string[];
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+  frictionKiller: string;
+  imageSrc?: string;
+  imageAlt?: string;
+}
+const {
+  eyebrow,
+  headline,
+  body,
+  bullets,
+  primaryCtaLabel,
+  primaryCtaHref,
+  frictionKiller,
+  imageSrc,
+  imageAlt = '',
+} = Astro.props;
+---
+
+<section class="final section-paper-soft section">
+  <div class="container-wide">
+    <div class="final__grid">
+      <div class="final__copy">
+        {eyebrow ? <p class="eyebrow eyebrow--muted">{eyebrow}</p> : null}
+        <h2 class="final__h">{headline}</h2>
+        <p class="final__body">{body}</p>
+        <ul class="final__bullets" role="list">
+          {bullets.map((b) => (
+            <li>
+              <span class="final__check" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <span>{b}</span>
+            </li>
+          ))}
+        </ul>
+        <a class="btn btn-primary btn-arrow" href={primaryCtaHref}>{primaryCtaLabel}</a>
+        <p class="friction-killer">{frictionKiller}</p>
+      </div>
+      <div class="final__media">
+        {imageSrc ? (
+          <img class="final__img" src={imageSrc} alt={imageAlt} loading="lazy" />
+        ) : (
+          <div class="placeholder" data-ratio="square">
+            [Image / video that reinforces value proposition]
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final__grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .final__h {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: var(--space-md);
+    max-width: 18ch;
+  }
+
+  .final__body {
+    color: var(--color-ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: var(--space-lg);
+    max-width: 560px;
+  }
+
+  .final__bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .final__bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.65rem;
+    font-size: 1rem;
+    color: var(--color-ink);
+  }
+
+  .final__check {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background-color: var(--color-emerald-deep);
+    color: var(--color-cream-on-dark);
+    margin-top: 1px;
+  }
+
+  .final__img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-md);
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  @media (max-width: 900px) {
+    .final__grid {
+      grid-template-columns: 1fr;
+    }
+    .final__media {
+      order: -1;
+    }
+  }
+</style>

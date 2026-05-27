@@ -1,0 +1,91 @@
+---
+export interface Step {
+  headline: string;
+  body: string;
+}
+
+export interface Props {
+  sectionHeadline: string;
+  steps: Step[];
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+}
+const { sectionHeadline, steps, primaryCtaLabel, primaryCtaHref } = Astro.props;
+---
+
+<section class="process section-paper-soft section">
+  <div class="container">
+    <h2 class="process__headline">{sectionHeadline}</h2>
+    <div class="process__grid">
+      {
+        steps.map((s, i) => (
+          <article class="process__card">
+            <span class="process__num">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="process__cardh">{s.headline}</h3>
+            <p class="process__cardb">{s.body}</p>
+          </article>
+        ))
+      }
+    </div>
+    <div class="process__cta">
+      <a class="btn btn-primary btn-arrow" href={primaryCtaHref}>{primaryCtaLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process__headline {
+    font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto var(--space-xl);
+    line-height: 1.15;
+  }
+
+  .process__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+    margin-bottom: var(--space-xl);
+  }
+
+  .process__card {
+    background-color: var(--color-paper);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .process__num {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-emerald-deep);
+    letter-spacing: 0.1em;
+  }
+
+  .process__cardh {
+    font-size: 1.2rem;
+    line-height: 1.25;
+  }
+
+  .process__cardb {
+    color: var(--color-ink-soft);
+    font-size: var(--type-small);
+    line-height: 1.6;
+  }
+
+  .process__cta {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 900px) {
+    .process__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

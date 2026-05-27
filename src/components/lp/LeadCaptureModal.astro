@@ -1,0 +1,279 @@
+---
+export interface Props {
+  title: string;
+  subtitle: string;
+}
+const { title, subtitle } = Astro.props;
+
+// Webhook URL receives the form POST as JSON: { name, email, phone, source }
+// Defaults to the bundled /api/lead Vercel function (Resend auto-reply).
+// Override with PUBLIC_LEAD_WEBHOOK_URL in .env if you want to point at n8n / Formspree / etc.
+const leadWebhook = import.meta.env.PUBLIC_LEAD_WEBHOOK_URL || '/api/lead';
+---
+
+<dialog id="lead-modal" class="modal" aria-labelledby="lead-modal-title">
+  <div class="modal__card">
+    <button class="modal__close" aria-label="Close" type="button">&times;</button>
+
+    <div class="modal__form-wrap" data-state="form">
+      <p class="modal__eyebrow">Book a call</p>
+      <h2 class="modal__title" id="lead-modal-title">{title}</h2>
+      <p class="modal__sub">{subtitle}</p>
+
+      <form class="modal__form" data-webhook={leadWebhook} novalidate>
+        <div class="field">
+          <label for="lead-name">Name</label>
+          <input id="lead-name" name="name" type="text" required minlength="2" autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="lead-email">Email</label>
+          <input id="lead-email" name="email" type="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="lead-phone">Phone</label>
+          <input id="lead-phone" name="phone" type="tel" required autocomplete="tel" />
+        </div>
+        <button type="submit" class="btn btn-primary modal__submit">[Submit button text]</button>
+        <p class="modal__friction">{subtitle}</p>
+      </form>
+    </div>
+
+    <div class="modal__form-wrap" data-state="success" hidden>
+      <h2 class="modal__title">[Success headline]</h2>
+      <p class="modal__sub">[Success body — e.g. tell them to check their email for the booking link]</p>
+      <button type="button" class="btn btn-primary modal__close-cta">Close</button>
+    </div>
+
+    <div class="modal__form-wrap" data-state="error" hidden>
+      <h2 class="modal__title">[Error headline]</h2>
+      <p class="modal__sub">[Error body — e.g. invite them to text instead]</p>
+      <button type="button" class="btn btn-primary modal__retry">Try Again</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const modal = document.getElementById('lead-modal') as HTMLDialogElement | null;
+  if (modal) {
+    const form = modal.querySelector('form.modal__form') as HTMLFormElement;
+    const closeBtn = modal.querySelector('.modal__close') as HTMLButtonElement;
+    const closeCta = modal.querySelector('.modal__close-cta') as HTMLButtonElement;
+    const retryBtn = modal.querySelector('.modal__retry') as HTMLButtonElement;
+    const wraps = modal.querySelectorAll<HTMLElement>('[data-state]');
+
+    const setState = (state: 'form' | 'success' | 'error') => {
+      wraps.forEach((w) => {
+        w.hidden = w.dataset.state !== state;
+      });
+    };
+
+    const openModal = () => {
+      setState('form');
+      modal.showModal();
+      // Focus first input after open
+      window.requestAnimationFrame(() => {
+        const first = form.querySelector<HTMLInputElement>('input[name="name"]');
+        first?.focus();
+      });
+    };
+
+    const closeModal = () => modal.close();
+
+    // Open modal when any anchor with href="#book" is clicked
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement | null;
+      const link = t?.closest('a[href="#book"]') as HTMLAnchorElement | null;
+      if (!link) return;
+      e.preventDefault();
+      openModal();
+    });
+
+    // Close handlers
+    closeBtn?.addEventListener('click', closeModal);
+    closeCta?.addEventListener('click', closeModal);
+    retryBtn?.addEventListener('click', () => setState('form'));
+
+    // Click outside the card → close
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Submit handler
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      submitBtn.disabled = true;
+
+      const data = Object.fromEntries(new FormData(form));
+      const payload = { ...data, source: window.location.pathname };
+      const webhook = form.dataset.webhook;
+
+      try {
+        if (webhook) {
+          const res = await fetch(webhook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) throw new Error(`webhook returned ${res.status}`);
+        }
+
+        // Customer.io identify + track (only fires if the cio snippet loaded)
+        const w = window as unknown as { _cio?: { identify: (p: Record<string, unknown>) => void; track: (e: string, p?: Record<string, unknown>) => void } };
+        if (w._cio) {
+          w._cio.identify({
+            id: String(data.email),
+            email: data.email,
+            name: data.name,
+            phone: data.phone,
+          });
+          w._cio.track('lead_captured', { source: window.location.pathname });
+        }
+
+        setState('success');
+      } catch (err) {
+        console.error('Lead capture failed:', err);
+        setState('error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .modal {
+    padding: 0;
+    border: none;
+    background: transparent;
+    max-width: min(520px, 92vw);
+    width: 100%;
+    overflow: visible;
+  }
+
+  .modal::backdrop {
+    background-color: rgba(26, 26, 26, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .modal__card {
+    background-color: var(--color-paper);
+    border-radius: var(--radius-md);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    color: var(--color-ink);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-ink-muted);
+    padding: 0.5rem;
+  }
+
+  .modal__close:hover { color: var(--color-ink); }
+
+  .modal__eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--type-micro);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: var(--space-sm);
+  }
+
+  .modal__title {
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+    line-height: 1.2;
+    margin-bottom: var(--space-sm);
+  }
+
+  .modal__sub {
+    color: var(--color-ink-soft);
+    font-size: var(--type-small);
+    line-height: 1.5;
+    margin-bottom: var(--space-lg);
+  }
+
+  .modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .field label {
+    font-size: var(--type-small);
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  .field input {
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  .field input:focus {
+    outline: 2px solid var(--color-emerald-deep);
+    outline-offset: -1px;
+  }
+
+  .field input:invalid:not(:placeholder-shown) {
+    border-color: #c5403d;
+  }
+
+  .modal__submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-sm);
+  }
+
+  .modal__submit[disabled] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .modal__friction {
+    text-align: center;
+    margin-top: 0;
+    font-size: var(--type-micro);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  [data-state='success'] .modal__title,
+  [data-state='error'] .modal__title {
+    margin-top: 0.5rem;
+  }
+
+  [data-state='success'] .btn,
+  [data-state='error'] .btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: var(--space-md);
+  }
+</style>

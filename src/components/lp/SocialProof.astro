@@ -1,0 +1,174 @@
+---
+export interface ClientLogo {
+  name: string;
+  src?: string;
+  link?: string;
+  media?: string;
+  mediaType?: 'image' | 'video';
+  logo?: string;
+}
+
+export interface Props {
+  logos: ClientLogo[];
+  eyebrow?: string;
+  headline?: string;
+  footnote?: string;
+}
+const { logos, eyebrow = '', headline = '', footnote = '' } = Astro.props;
+
+function detectMediaType(media: string | undefined): 'image' | 'video' {
+  if (!media) return 'image';
+  return /\.(mp4|webm|mov)$/i.test(media) ? 'video' : 'image';
+}
+---
+
+<section class="social section">
+  <div class="container-wide">
+    {eyebrow ? <p class="social__eyebrow">{eyebrow}</p> : null}
+    {headline ? <h2 class="social__headline">{headline}</h2> : null}
+
+    <div class="social__reels">
+      {
+        logos.map((logo) => {
+          const mediaType = logo.mediaType ?? detectMediaType(logo.media);
+          return (
+            <div class="reel">
+              <div class="reel__media">
+                {logo.media ? (
+                  mediaType === 'video' ? (
+                    <video
+                      class="reel__video"
+                      src={logo.media}
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img class="reel__img" src={logo.media} alt={logo.name} loading="lazy" />
+                  )
+                ) : (
+                  <div class="reel__placeholder">[Social Proof]</div>
+                )}
+              </div>
+              <div class="reel__plate">
+                {logo.logo ? (
+                  <img class="reel__logo" src={logo.logo} alt={`${logo.name} logo`} loading="lazy" />
+                ) : null}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    {footnote ? <p class="social__footnote">{footnote}</p> : null}
+  </div>
+</section>
+
+<style>
+  .social {
+    background-color: var(--color-paper-soft);
+    padding-block: var(--space-2xl);
+  }
+
+  .social__eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--type-micro);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    text-align: center;
+    margin-bottom: var(--space-sm);
+  }
+
+  .social__headline {
+    font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+    text-align: center;
+    color: var(--color-ink);
+    margin-bottom: var(--space-xl);
+  }
+
+  .social__reels {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(1rem, 2vw, 1.5rem);
+    align-items: start;
+  }
+
+  .reel__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: var(--color-ink);
+    border: 2px solid var(--color-ink);
+    box-shadow: var(--shadow-md);
+  }
+
+  .reel__video,
+  .reel__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .reel__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-paper);
+    font-size: var(--type-small);
+  }
+
+  .reel__plate {
+    margin-top: var(--space-sm);
+    width: 100%;
+    aspect-ratio: 2 / 1; /* matches the 200x100 logo ratio */
+    background-color: #e8e3da; /* a touch greyer than paper-soft so the card pops on the section bg */
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+    overflow: hidden;
+  }
+
+  .reel__logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .social__footnote {
+    margin-top: var(--space-lg);
+    font-size: var(--type-micro);
+    color: var(--color-ink-muted);
+    text-align: center;
+    max-width: 540px;
+    margin-inline: auto;
+  }
+
+  @media (max-width: 900px) {
+    .social__reels {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .social__reels {
+      grid-template-columns: 1fr;
+      max-width: 320px;
+      margin-inline: auto;
+    }
+  }
+</style>

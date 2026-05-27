@@ -1,0 +1,49 @@
+---
+export interface Props {
+  headline: string;
+  body: string;
+  primaryCtaLabel: string;
+  primaryCtaHref: string;
+}
+const { headline, body, primaryCtaLabel, primaryCtaHref } = Astro.props;
+---
+
+<section class="pain section-paper section">
+  <div class="container-narrow pain__inner">
+    <h2 class="pain__headline">{headline}</h2>
+    {body.split('\n\n').map((para) => <p class="pain__body">{para}</p>)}
+    <div class="pain__cta">
+      <a class="btn btn-primary" href={primaryCtaHref}>{primaryCtaLabel}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pain__inner {
+    text-align: center;
+  }
+
+  .pain__headline {
+    font-size: clamp(1.85rem, 3.4vw, 2.6rem);
+    line-height: 1.15;
+    margin-bottom: var(--space-md);
+  }
+
+  .pain__body {
+    color: var(--color-ink-soft);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 0 auto var(--space-md);
+    text-align: left;
+  }
+
+  .pain__body:last-of-type {
+    margin-bottom: var(--space-lg);
+  }
+
+  .pain__cta {
+    display: flex;
+    justify-content: center;
+  }
+</style>

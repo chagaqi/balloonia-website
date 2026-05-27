@@ -1,0 +1,114 @@
+---
+export interface Props {
+  logoText: string;
+  logoImage?: string;
+  phoneDisplay: string;
+  phoneTel: string;
+  ctaLabel: string;
+  ctaHref: string;
+}
+const { logoText, logoImage, phoneDisplay, phoneTel, ctaLabel, ctaHref } = Astro.props;
+---
+
+<header class="topnav">
+  <div class="container-wide topnav__inner">
+    <a class="topnav__brand" href="#top" aria-label={logoText}>
+      {logoImage ? (
+        <img class="topnav__brand-img" src={logoImage} alt={logoText} />
+      ) : (
+        <span class="topnav__brand-text">{logoText}</span>
+      )}
+    </a>
+    <div class="topnav__right">
+      <a class="topnav__phone" href={`tel:${phoneTel}`} aria-label="Call us">
+        <span class="topnav__phone-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </span>
+        <span class="topnav__phone-text">{phoneDisplay}</span>
+      </a>
+      <a class="btn btn-primary btn-sm" href={ctaHref}>{ctaLabel}</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .topnav {
+    background-color: var(--color-paper);
+    border-bottom: 1px solid var(--color-rule);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topnav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--space-md);
+  }
+
+  .topnav__brand {
+    text-decoration: none;
+    color: var(--color-ink);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    font-size: 1.15rem;
+  }
+
+  .topnav__brand-text {
+    display: inline-block;
+    padding: 0.5rem 0.85rem;
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--radius-sm);
+  }
+
+  .topnav__brand-img {
+    display: block;
+    height: 44px;
+    width: auto;
+  }
+
+  @media (max-width: 640px) {
+    .topnav__brand-img { height: 36px; }
+  }
+
+  .topnav__right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .topnav__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: var(--color-ink);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  .topnav__phone-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    background-color: var(--color-emerald-deep);
+    color: var(--color-cream-on-dark);
+  }
+
+  .btn-sm {
+    padding: 0.7rem 1.1rem;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 640px) {
+    .topnav__brand-text { font-size: 0.95rem; padding: 0.4rem 0.65rem; }
+    .topnav__phone-text { display: none; }
+    .topnav__right { gap: var(--space-sm); }
+  }
+</style>
