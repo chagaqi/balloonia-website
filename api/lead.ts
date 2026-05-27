@@ -111,7 +111,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (!resendRes.ok) {
     const errText = await resendRes.text();
     console.error('Resend send failed:', resendRes.status, errText);
-    return json({ error: 'Email send failed' }, 502);
+    return json({ error: 'Email send failed', resendStatus: resendRes.status, resendBody: errText }, 502);
   }
 
   return json({ ok: true });
