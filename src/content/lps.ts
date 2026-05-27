@@ -167,8 +167,8 @@ const sharedFaq = [
 // vroom — exact copy of /house content, only route differs. Customize per ICP later.
 export const vroom: LPConfig = {
   route: '/vroom',
-  title: '[Page title]',
-  metaDescription: '[Meta description]',
+  title: 'Balloonia Events',
+  metaDescription: 'Custom balloon designs made just for your venue. London Ontario. No deposit, no commitments, love your design or it is free.',
   microTrustCaption: 'Trusted by over 200 brands',
   microTrustAvatars: [
     { src: '/images/microtrust/circle1.png', alt: 'Areta Fitness' },
@@ -355,8 +355,8 @@ export const vroom: LPConfig = {
 // 04_Operations/landing-pages/template-text-by-section.md
 export const house: LPConfig = {
   route: '/house',
-  title: '[Page title]',
-  metaDescription: '[Meta description]',
+  title: 'Balloonia Events',
+  metaDescription: 'Custom balloon designs made just for your venue. London Ontario. No deposit, no commitments, love your design or it is free.',
   microTrustCaption: 'Trusted by over 200 brands',
   microTrustAvatars: [
     { src: '/images/microtrust/circle1.png', alt: 'Areta Fitness' },
@@ -541,8 +541,8 @@ export const house: LPConfig = {
 // corpOffer — exact copy of /house content, only route differs. Customize per ICP later.
 export const corpOffer: LPConfig = {
   route: '/corp-offer',
-  title: '[Page title]',
-  metaDescription: '[Meta description]',
+  title: 'Balloonia Events',
+  metaDescription: 'Custom balloon designs made just for your venue. London Ontario. No deposit, no commitments, love your design or it is free.',
   microTrustCaption: 'Trusted by over 200 brands',
   microTrustAvatars: [
     { src: '/images/microtrust/circle1.png', alt: 'Areta Fitness' },
