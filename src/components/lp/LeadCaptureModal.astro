@@ -39,14 +39,14 @@ const leadWebhook = import.meta.env.PUBLIC_LEAD_WEBHOOK_URL || '/api/lead';
     </div>
 
     <div class="modal__form-wrap" data-state="success" hidden>
-      <h2 class="modal__title">[Success headline]</h2>
-      <p class="modal__sub">[Success body — e.g. tell them to check their email for the booking link]</p>
+      <h2 class="modal__title">You're in.</h2>
+      <p class="modal__sub">Check your inbox in the next minute or two. Brenda will be in touch shortly. If you do not see anything, text us at (226) 242-2244.</p>
       <button type="button" class="btn btn-primary modal__close-cta">Close</button>
     </div>
 
     <div class="modal__form-wrap" data-state="error" hidden>
-      <h2 class="modal__title">[Error headline]</h2>
-      <p class="modal__sub">[Error body — e.g. invite them to text instead]</p>
+      <h2 class="modal__title">Something went wrong.</h2>
+      <p class="modal__sub">Give it another shot, or text us directly at (226) 242-2244 and we will lock in your spot.</p>
       <button type="button" class="btn btn-primary modal__retry">Try Again</button>
     </div>
   </div>

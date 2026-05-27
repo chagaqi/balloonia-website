@@ -50,11 +50,18 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ error: 'Invalid email' }, 400);
   }
 
-  const apiKey = (globalThis as { process?: { env?: Record<string, string> } }).process?.env?.RESEND_API_KEY;
-  const fromAddress = (globalThis as { process?: { env?: Record<string, string> } }).process?.env?.LEAD_FROM_ADDRESS
-    || 'Balloonia Events <hello@mail.balloonia.events>';
-  const replyTo = (globalThis as { process?: { env?: Record<string, string> } }).process?.env?.LEAD_REPLY_TO
-    || 'contact@balloonia.events';
+  // Read env vars defensively. Vercel sometimes wraps user-entered values in quotes.
+  const cleanEnv = (v: string | undefined): string => (v || '').trim().replace(/^['"](.+)['"]$/, '$1').trim();
+  const apiKey = cleanEnv(process.env.RESEND_API_KEY);
+  let fromAddress = cleanEnv(process.env.LEAD_FROM_ADDRESS) || 'Balloonia Events <hello@mail.balloonia.events>';
+  const replyTo = cleanEnv(process.env.LEAD_REPLY_TO) || 'contact@balloonia.events';
+
+  // Validate FROM format. Accept either `email@x.com` or `Name <email@x.com>`.
+  // If invalid, fall back to the known-good default so we never break on a misconfigured env var.
+  const fromValid = /^([^<>]+<[^\s<>]+@[^\s<>]+>|[^\s<>]+@[^\s<>]+)$/.test(fromAddress);
+  if (!fromValid) {
+    fromAddress = 'Balloonia Events <hello@mail.balloonia.events>';
+  }
 
   if (!apiKey) {
     console.error('RESEND_API_KEY not configured');
@@ -111,7 +118,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (!resendRes.ok) {
     const errText = await resendRes.text();
     console.error('Resend send failed:', resendRes.status, errText);
-    return json({ error: 'Email send failed', resendStatus: resendRes.status, resendBody: errText }, 502);
+    return json({ error: 'Email send failed' }, 502);
   }
 
   return json({ ok: true });
