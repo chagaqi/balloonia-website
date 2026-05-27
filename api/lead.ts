@@ -69,18 +69,26 @@ export default async function handler(req: Request): Promise<Response> {
   }
 
   // ----------------------------------------------------------------------
-  // Email content. EDIT subject + html below.
-  // The {{vars}} are substituted from the form data.
+  // Email content. {{vars}} are substituted from form data. [YOUR_BOOKING_URL]
+  // is the call-booking link — replace with Cal.com / HoneyBook scheduler URL.
   // ----------------------------------------------------------------------
-  const subject = '[Email subject — e.g. Thanks for reaching out, {{name}}]';
+  const subject = 'your event blueprint + free render 🎈';
+
+  const bookingUrl = cleanEnv(process.env.LEAD_BOOKING_URL) || '[YOUR_BOOKING_URL]';
 
   const html = `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a; line-height: 1.6;">
-      <p>[Email greeting line — e.g. Hi {{name}}]</p>
-      <p>[Welcome paragraph — thank them for reaching out]</p>
-      <p>[Booking link line — e.g. Pick a time that works here: <a href="[YOUR_CAL_OR_HONEYBOOK_URL]">[YOUR_CAL_OR_HONEYBOOK_URL]</a>]</p>
-      <p>[Alternative — invite them to reply with a time that works best]</p>
-      <p>[Signoff — e.g. Brenda]</p>
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a; line-height: 1.6; font-size: 16px;">
+      <p>Hey {{name}},</p>
+      <p>Thanks for reaching out! We are excited to help you make your next listing unforgettable.</p>
+      <p>We want to make this completely effortless for you, so let us get right to the fun part. To get your free custom design render, just do one of two things:</p>
+      <ol style="padding-left: 1.25em; margin: 0 0 1em 0;">
+        <li style="margin-bottom: 0.6em;">Reply directly to this email and drop a few quick details about your upcoming event (date, venue location, or a link to the listing).</li>
+        <li><a href="${bookingUrl}" style="color: #1c3d34; font-weight: 600;">Click here to lock in your quick 15-minute blueprint call</a> so we can chat details and map out the concept together.</li>
+      </ol>
+      <p>There is absolute zero obligation, no deposit required, and we will handle everything from design to the late-night cleanup.</p>
+      <p>Let's pack your next open house!</p>
+      <p style="margin-bottom: 0;">Best,</p>
+      <p style="margin-top: 0;"><strong>Brenda</strong><br/>Balloonia Events</p>
       <hr style="border: 0; border-top: 1px solid #e8e3da; margin: 24px 0;" />
       <p style="font-size: 12px; color: #6b6b6b;">
         Phone: <a href="tel:+12262422244" style="color: #1c3d34;">(226) 242-2244</a><br/>
