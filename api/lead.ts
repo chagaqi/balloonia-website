@@ -74,7 +74,7 @@ export default async function handler(req: Request): Promise<Response> {
   // ----------------------------------------------------------------------
   const subject = 'your event blueprint + free render 🎈';
 
-  const bookingUrl = cleanEnv(process.env.LEAD_BOOKING_URL) || '[YOUR_BOOKING_URL]';
+  const bookingUrl = cleanEnv(process.env.LEAD_BOOKING_URL) || 'https://ballooniaevents.hbportal.co/public/schedulenow';
 
   const html = `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1a1a1a; line-height: 1.6; font-size: 16px;">
