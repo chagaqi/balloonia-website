@@ -103,282 +103,69 @@ export interface LPConfig {
   faq: { q: string; a: string }[];
 }
 
-// Shared CTA config — same across all LPs
-const sharedCta = {
-  primaryCtaLabel: 'Book a 15-min call',
-  primaryCtaHref: '#book',
-  secondaryCtaLabel: 'Or text us: (226) 242-2244',
-  secondaryCtaHref: 'sms:+12262422244',
-  frictionKiller: "No deposit. No commitment. Love it or it's free.",
+// Shared brand constants (referenced by all 3 LPs)
+const sharedMicroTrustAvatars: MicroTrustAvatar[] = [
+  { src: '/images/microtrust/circle1.png', alt: 'Areta Fitness' },
+  { src: '/images/microtrust/circle2.png', alt: 'Client logo' },
+  { src: '/images/microtrust/circle3.png', alt: 'Client logo' },
+  { src: '/images/microtrust/circle4.png', alt: 'Akeso Botanicals' },
+  { src: '/images/microtrust/circle5.png', alt: 'Engel & Völkers' },
+  { src: '/images/microtrust/circle6.png', alt: 'Ford' },
+];
+
+const sharedTopNav: TopNavConfig = {
+  logoText: 'Balloonia Events',
+  logoImage: '/images/brand/logo-header.png',
+  phoneDisplay: '(226) 242-2244',
+  phoneTel: '+12262422244',
+  ctaLabel: 'Book a Call',
+};
+
+const sharedSocialProof: SocialProofConfig = {
+  eyebrow: '',
+  headline: 'Recent Clients We Have Worked With:',
+  footnote: '',
 };
 
 const sharedClientLogos: ClientLogo[] = [
-  { name: 'Autism Ontario', src: '/images/logos/autism-ontario.png', link: 'https://www.autismontario.com/' },
-  { name: 'The Church of Jesus Christ of Latter-day Saints', link: 'https://www.churchofjesuschrist.org/' },
-  { name: 'London Ukrainian Centre', src: '/images/logos/london-ukrainian-centre.png', link: 'https://londonukrainiancentre.ca/' },
-  { name: 'Cocina La Michoacana', src: '/images/logos/cocina-la-michoacana.png', link: 'https://cocinalamichoacanaon.com/' },
-];
-
-const sharedGuarantee = {
-  eyebrow: 'The guarantee',
-  headline: "Love it or it's free.",
-  body: "No deposit. We design the install, build it, install it, and photograph it. On event day you walk the install with Brenda. If you love it, you pay the invoice. If you don't, you walk away owing nothing and we eat the cost of materials. We can offer this because Brenda is the artist on every build and we do not take a job we cannot deliver on.",
-  trustPoints: ['$2M GL Insurance', '24-hour written quote', 'Render before build', '10+ years operating'],
-};
-
-const sharedFaq = [
   {
-    q: "How does the 'Love it or it's free' guarantee actually work?",
-    a: "There's no deposit. We design the install, build it, install it, and photograph it. On event day you walk the install with Brenda. If you love it, you pay the invoice. If you don't, you walk away owing nothing. We eat the cost of materials. We can offer this because Brenda is the artist on every build and we don't take a job we can't deliver on.",
+    name: 'Autism Ontario',
+    media: '/images/social-proof/1.jpeg',
+    mediaType: 'image',
+    logo: '/images/logos/aut.png',
   },
   {
-    q: 'What does an install cost?',
-    a: 'Most B2B installs land between $500 and $3,000. Statement pieces (large arches, full-room transformations, multi-element builds) run $2,500 to $5,000+. Every quote is written and includes delivery, on-site setup, and clean-up. No hidden fees. Pricing is built around size, complexity, materials, and venue.',
+    name: 'The Church of Jesus Christ of Latter-day Saints',
+    media: '/images/social-proof/2.mp4',
+    mediaType: 'video',
+    logo: '/images/logos/latterday.png',
   },
   {
-    q: 'How fast can you turn around an install?',
-    a: 'Standard lead time is 2 to 6 weeks. Rush slots inside 7 days are sometimes available and may include a rush fee depending on the build. Tell us your date on the call and we will tell you straight whether the timing works.',
+    name: 'London Ukrainian Centre',
+    media: '/images/social-proof/3.mp4',
+    mediaType: 'video',
+    logo: '/images/logos/luc.png',
   },
   {
-    q: 'Do you carry insurance?',
-    a: 'Yes. $2M commercial general liability. We send a Certificate of Insurance with the proposal and can name your venue or organization as additional insured if needed.',
-  },
-  {
-    q: 'Can you match our brand colors exactly?',
-    a: 'Yes. Send hex codes, swatches, brand guidelines, or a Pinterest board. Brenda matches or coordinates to what you send and includes a render with the proposal so you can approve the look before we build.',
-  },
-  {
-    q: 'What if my event is outside London?',
-    a: 'We cover London plus a 50km radius standard, which includes St Thomas, Strathroy, Woodstock, Ingersoll, and surrounding towns. Travel beyond that is available on request and may include a travel fee.',
-  },
-  {
-    q: 'Do you handle dismantle and clean-up?',
-    a: 'Yes. Every install includes delivery, setup, and post-event dismantle. Nothing is left behind for you to deal with.',
-  },
-  {
-    q: 'What about post-event photos?',
-    a: 'We photograph every install before guests arrive. You get the full set within 5 business days. Use them however you want for your own marketing, social, or press.',
+    name: 'Cocina La Michoacana',
+    media: '/images/social-proof/4.mp4',
+    mediaType: 'video',
+    logo: '/images/logos/mecho.png',
   },
 ];
 
-// Placeholder value-prop / differentiator / step / final-cta content per ICP.
-// Copy lives behind [INSERT...] markers — search the codebase for "[INSERT" to find every gap.
-
-// vroom — exact copy of /house content, only route differs. Customize per ICP later.
-export const vroom: LPConfig = {
-  route: '/vroom',
-  title: 'Balloonia Events',
-  metaDescription: 'Custom balloon designs made just for your venue. London Ontario. No deposit, no commitments, love your design or it is free.',
-  microTrustCaption: 'Trusted by over 200 brands',
-  microTrustAvatars: [
-    { src: '/images/microtrust/circle1.png', alt: 'Areta Fitness' },
-    { src: '/images/microtrust/circle2.png', alt: 'Client logo' },
-    { src: '/images/microtrust/circle3.png', alt: 'Client logo' },
-    { src: '/images/microtrust/circle4.png', alt: 'Akeso Botanicals' },
-    { src: '/images/microtrust/circle5.png', alt: 'Engel & Völkers' },
-    { src: '/images/microtrust/circle6.png', alt: 'Ford' },
-  ],
-  topNav: {
-    logoText: 'Balloonia Events',
-    logoImage: '/images/brand/logo-header.png',
-    phoneDisplay: '(226) 242-2244',
-    phoneTel: '+12262422244',
-    ctaLabel: 'Book a Call',
-  },
-  socialStripLabel: 'Trusted by over 200 Brands',
-  socialProof: {
-    eyebrow: '',
-    headline: 'Recent Clients We Have Worked With:',
-    footnote: '',
-  },
-  hero: {
-    primaryCtaLabel: 'Book a Call & Claim Offer Here',
-    primaryCtaHref: '#book',
-    secondaryCtaLabel: '',
-    secondaryCtaHref: '#',
-    frictionKiller: 'No deposit required. No commitments. Love your design or it is free.',
-    eyebrow: 'LIMITED SPOTS AVAILABLE',
-    headline:
-      'Pack Your Open Houses & Pack Your Wallet with Custom, Show-Stopping Balloon Displays Built in 24 Hours',
-    subhead:
-      'Stop hosting boring open houses. No more disappearing into a crowded social feed. We hand-build, install, photograph, and clean up premium custom balloon designs made just for your venue. It is the easiest way to grab neighborhood attention, get tons of online tags, and land your next listing.',
-    imageCaption: '',
-    heroImage: '/images/hero/house-abovefold.png',
-    heroImageAlt: 'Premium green, cream, and gold balloon archway framing a luxury London brokerage entrance',
-  },
-  painPoint: {
-    headline:
-      "Your Staging Looks Just Like Everyone Else's & It Is Costing You Premium Listings",
-    body: 'Traditional signs and basic staging do not cut it anymore. If your open houses look cookie-cutter, high-end sellers will pass you by and choose the discount brokerage down the street instead. Balloonia Events hand-builds custom visual installations from scratch to turn your properties into neighborhood block events, completely hands-free.',
-  },
-  valueProps: [
-    {
-      eyebrow: 'UNFORGETTABLE CROWDS',
-      headline: 'Stop Blending In With Boring Arches & Get 100% Custom Visual Builds',
-      body: 'We build every design completely from scratch with zero recycled props or templates. Your events will look totally exclusive, giving you the high-end look that luxury buyers and sellers remember.',
-      imageSrc: '/images/value-props/house-unforgettable-crowds.png',
-      imageAlt: 'A packed corporate event with guests gathered around a dramatic neutral-toned balloon installation',
-    },
-    {
-      eyebrow: 'HIGHER OFFERS',
-      headline: 'Skip the Catalog & Get Venue-Matched Designs That Sell Homes Faster',
-      body: 'We tailor every design to fit the exact layout, lighting, and style of your specific listing. It highlights the absolute best parts of the house and naturally makes the property feel worth way more.',
-      imageSrc: '/images/value-props/house-skip-the-catalog.png',
-      imageAlt: 'Balloon installation tailored to a high-end home interior',
-    },
-    {
-      eyebrow: 'ZERO STRESS',
-      headline: 'Put Your Feet Up While We Handle Everything From Design to Midnight Teardown',
-      body: 'You have enough on your plate, so let us do the heavy lifting. We handle the design, on-site setup, professional photography, and late-night cleanup so you can just focus on your clients.',
-      imageSrc: '/images/value-props/house-put-your-feet-up.png',
-      imageAlt: 'Hands-free, fully-managed balloon installation experience for real estate agents',
-    },
-  ],
-  differentiators: {
-    sectionHeadline:
-      '6 Unfair Advantages Designed Exclusively to Turn London Real Estate Agents into Undisputed Top Producers',
-    items: [
-      {
-        headline: 'Fully Custom Designs',
-        body: 'Every installation is engineered entirely from scratch without templates or used frames, guaranteeing your brand is never associated with cheap party decor.',
-      },
-      {
-        headline: 'Architectural Integration',
-        body: 'Bespoke designs are carefully adapted to the specific scale, lighting, and layout of the home to emphasize its premium selling features.',
-      },
-      {
-        headline: 'Turnkey Execution',
-        body: 'A comprehensive, all-inclusive service covering initial design, on-site build, prompt installation, and complete midnight dismantle so you never lift a finger.',
-      },
-      {
-        headline: 'Built-In High-End Photography',
-        body: 'Professional photography of the installation and event spaces is built directly into your package, giving you instant luxury marketing assets.',
-      },
-      {
-        headline: 'Psychological Stopping Power',
-        body: 'Massive, immersive scale designed specifically to alter human foot traffic patterns, drawing drive-by traffic and neighbors straight to your door.',
-      },
-      {
-        headline: 'Real Estate Conversion Focus',
-        body: 'Installations are structured strategically around specific agent touchpoints like luxury listing reveals, open houses, and premium welcome-home post-purchase gifts.',
-      },
-    ],
-  },
-  process: {
-    sectionHeadline: 'Three Simple Steps to a Flawless, High-Traffic Luxury Event',
-    steps: [
-      {
-        headline: 'Step #1: The Blueprint Call',
-        body: 'Book your brief 15-minute session where we map out a custom spatial design tailored entirely to your upcoming listing, venue layout, and event goals.',
-      },
-      {
-        headline: 'Step #2: Hands-Free Install',
-        body: 'Our elite team arrives on-site to build and install your bespoke sculpture, capturing professional marketing photography before the first guest walks through the door.',
-      },
-      {
-        headline: 'Step #3: Zero-Trace Dismantle',
-        body: 'Once your highly successful, packed event concludes, our crew returns to carefully dismantle and remove everything, leaving the venue completely spotless.',
-      },
-    ],
-  },
-  guarantee: {
-    eyebrow: 'OUR GUARANTEE',
-    headline: 'The Balloonia Events 100% Love-It-Or-It-Is-Free Ironclad Guarantee',
-    body: 'We stand entirely behind our custom craftsmanship and its ability to transform your real estate event. If your custom-built installation does not perfectly match your approved design blueprint, or if you do not completely love the jaw-dropping impact it creates at your venue, we will fix it on the spot or remove it immediately without charging you a single penny. You take on absolute zero financial risk, zero upfront commitment, and zero stress.',
-    trustPoints: [],
-  },
-  finalCta: {
-    eyebrow: 'LIMITED SPOTS AVAILABLE',
-    headline: 'Claim your unfair advantage. Limited spots per city.',
-    body: 'The London market moves fast, and agents are fighting for the exact same high-net-worth sellers. Stick to basic signs and you will just blend in. As part of our flyer campaign, the next 5 agents to book a call get our professional photography package completely free. We only build one custom installation per day to keep quality elite, and weekend slots fill up fast. Claim your spot, pack your open house, and secure your next listing risk-free today.',
-    bullets: [
-      '100% From-Scratch Custom Designs Built Exclusively for Your Luxury Brand Status',
-      'Full Turnkey Design-to-Dismantle Service Letting You Focus Purely on Your Clients',
-      'Built-In Professional Event Photography Included Free to Explode Your Inbound Referral Pipeline',
-    ],
-    imageSrc: '/images/final-cta/house-claim-your-unfair-advantage.png',
-    imageAlt: 'Real estate agent handing over keys in front of a SOLD sign with a luxury balloon archway in the background',
-  },
-  portfolioPhotos: [],
-  clientLogos: [
-    {
-      name: 'Autism Ontario',
-      media: '/images/social-proof/1.jpeg',
-      mediaType: 'image',
-      logo: '/images/logos/aut.png',
-    },
-    {
-      name: 'The Church of Jesus Christ of Latter-day Saints',
-      media: '/images/social-proof/2.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/latterday.png',
-    },
-    {
-      name: 'London Ukrainian Centre',
-      media: '/images/social-proof/3.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/luc.png',
-    },
-    {
-      name: 'Cocina La Michoacana',
-      media: '/images/social-proof/4.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/mecho.png',
-    },
-  ],
-  faq: [
-    {
-      q: 'How long does the installation and dismantle process take?',
-      a: 'Most custom installations take between 2 and 4 hours to build on-site. Once your event is over, our team handles the complete dismantle quickly and cleanly, usually in under an hour.',
-    },
-    {
-      q: 'Is the professional photography really included in the package?',
-      a: 'Yes. As part of our current flyer campaign, high-end professional photography of your custom installation and key property angles is built directly into the service to fuel your social media assets.',
-    },
-    {
-      q: 'Can these installations be built outdoors for curb attraction?',
-      a: 'Yes. We design high-impact, weather-resistant outdoor structures from the curb to the ceiling, engineered specifically to stop neighborhood traffic and guide them straight into your open house.',
-    },
-    {
-      q: 'What happens if I need to change or reschedule an event date?',
-      a: 'We understand that the real estate market moves quickly. Because we operate with zero deposits and zero rigid commitments, we will gladly work with you to adapt to your shifting schedule.',
-    },
-    {
-      q: 'How far in advance do I need to book my Blueprint Session?',
-      a: 'Because every installation is custom-built and venue-matched, we recommend scheduling your 15-minute blueprint call at least 7 to 10 days before your listing launch to lock in your date.',
-    },
-  ],
-};
-
-// HOUSE LP — bare Figma template. Zero custom copy. All text below is from the
-// PDF placeholder. Fill in section by section using
-// 04_Operations/landing-pages/template-text-by-section.md
+// ============================================================================
+// /house — real estate ICP
+// ============================================================================
 export const house: LPConfig = {
   route: '/house',
   title: 'Balloonia Events',
   metaDescription: 'Custom balloon designs made just for your venue. London Ontario. No deposit, no commitments, love your design or it is free.',
   microTrustCaption: 'Trusted by over 200 brands',
-  microTrustAvatars: [
-    { src: '/images/microtrust/circle1.png', alt: 'Areta Fitness' },
-    { src: '/images/microtrust/circle2.png', alt: 'Client logo' },
-    { src: '/images/microtrust/circle3.png', alt: 'Client logo' },
-    { src: '/images/microtrust/circle4.png', alt: 'Akeso Botanicals' },
-    { src: '/images/microtrust/circle5.png', alt: 'Engel & Völkers' },
-    { src: '/images/microtrust/circle6.png', alt: 'Ford' },
-  ],
-  topNav: {
-    logoText: 'Balloonia Events',
-    logoImage: '/images/brand/logo-header.png',
-    phoneDisplay: '(226) 242-2244',
-    phoneTel: '+12262422244',
-    ctaLabel: 'Book a Call',
-  },
+  microTrustAvatars: sharedMicroTrustAvatars,
+  topNav: sharedTopNav,
   socialStripLabel: 'Trusted by over 200 Brands',
-  socialProof: {
-    eyebrow: '',
-    headline: 'Recent Clients We Have Worked With:',
-    footnote: '',
-  },
+  socialProof: sharedSocialProof,
   hero: {
     primaryCtaLabel: 'Book a Call & Claim Offer Here',
     primaryCtaHref: '#book',
@@ -488,32 +275,7 @@ export const house: LPConfig = {
     imageAlt: 'Real estate agent handing over keys in front of a SOLD sign with a luxury balloon archway in the background',
   },
   portfolioPhotos: [],
-  clientLogos: [
-    {
-      name: 'Autism Ontario',
-      media: '/images/social-proof/1.jpeg',
-      mediaType: 'image',
-      logo: '/images/logos/aut.png',
-    },
-    {
-      name: 'The Church of Jesus Christ of Latter-day Saints',
-      media: '/images/social-proof/2.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/latterday.png',
-    },
-    {
-      name: 'London Ukrainian Centre',
-      media: '/images/social-proof/3.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/luc.png',
-    },
-    {
-      name: 'Cocina La Michoacana',
-      media: '/images/social-proof/4.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/mecho.png',
-    },
-  ],
+  clientLogos: sharedClientLogos,
   faq: [
     {
       q: 'How long does the installation and dismantle process take?',
@@ -538,188 +300,282 @@ export const house: LPConfig = {
   ],
 };
 
-// corpOffer — exact copy of /house content, only route differs. Customize per ICP later.
-export const corpOffer: LPConfig = {
-  route: '/corp-offer',
+// ============================================================================
+// /vroom — dealership ICP
+// ============================================================================
+export const vroom: LPConfig = {
+  route: '/vroom',
   title: 'Balloonia Events',
-  metaDescription: 'Custom balloon designs made just for your venue. London Ontario. No deposit, no commitments, love your design or it is free.',
+  metaDescription: 'Custom showroom displays hand-built for your dealership weekend. London Ontario. No deposit, no commitments, love your design or it is free.',
   microTrustCaption: 'Trusted by over 200 brands',
-  microTrustAvatars: [
-    { src: '/images/microtrust/circle1.png', alt: 'Areta Fitness' },
-    { src: '/images/microtrust/circle2.png', alt: 'Client logo' },
-    { src: '/images/microtrust/circle3.png', alt: 'Client logo' },
-    { src: '/images/microtrust/circle4.png', alt: 'Akeso Botanicals' },
-    { src: '/images/microtrust/circle5.png', alt: 'Engel & Völkers' },
-    { src: '/images/microtrust/circle6.png', alt: 'Ford' },
-  ],
-  topNav: {
-    logoText: 'Balloonia Events',
-    logoImage: '/images/brand/logo-header.png',
-    phoneDisplay: '(226) 242-2244',
-    phoneTel: '+12262422244',
-    ctaLabel: 'Book a Call',
-  },
+  microTrustAvatars: sharedMicroTrustAvatars,
+  topNav: sharedTopNav,
   socialStripLabel: 'Trusted by over 200 Brands',
-  socialProof: {
-    eyebrow: '',
-    headline: 'Recent Clients We Have Worked With:',
-    footnote: '',
-  },
+  socialProof: sharedSocialProof,
   hero: {
-    primaryCtaLabel: 'Book a Call & Claim Offer Here',
+    primaryCtaLabel: 'Request Your Custom Showroom Visual Analysis',
     primaryCtaHref: '#book',
     secondaryCtaLabel: '',
     secondaryCtaHref: '#',
-    frictionKiller: 'No deposit required. No commitments. Love your design or it is free.',
+    frictionKiller: 'No deposit required. No commitments. Love your custom design or it is completely free.',
     eyebrow: 'LIMITED SPOTS AVAILABLE',
     headline:
-      'Pack Your Open Houses & Pack Your Wallet with Custom, Show-Stopping Balloon Displays Built in 24 Hours',
+      'Command Showroom Authority & Pack Your Dealership This Weekend with High-Impact Custom Visual Blueprints',
     subhead:
-      'Stop hosting boring open houses. No more disappearing into a crowded social feed. We hand-build, install, photograph, and clean up premium custom balloon designs made just for your venue. It is the easiest way to grab neighborhood attention, get tons of online tags, and land your next listing.',
+      'Stop hosting quiet promotional weekends. No more wasting marketing dollars on cheap, sagging balloon strings that look unprofessional. We hand-build, install, photograph, and clean up premium custom showroom displays made just for your brand launch or holiday tent sale. It is the easiest way to capture highway attention, drive heavy foot traffic, and smash your sales goals this weekend.',
     imageCaption: '',
-    heroImage: '/images/hero/house-abovefold.png',
-    heroImageAlt: 'Premium green, cream, and gold balloon archway framing a luxury London brokerage entrance',
+    heroImage: '/images/hero/vroom-ford.png',
+    heroImageAlt: 'Ford dealership showroom with a large blue, silver, and white balloon archway framing a new vehicle reveal',
   },
   painPoint: {
     headline:
-      "Your Staging Looks Just Like Everyone Else's & It Is Costing You Premium Listings",
-    body: 'Traditional signs and basic staging do not cut it anymore. If your open houses look cookie-cutter, high-end sellers will pass you by and choose the discount brokerage down the street instead. Balloonia Events hand-builds custom visual installations from scratch to turn your properties into neighborhood block events, completely hands-free.',
+      'Your Showroom Looks Just Like the Competition & It Is Costing You Weekend Foot Traffic',
+    body: 'Traditional roadside flags and basic balloon strings do not drive urgency anymore. If your holiday event or new model launch looks cookie-cutter, buyers will cruise right past your lot and head to the next dealership down the strip. Balloonia Events hand-builds high-stability, custom visual installations from scratch to turn your showroom floor into a local destination, completely hands-free.',
   },
   valueProps: [
     {
-      eyebrow: 'UNFORGETTABLE CROWDS',
-      headline: 'Stop Blending In With Boring Arches & Get 100% Custom Visual Builds',
-      body: 'We build every design completely from scratch with zero recycled props or templates. Your events will look totally exclusive, giving you the high-end look that luxury buyers and sellers remember.',
-      imageSrc: '/images/value-props/house-unforgettable-crowds.png',
-      imageAlt: 'A packed corporate event with guests gathered around a dramatic neutral-toned balloon installation',
+      eyebrow: 'PACKED SHOWROOMS',
+      headline: 'Stop Blending In With Cheap Arches & Get 100% On-Site Precision Construction',
+      body: 'We fabricate every design directly on your showroom floor with zero transport damage or pre-made catalog templates. Your promotional displays will look totally exclusive and high-end, giving your lot the massive visual gravity that pulls buyers in.',
     },
     {
-      eyebrow: 'HIGHER OFFERS',
-      headline: 'Skip the Catalog & Get Venue-Matched Designs That Sell Homes Faster',
-      body: 'We tailor every design to fit the exact layout, lighting, and style of your specific listing. It highlights the absolute best parts of the house and naturally makes the property feel worth way more.',
-      imageSrc: '/images/value-props/house-skip-the-catalog.png',
-      imageAlt: 'Balloon installation tailored to a high-end home interior',
+      eyebrow: 'HIGHER SALES NOISE',
+      headline: 'Drive Intense Holiday Urgency with Venue-Matched Showroom Designs',
+      body: 'We tailor every layout to fit the exact scale, lighting, and architecture of your building. It highlights your newest vehicle models perfectly and naturally creates an exciting, high-revenue buying atmosphere that closes deals faster.',
     },
     {
-      eyebrow: 'ZERO STRESS',
-      headline: 'Put Your Feet Up While We Handle Everything From Design to Midnight Teardown',
-      body: 'You have enough on your plate, so let us do the heavy lifting. We handle the design, on-site setup, professional photography, and late-night cleanup so you can just focus on your clients.',
-      imageSrc: '/images/value-props/house-put-your-feet-up.png',
-      imageAlt: 'Hands-free, fully-managed balloon installation experience for real estate agents',
+      eyebrow: 'ZERO STAFF LABOR',
+      headline: 'Put Your Sales Team to Work Selling Cars While We Handle the Entire Teardown',
+      body: "Your sales staff shouldn't be popping balloons or dragging trash to the dumpsters after a long weekend. We handle the custom design, on-site setup, professional event photography, and rapid post-event cleanup so your team can focus entirely on moving units.",
     },
   ],
   differentiators: {
     sectionHeadline:
-      '6 Unfair Advantages Designed Exclusively to Turn London Real Estate Agents into Undisputed Top Producers',
+      "6 Unfair Advantages Designed Exclusively to Explode Your Dealership's Weekend Traffic",
     items: [
       {
-        headline: 'Fully Custom Designs',
-        body: 'Every installation is engineered entirely from scratch without templates or used frames, guaranteeing your brand is never associated with cheap party decor.',
+        headline: 'On-Site Precision Construction',
+        body: 'Everything is fabricated directly at your dealership to ensure perfect structural stability, massive scale, and zero transit damage before doors open.',
       },
       {
-        headline: 'Architectural Integration',
-        body: 'Bespoke designs are carefully adapted to the specific scale, lighting, and layout of the home to emphasize its premium selling features.',
+        headline: 'Turnkey Corporate Workflow',
+        body: "Built specifically to meet high commercial standards, requiring absolutely zero manual labor, setup, or tracking from your dealership's staff.",
       },
       {
-        headline: 'Turnkey Execution',
-        body: 'A comprehensive, all-inclusive service covering initial design, on-site build, prompt installation, and complete midnight dismantle so you never lift a finger.',
+        headline: 'Rapid Hyper-Clean Dismantling',
+        body: 'Post-event teardown is completed swiftly, cleanly, and professionally, leaving your showroom floor immaculate without a single piece of debris left behind.',
       },
       {
-        headline: 'Built-In High-End Photography',
-        body: 'Professional photography of the installation and event spaces is built directly into your package, giving you instant luxury marketing assets.',
+        headline: 'Multi-Day Structural Integrity',
+        body: 'Our commercial-grade installations easily withstand heavy foot traffic and dealership air conditioning, looking just as firm and vibrant on Sunday evening as Friday morning.',
       },
       {
-        headline: 'Psychological Stopping Power',
-        body: 'Massive, immersive scale designed specifically to alter human foot traffic patterns, drawing drive-by traffic and neighbors straight to your door.',
+        headline: 'Strict On-Time Delivery',
+        body: 'We lock in a rock-solid commitment to schedule accuracy, entirely removing the fear of late setups or chaotic, delayed weekend event launches.',
       },
       {
-        headline: 'Real Estate Conversion Focus',
-        body: 'Installations are structured strategically around specific agent touchpoints like luxury listing reveals, open houses, and premium welcome-home post-purchase gifts.',
+        headline: 'High-End Visual Assets',
+        body: 'Professional photography of your showroom installation is included free, giving your marketing lead instant high-converting content for digital ads.',
       },
     ],
   },
   process: {
-    sectionHeadline: 'Three Simple Steps to a Flawless, High-Traffic Luxury Event',
+    sectionHeadline: 'Three Simple Steps to a High-Traffic Showroom Event',
     steps: [
       {
-        headline: 'Step #1: The Blueprint Call',
-        body: 'Book your brief 15-minute session where we map out a custom spatial design tailored entirely to your upcoming listing, venue layout, and event goals.',
+        headline: 'Step #1: The Visual Analysis',
+        body: 'Book your quick 15-minute call where we review your lot layout, upcoming sales goals, and map out a custom visual blueprint for the event.',
       },
       {
-        headline: 'Step #2: Hands-Free Install',
-        body: 'Our elite team arrives on-site to build and install your bespoke sculpture, capturing professional marketing photography before the first guest walks through the door.',
+        headline: 'Step #2: Hands-Free Setup',
+        body: 'Our commercial team arrives on-site to build your bespoke display directly on the floor, making sure everything looks perfect before your sales team hits the floor.',
       },
       {
-        headline: 'Step #3: Zero-Trace Dismantle',
-        body: 'Once your highly successful, packed event concludes, our crew returns to carefully dismantle and remove everything, leaving the venue completely spotless.',
+        headline: 'Step #3: Hyper-Clean Teardown',
+        body: 'Once your massive weekend promotion wraps up, our crew handles the rapid cleanup and removal, leaving your showroom floor spotless and ready for regular business.',
       },
     ],
   },
   guarantee: {
     eyebrow: 'OUR GUARANTEE',
     headline: 'The Balloonia Events 100% Love-It-Or-It-Is-Free Ironclad Guarantee',
-    body: 'We stand entirely behind our custom craftsmanship and its ability to transform your real estate event. If your custom-built installation does not perfectly match your approved design blueprint, or if you do not completely love the jaw-dropping impact it creates at your venue, we will fix it on the spot or remove it immediately without charging you a single penny. You take on absolute zero financial risk, zero upfront commitment, and zero stress.',
+    body: 'We stand entirely behind our custom craftsmanship and its ability to drive showroom traffic. If your custom-built installation does not perfectly match your approved design blueprint, or if you do not completely love the exciting visual impact it brings to your lot, we will fix it instantly or remove it without charging you a single penny. You take on absolute zero financial risk, zero upfront commitment, and zero stress.',
     trustPoints: [],
   },
   finalCta: {
     eyebrow: 'LIMITED SPOTS AVAILABLE',
     headline: 'Claim your unfair advantage. Limited spots per city.',
-    body: 'The London market moves fast, and agents are fighting for the exact same high-net-worth sellers. Stick to basic signs and you will just blend in. As part of our flyer campaign, the next 5 agents to book a call get our professional photography package completely free. We only build one custom installation per day to keep quality elite, and weekend slots fill up fast. Claim your spot, pack your open house, and secure your next listing risk-free today.',
+    body: "Your next major weekend promotional campaign or grand opening is far too important to risk on an unreliable local hobbyist vendor. Partner with a dedicated commercial team that takes 100% responsibility for your dealership's visual impact so you can focus entirely on guest traffic, write ups, and sales. Showroom slots for major sales weekends fill up fast, so secure your custom blueprint today.",
     bullets: [
-      '100% From-Scratch Custom Designs Built Exclusively for Your Luxury Brand Status',
-      'Full Turnkey Design-to-Dismantle Service Letting You Focus Purely on Your Clients',
-      'Built-In Professional Event Photography Included Free to Explode Your Inbound Referral Pipeline',
+      'Turnkey Corporate Workflow Saving Valuable Staff Labor and Clean Up Time',
+      'On-Site Precision Construction Engineering Flawless, High-Stability Visual Displays',
+      'Ironclad 100% On-Time Delivery Contract to Fully Eliminate Launch-Day Anxiety',
     ],
     imageSrc: '/images/final-cta/house-claim-your-unfair-advantage.png',
-    imageAlt: 'Real estate agent handing over keys in front of a SOLD sign with a luxury balloon archway in the background',
+    imageAlt: 'Dealership floor with a custom balloon installation showcasing new vehicles',
   },
   portfolioPhotos: [],
-  clientLogos: [
+  clientLogos: sharedClientLogos,
+  faq: [
     {
-      name: 'Autism Ontario',
-      media: '/images/social-proof/1.jpeg',
-      mediaType: 'image',
-      logo: '/images/logos/aut.png',
+      q: 'How long will the showroom installation stay inflated?',
+      a: 'We use high-density, commercial-grade materials that easily look flawless, firm, and vibrant across a full 3-day or 4-day holiday weekend sale.',
     },
     {
-      name: 'The Church of Jesus Christ of Latter-day Saints',
-      media: '/images/social-proof/2.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/latterday.png',
+      q: 'Does our staff have to help with setup or cleaning?',
+      a: 'No. Our turnkey service handles everything from floor template design to final sweeping. Your team focuses entirely on sales.',
     },
     {
-      name: 'London Ukrainian Centre',
-      media: '/images/social-proof/3.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/luc.png',
+      q: 'Can you build displays outdoors for car lot visibility?',
+      a: 'Yes. We engineer massive, heavy-duty outdoor installations designed specifically to stop highway traffic and bring buyers to the lot.',
     },
     {
-      name: 'Cocina La Michoacana',
-      media: '/images/social-proof/4.mp4',
-      mediaType: 'video',
-      logo: '/images/logos/mecho.png',
+      q: 'How far in advance do we need to schedule a major tent sale display?',
+      a: 'Weekend promotional slots book up fast. We recommend booking your 15-minute analysis call at least 7 days prior to launch.',
+    },
+    {
+      q: 'What happens if a vehicle needs to be moved near the display?',
+      a: 'Our liability-first spatial designs are built to respect your showroom floor layout, ensuring easy car placement and vehicle accessibility.',
     },
   ],
+};
+
+// ============================================================================
+// /corp-offer — corporate / hospitality / gallery ICP
+// ============================================================================
+export const corpOffer: LPConfig = {
+  route: '/corp-offer',
+  title: 'Balloonia Events',
+  metaDescription: 'Custom balloon installations for corporate events, brand launches, and galas. London Ontario. No deposit, no commitments, love your design or it is free.',
+  microTrustCaption: 'Trusted by over 200 brands',
+  microTrustAvatars: sharedMicroTrustAvatars,
+  topNav: sharedTopNav,
+  socialStripLabel: 'Trusted by over 200 Brands',
+  socialProof: sharedSocialProof,
+  hero: {
+    primaryCtaLabel: 'Book Your Free 15-Minute Event Prep Call',
+    primaryCtaHref: '#book',
+    secondaryCtaLabel: '',
+    secondaryCtaHref: '#',
+    frictionKiller: 'No deposit required. No commitments. Love your custom design or it is free.',
+    eyebrow: 'LIMITED SPOTS AVAILABLE',
+    headline:
+      'Blow Your Competitors Away & Pack Your Corporate Events with Custom, Show-Stopping Visual Experiences Built in 24 Hours',
+    subhead:
+      'Stop hosting boring corporate events. No more settling for cheap catalog decor that makes your high-stakes launch look like a backyard party. We hand-build, install, photograph, and clean up premium custom balloon designs made just for your brand palette. It is the easiest way to grab massive crowd attention, flood your social channels with tags, and look like an absolute rockstar to your leadership team.',
+    imageCaption: '',
+    heroImage: '/images/hero/corp-marriott.png',
+    heroImageAlt: 'Marriott hotel lobby and bar area with a navy, gold, and cream balloon garland sweeping along the ceiling and walls',
+  },
+  painPoint: {
+    headline:
+      'Your Event Decor Looks Too Ordinary & It Is Risking Your Professional Standing',
+    body: 'Cheap catalog kits and uninspired decorations do not cut it in a competitive market. If your brand launch or corporate gala looks cookie-cutter, your VIP guests and high-value clients will walk away unimpressed. Balloonia Events hand-builds custom visual installations from scratch to turn your brand spaces into packed, camera-ready local landmarks, completely hands-free.',
+  },
+  valueProps: [
+    {
+      eyebrow: 'MASSIVE CROWDS',
+      headline: 'Stop Blending In With Boring Arches & Get 100% Custom Brand Builds',
+      body: 'We build every design completely from scratch with zero recycled props or templates. Your corporate installation will look totally exclusive, giving you the high-end look that leaves your guests talking for weeks.',
+    },
+    {
+      eyebrow: 'CAMERA-READY LOOKS',
+      headline: 'Skip the Shiny Plastic & Get Studio-Grade Matte Materials That Pop On Camera',
+      body: "Standard balloons act like mirrors, creating ugly white glares under flash photography and harsh track lighting. We source premium matte-finish materials that absorb light perfectly. This ensures your installation looks stunning in person and translates to flawless digital marketing assets for your brand's social feed.",
+    },
+    {
+      eyebrow: 'ZERO STRESS',
+      headline: 'Put Your Feet Up While We Handle Everything From Design to Midnight Teardown',
+      body: 'Your internal team already has enough on their plate, so let us do the heavy lifting. We handle the design, loading docks, on-site setup, and prompt late-night cleanup so you can focus entirely on your VIP clients and guests.',
+    },
+  ],
+  differentiators: {
+    sectionHeadline:
+      '6 Unfair Advantages Designed Exclusively to Protect Your Venue, Your Budget, & Your Professional Reputation',
+    items: [
+      {
+        headline: 'Fully Custom Designs',
+        body: 'Every installation is engineered entirely from scratch without templates or used frames, guaranteeing your brand is never associated with amateur party decor.',
+      },
+      {
+        headline: 'Precise Brand Color Matching',
+        body: 'We treat your corporate brand book with absolute respect. We custom-layer our materials to match your exact palette and Pantone tones for a flawless look.',
+      },
+      {
+        headline: 'Absolute Turnkey Teardown',
+        body: 'Our white-glove service includes a rapid dismantle team. We arrive precisely when your event ends to strike the structure so your staff never has to handle trash.',
+      },
+      {
+        headline: 'Studio-Grade Matte Finishes',
+        body: 'We source exclusive matte-finish materials that eliminate harsh lighting glares, making your event look incredible in person and publication-ready on camera.',
+      },
+      {
+        headline: 'Flake-Proof Scheduling Guarantee',
+        body: 'We run on a strict operational timeline, finishing your setup hours before your executives or first guests arrive, entirely eliminating pre-event panic.',
+      },
+      {
+        headline: 'Liability-First Engineering',
+        body: 'We utilize non-destructive, load-tested rigging methods specifically engineered to respect strict venue guidelines and keep your security deposit completely safe.',
+      },
+    ],
+  },
+  process: {
+    sectionHeadline: 'Three Simple Steps to a Flawless, High-Impact Corporate Event',
+    steps: [
+      {
+        headline: 'Step #1: The Prep Call',
+        body: 'Book your brief 15-minute session where we map out a fixed-price budget blueprint and a custom spatial design tailored to your venue layout and goals.',
+      },
+      {
+        headline: 'Step #2: Flawless Setup',
+        body: 'Our professional corporate crew arrives on-site to build your bespoke sculpture, completing the build well before the doors open so everything is camera-ready.',
+      },
+      {
+        headline: 'Step #3: Zero-Trace Dismantle',
+        body: 'Once your highly successful event concludes, our team returns to quickly dismantle and remove the entire structure, leaving the venue completely spotless.',
+      },
+    ],
+  },
+  guarantee: {
+    eyebrow: 'OUR GUARANTEE',
+    headline: 'The Balloonia Events 100% Love-It-Or-It-Is-Free Ironclad Guarantee',
+    body: 'We stand entirely behind our custom craftsmanship and its ability to transform your corporate event. If your custom-built installation does not perfectly match your approved blueprint, or if you do not completely love the jaw-dropping impact it creates for your brand, we will fix it on the spot or remove it immediately without charging you a single penny. You take on absolute zero financial risk, zero upfront commitment, and zero stress.',
+    trustPoints: [],
+  },
+  finalCta: {
+    eyebrow: 'LIMITED SPOTS AVAILABLE',
+    headline: 'Claim your unfair advantage. Limited spots per city.',
+    body: 'Your next brand launch or corporate event is too important to risk on a last-minute party decorator. Custom material sourcing and precision venue mapping take time, and we strictly limit our weekly corporate bookings to guarantee our signature white-glove focus. Claim your spot, pack your event, and blow your guests away risk-free today.',
+    bullets: [
+      '100% Bespoke Spatial Design Custom-Built from Scratch to Make Your Brand Stand Out',
+      'Full Turnkey Setup & Zero-Trace Dismantle So Your Team Handles Zero Logistics',
+      'Guaranteed Venue Policy Compliance with Non-Destructive Spatial Engineering',
+    ],
+    imageSrc: '/images/final-cta/house-claim-your-unfair-advantage.png',
+    imageAlt: 'Corporate event with a luxury matte-finish balloon installation',
+  },
+  portfolioPhotos: [],
+  clientLogos: sharedClientLogos,
   faq: [
     {
       q: 'How long does the installation and dismantle process take?',
-      a: 'Most custom installations take between 2 and 4 hours to build on-site. Once your event is over, our team handles the complete dismantle quickly and cleanly, usually in under an hour.',
+      a: 'Most corporate installations take 2 to 4 hours to build on-site. Dismantle takes under an hour.',
     },
     {
-      q: 'Is the professional photography really included in the package?',
-      a: 'Yes. As part of our current flyer campaign, high-end professional photography of your custom installation and key property angles is built directly into the service to fuel your social media assets.',
+      q: 'Can you match our exact company brand colors?',
+      a: 'Yes. We custom-layer specialized materials to perfectly mirror your corporate palette and brand guidelines.',
     },
     {
-      q: 'Can these installations be built outdoors for curb attraction?',
-      a: 'Yes. We design high-impact, weather-resistant outdoor structures from the curb to the ceiling, engineered specifically to stop neighborhood traffic and guide them straight into your open house.',
+      q: 'Are you insured and venue-compliant?',
+      a: 'Yes. We utilize non-destructive, liability-first rigging methods designed to protect luxury hotels and strict commercial spaces.',
     },
     {
-      q: 'What happens if I need to change or reschedule an event date?',
-      a: 'We understand that the real estate market moves quickly. Because we operate with zero deposits and zero rigid commitments, we will gladly work with you to adapt to your shifting schedule.',
+      q: 'Is the professional photography included?',
+      a: 'Yes. As part of our current campaign, high-end photography of the installation is built directly into your package.',
     },
     {
-      q: 'How far in advance do I need to book my Blueprint Session?',
-      a: 'Because every installation is custom-built and venue-matched, we recommend scheduling your 15-minute blueprint call at least 7 to 10 days before your listing launch to lock in your date.',
+      q: 'What if our event schedule or load-in time changes?',
+      a: "We operate with zero rigid contracts. Just let us know and we will adapt directly to your venue's loading dock timetable.",
     },
   ],
 };
