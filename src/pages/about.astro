@@ -21,6 +21,19 @@ import CTAButton from '../components/CTAButton.astro';
     </div>
   </section>
 
+  <section class="about-portrait">
+    <div class="container container-narrow">
+      <img
+        class="about-portrait-img"
+        src="/images/founder/brenda.png"
+        alt="Brenda, the artist and founder behind Balloonia Events"
+        width="800"
+        height="1000"
+        loading="lazy"
+      />
+    </div>
+  </section>
+
   <section class="about-body section">
     <div class="container container-narrow">
       <h2>Every build starts fresh.</h2>
@@ -64,6 +77,19 @@ import CTAButton from '../components/CTAButton.astro';
 </BaseLayout>
 
 <style>
+  .about-portrait {
+    padding-top: var(--space-6);
+  }
+  .about-portrait-img {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    display: block;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
   .about-cta-wrap {
     margin-top: var(--space-8);
   }
