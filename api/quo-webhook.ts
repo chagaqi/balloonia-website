@@ -1,12 +1,12 @@
 // Quo (OpenPhone) → discovery pipeline.
 //
 // Receives the `call.summary.completed` webhook from Quo. Pulls the transcript
-// + AI summary. Sends to Claude Haiku 4.5 for structured field extraction
+// + AI summary. Sends to MiniMax M3 for structured field extraction
 // using the Balloonia discovery script as the schema. Formats a Telegram
 // packet with click-to-copy fields + render prompts and ships it to Brenda.
 //
 // Required env vars:
-//   ANTHROPIC_API_KEY   - Claude API
+//   MINIMAX_API_KEY     - LLM for field extraction (MiniMax M3, Anthropic-compatible endpoint)
 //   TELEGRAM_BOT_TOKEN  - same bot as @Balloonia_Media_Bot
 //   BRENDA_CHAT_ID      - Brenda's chat (packet is sent here)
 //   DH_CHAT_ID          - DH's chat (packet is ALSO sent here; set both to notify both)
@@ -74,17 +74,26 @@ For render_prompts: write 2-3 photorealistic image generation prompts in this st
 
 If a field is missing from the call, return empty string "" or "(not captured)". Never invent data.`;
 
+// ---- LLM provider: MiniMax M3 via its Anthropic-compatible endpoint ----
+// URL and model are env-overridable so the provider can be repointed without a code change.
+const LLM_API_URL = process.env.LLM_API_URL || 'https://api.minimax.io/anthropic/v1/messages';
+const LLM_MODEL = process.env.LLM_MODEL || 'MiniMax-M3';
+
 async function extractFields(transcript: string): Promise<ExtractedLead> {
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+  const apiKey = process.env.MINIMAX_API_KEY;
+  if (!apiKey) throw new Error('MINIMAX_API_KEY missing');
+  const r = await fetch(LLM_API_URL, {
     method: 'POST',
     headers: {
-      'x-api-key': process.env.ANTHROPIC_API_KEY!,
+      'x-api-key': apiKey,
       'anthropic-version': '2023-06-01',
       'content-type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 2000,
+      // M-series can emit a `thinking` block before the `text` block, so keep
+      // max_tokens generous enough for any reasoning plus the JSON payload.
+      model: LLM_MODEL,
+      max_tokens: 4000,
       system: SYSTEM_PROMPT,
       messages: [
         {
@@ -95,7 +104,7 @@ async function extractFields(transcript: string): Promise<ExtractedLead> {
     }),
   });
   if (!r.ok) {
-    throw new Error(`Anthropic API ${r.status}: ${await r.text()}`);
+    throw new Error(`LLM API ${r.status}: ${await r.text()}`);
   }
   const data = (await r.json()) as { content: { type: string; text: string }[] };
   const text = data.content.find((c) => c.type === 'text')?.text ?? '';
@@ -259,7 +268,7 @@ export default async function handler(req: Request): Promise<Response> {
   // Log every hit so we can see in Vercel logs whether Quo is reaching us.
   console.log('[quo-webhook] called, method:', req.method);
   console.log('[quo-webhook] env check:', {
-    hasAnthropic: !!process.env.ANTHROPIC_API_KEY,
+    hasMinimax: !!process.env.MINIMAX_API_KEY,
     hasTgToken: !!process.env.TELEGRAM_BOT_TOKEN,
     hasQuoKey: !!process.env.QUO_API_KEY,
     hasBrendaChat: !!process.env.BRENDA_CHAT_ID,
