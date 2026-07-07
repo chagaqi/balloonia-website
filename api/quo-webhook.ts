@@ -8,7 +8,8 @@
 // Required env vars:
 //   ANTHROPIC_API_KEY   - Claude API
 //   TELEGRAM_BOT_TOKEN  - same bot as @Balloonia_Media_Bot
-//   BRENDA_CHAT_ID      - target chat (set DH_CHAT_ID instead for testing)
+//   BRENDA_CHAT_ID      - Brenda's chat (packet is sent here)
+//   DH_CHAT_ID          - DH's chat (packet is ALSO sent here; set both to notify both)
 //   QUO_API_KEY         - Quo API for fetching transcript by call id
 //   QUO_SIGNING_KEY     - (optional) webhook signature secret if Quo signs
 //
@@ -279,8 +280,9 @@ export default async function handler(req: Request): Promise<Response> {
 
   console.log('[quo-webhook] payload:', JSON.stringify(body).slice(0, 1500));
 
-  const target = process.env.BRENDA_CHAT_ID || process.env.DH_CHAT_ID;
-  if (!target) {
+  // Send every packet to everyone configured — Brenda AND DH (dedup, drop blanks).
+  const targets = [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].filter(Boolean))] as string[];
+  if (!targets.length) {
     console.error('[quo-webhook] no chat target configured');
     return new Response('No target chat configured', { status: 500 });
   }
@@ -288,6 +290,8 @@ export default async function handler(req: Request): Promise<Response> {
     console.error('[quo-webhook] TELEGRAM_BOT_TOKEN missing');
     return new Response('TELEGRAM_BOT_TOKEN missing', { status: 500 });
   }
+  // Fan one message out to every configured chat.
+  const broadcast = (text: string) => Promise.all(targets.map((t) => sendTelegram(t, text)));
 
   // Quo v3 webhook payload shape:
   //   {
@@ -306,8 +310,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   if (!callId) {
     console.warn('[quo-webhook] no callId found');
-    await sendTelegram(
-      target,
+    await broadcast(
       `⚠️ Quo webhook fired (${eventType}) but no callId.\n\n\`\`\`\n${JSON.stringify(body, null, 2).slice(0, 2500)}\n\`\`\``,
     );
     return new Response('No callId', { status: 200 });
@@ -368,7 +371,7 @@ export default async function handler(req: Request): Promise<Response> {
       duration: durationStr,
       recordingUrl: deepLink || mediaUrl,
     });
-    await sendTelegram(target, message);
+    await broadcast(message);
 
     return new Response(JSON.stringify({ ok: true, callId, eventType }), {
       status: 200,
@@ -377,8 +380,7 @@ export default async function handler(req: Request): Promise<Response> {
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'unknown error';
     console.error('[quo-webhook] pipeline error:', msg);
-    await sendTelegram(
-      target,
+    await broadcast(
       `⚠️ Discovery pipeline error for call ${callId} (${eventType}): ${msg}\n\nManually review: ${deepLink || '(no deep link)'}`,
     );
     // Return 200 so Quo doesn't retry endlessly on an error we already handled.
