@@ -2,35 +2,21 @@ const { useState, useMemo } = React;
 
 /* ---------- icons ---------- */
 const Icon = {
-  ring: <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8 4l-3 4 3 4 3-4-3-4z"/><circle cx="8" cy="11" r="2.5"/></svg>,
-  building: <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="10" height="11" rx="0.5"/><path d="M6 7h1M9 7h1M6 10h1M9 10h1M6 13v-2h4v2"/></svg>,
-  shower: <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="8" cy="6" r="2.5"/><path d="M4 13c0-2.2 1.8-4 4-4s4 1.8 4 4"/></svg>,
-  cake: <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M3 13h10v-4H3v4z"/><path d="M3 9c1 0 1-1.5 2.5-1.5S7 9 8 9s1-1.5 2.5-1.5S12 9 13 9"/><path d="M5.5 6V4M8 6V4M10.5 6V4"/></svg>,
-  cap: <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 6.5L8 4l6 2.5L8 9 2 6.5z"/><path d="M5 8v3c0 0.8 1.3 1.5 3 1.5s3-0.7 3-1.5V8"/></svg>,
-  spark: <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M8 2v3M8 11v3M2 8h3M11 8h3M4 4l2 2M10 10l2 2M12 4l-2 2M6 10l-2 2"/></svg>,
   check: <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
   arrow: <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 6h6m0 0L6 3m3 3L6 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>,
 };
 
 /* ---------- data ---------- */
-const EVENT_TYPES = [
-  { id: 'wedding',    name: 'Wedding',    meta: 'Ceremony, reception',  glyph: Icon.ring },
-  { id: 'corporate',  name: 'Corporate',  meta: 'Brand, launch, party', glyph: Icon.building },
-  { id: 'shower',     name: 'Shower',     meta: 'Baby or bridal',       glyph: Icon.shower },
-  { id: 'birthday',   name: 'Birthday',   meta: 'Kids, milestone',      glyph: Icon.cake },
-  { id: 'graduation', name: 'Graduation', meta: 'School, class of',     glyph: Icon.cap },
-  { id: 'other',      name: 'Other',      meta: 'Custom occasion',      glyph: Icon.spark },
-];
-
 // Tier 1 — the must-haves. Enough for Brenda to quote. Ask these every call.
 const TIER1 = [
-  { id: 'date',    label: 'When is it?',            script: 'What date are we looking at?',                      hint: 'Firm date, or still tentative?' },
-  { id: 'venue',   label: 'Where?',                 script: "Where's it being held?",                            hint: 'City or venue, indoor or outdoor, booked yet?' },
-  { id: 'pieces',  label: 'What are they picturing?', script: 'What did you have in mind for placements?',        hint: 'Arch, backdrop, ceiling piece, columns, centerpieces, bouquets.' },
-  { id: 'theme',   label: 'Theme / vibe',           script: "What's the vibe you're going for?",                 hint: 'A word or two: boho, classic, modern, fun, elegant, kids-themed.' },
-  { id: 'colours', label: 'Colours',                script: 'What colours are we working with?',                 hint: 'Specific colours or a general direction.' },
-  { id: 'budget',  label: 'Budget',                 script: 'Do you have a budget in mind, or want to see a few options?' },
-  { id: 'contact', label: 'Name + contact',         script: 'Best name, email, and phone for Brenda to send the quote to?' },
+  { id: 'occasion', label: "What's the occasion?",    script: 'What are we celebrating?',                          hint: 'Wedding, birthday, shower, corporate, grad, or something else.' },
+  { id: 'date',     label: 'When is it?',             script: 'What date are we looking at?',                      hint: 'Firm date, or still tentative?' },
+  { id: 'venue',    label: 'Where?',                  script: "Where's it being held?",                           hint: 'City or venue, indoor or outdoor, booked yet?' },
+  { id: 'pieces',   label: 'What are they picturing?', script: 'What did you have in mind for placements?',        hint: 'Arch, backdrop, ceiling piece, columns, centerpieces, bouquets.' },
+  { id: 'theme',    label: 'Theme / vibe',            script: "What's the vibe you're going for?",                hint: 'A word or two: boho, classic, modern, fun, elegant, kids-themed.' },
+  { id: 'colours',  label: 'Colours',                 script: 'What colours are we working with?',                hint: 'Specific colours or a general direction.' },
+  { id: 'budget',   label: 'Budget',                  script: 'Do you have a budget in mind, or want to see a few options?' },
+  { id: 'contact',  label: 'Name + contact',          script: 'Best name, email, and phone for Brenda to send the quote to?' },
 ];
 
 // Tier 2 — more detail. Ask if the call has room. Nice to have, not required to quote.
@@ -57,42 +43,17 @@ function Q({ data, done, onToggle }) {
   );
 }
 
-function TypePicker({ value, onChange }) {
-  return (
-    <div className="type-grid" role="radiogroup" aria-label="Event type">
-      {EVENT_TYPES.map(t => (
-        <button
-          key={t.id}
-          type="button"
-          className="type"
-          role="radio"
-          aria-checked={value === t.id}
-          aria-pressed={value === t.id}
-          onClick={() => onChange(value === t.id ? '' : t.id)}
-        >
-          <span className="glyph">{t.glyph}</span>
-          <span className="name">{t.name}</span>
-          <span className="meta">{t.meta}</span>
-        </button>
-      ))}
-    </div>
-  );
-}
-
 function App() {
-  const [eventType, setEventType] = useState('');
   const [t1done, setT1done] = useState({});
   const [t2done, setT2done] = useState({});
   const [showMore, setShowMore] = useState(false);
 
   const progress = useMemo(() => {
     const t1 = Object.values(t1done).filter(Boolean).length;
-    const typeBit = eventType ? 12 : 0;
-    return Math.min(100, typeBit + (t1 / TIER1.length) * 88);
-  }, [t1done, eventType]);
+    return Math.min(100, (t1 / TIER1.length) * 100);
+  }, [t1done]);
 
   const reset = () => {
-    setEventType('');
     setT1done({});
     setT2done({});
     setShowMore(false);
@@ -127,11 +88,6 @@ function App() {
         </div>
         <h2 className="phase-title">The <em>essentials</em></h2>
         <p className="phase-desc">Enough for Brenda to quote. Get these on every call.</p>
-
-        <div className="group-label">What's the occasion?</div>
-        <TypePicker value={eventType} onChange={setEventType} />
-
-        <div className="group-label" style={{ marginTop: 18 }}>Then run through these</div>
         <div className="qlist">
           {TIER1.map(q => (
             <Q key={q.id} data={q} done={!!t1done[q.id]} onToggle={() => setT1done(d => ({ ...d, [q.id]: !d[q.id] }))} />
@@ -161,16 +117,6 @@ function App() {
             </div>
           </div>
         )}
-      </section>
-
-      {/* ─── Flags ─── */}
-      <section className="phase">
-        <div className="group-label">Flag to Brenda if…</div>
-        <ul className="flags">
-          <li>Event is <strong>less than a week away</strong> (rush).</li>
-          <li>Venue is <strong>more than ~50 km</strong> from London (travel).</li>
-          <li>Big vision but a <strong>small budget</strong>, or they dodge the budget question.</li>
-        </ul>
       </section>
 
       {/* ─── End ─── */}
