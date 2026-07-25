@@ -13,8 +13,10 @@
 //   QUO_API_KEY         - Quo API for fetching transcript by call id
 //   QUO_SIGNING_KEY     - (optional) webhook signature secret if Quo signs
 //
-// Quo webhook setup: POST https://balloonia.events/api/quo-webhook
+// Quo webhook setup: POST https://www.balloonia.events/api/quo-webhook
 //   on event `call.summary.completed`
+//   MUST be the www URL — the apex (balloonia.events) 307-redirects to www and
+//   webhook senders don't follow redirects, which silently kills delivery.
 
 export const config = { runtime: 'edge' };
 
@@ -276,7 +278,7 @@ export default async function handler(req: Request): Promise<Response> {
   });
 
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    return new Response('Method not allowed (quo-webhook v3)', { status: 405 });
   }
 
   let body: any;
@@ -369,23 +371,54 @@ export default async function handler(req: Request): Promise<Response> {
       throw new Error('No transcript or summary content available');
     }
 
-    const lead = await extractFields(fullText);
-
     const mediaUrl = eventObj?.media?.[0]?.url;
     const duration = eventObj?.media?.[0]?.duration ?? eventObj?.duration;
     const durationStr = duration ? `${Math.round(duration / 60)} min` : undefined;
 
-    const message = buildTelegramMessage(lead, {
-      id: callId,
-      duration: durationStr,
-      recordingUrl: deepLink || mediaUrl,
-    });
-    await broadcast(message);
+    // Extraction failing (dead key, provider outage, bad JSON) must NEVER cost
+    // us the lead. Fall back to shipping the raw call content so Brenda can
+    // still quote from it.
+    let lead: ExtractedLead | null = null;
+    let llmError = '';
+    try {
+      lead = await extractFields(fullText);
+    } catch (err) {
+      llmError = err instanceof Error ? err.message : 'unknown LLM error';
+      console.error('[quo-webhook] extraction failed, sending raw packet:', llmError);
+    }
 
-    return new Response(JSON.stringify({ ok: true, callId, eventType }), {
-      status: 200,
-      headers: { 'content-type': 'application/json' },
-    });
+    if (lead) {
+      const message = buildTelegramMessage(lead, {
+        id: callId,
+        duration: durationStr,
+        recordingUrl: deepLink || mediaUrl,
+      });
+      await broadcast(message);
+    } else {
+      const raw = fullText.length > 3200 ? fullText.slice(0, 3200) + '\n…(truncated)' : fullText;
+      await broadcast(
+        [
+          '🎈 *NEW LEAD — RAW* (auto-extraction is down, this is the unprocessed call content)',
+          '━━━━━━━━━━━━━━━━━━',
+          durationStr ? `📞 ${durationStr}` : '',
+          deepLink || mediaUrl ? `🎵 ${deepLink || mediaUrl}` : '',
+          '',
+          raw,
+          '',
+          `_extractor error: ${llmError.slice(0, 300)}_`,
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      );
+    }
+
+    return new Response(
+      JSON.stringify({ ok: true, callId, eventType, degraded: !lead, llmError: llmError || undefined }),
+      {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      },
+    );
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'unknown error';
     console.error('[quo-webhook] pipeline error:', msg);
