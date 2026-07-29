@@ -1,7 +1,7 @@
 ---
 title: Class of 2025 grad backdrop
 eventType: graduations
-image: /images/portfolio/real/class-2025-grad.jpg
+image: /images/portfolio/real/class-2025-grad.webp
 alt: Black and gold balloon hoop arch with 2025 foil numbers and grad bear backdrop
 featured: true
 order: 2

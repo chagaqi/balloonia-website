@@ -15,9 +15,10 @@ type Props = {
   noindex?: boolean;
   schemas?: Record<string, unknown>[];
   breadcrumbs?: Crumb[];
+  preconnect?: string[];
 };
 
-const { topic, description, ogImage, noindex, schemas = [], breadcrumbs } = Astro.props;
+const { topic, description, ogImage, noindex, schemas = [], breadcrumbs, preconnect = [] } = Astro.props;
 
 const allSchemas: Record<string, unknown>[] = [localBusinessSchema()];
 if (breadcrumbs && breadcrumbs.length > 1) {
@@ -35,6 +36,7 @@ allSchemas.push(...schemas);
     <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {preconnect.map((href) => <link rel="preconnect" href={href} />)}
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap"

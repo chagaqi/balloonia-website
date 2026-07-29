@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { business } from '../../data/business';
 ---
 
 <BaseLayout
@@ -9,23 +10,33 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     { name: 'Home', url: '/' },
     { name: 'Get a quote', url: '/quote' },
   ]}
+  preconnect={['https://widget.honeybook.com', 'https://www.honeybook.com']}
 >
   <section class="quote-section">
     <div class="container">
-      <div class="hb-p-69f56e21f1100d21e791fe5c-2"></div>
+      <div class="hb-embed" data-hb-embed>
+        <div class="hb-p-69f56e21f1100d21e791fe5c-2"></div>
+      </div>
+
+      <div class="hb-loading" data-hb-loading aria-live="polite">
+        <div class="hb-skeleton">
+          <span class="hb-skeleton-bar hb-skeleton-bar-1"></span>
+          <span class="hb-skeleton-bar hb-skeleton-bar-2"></span>
+          <span class="hb-skeleton-bar hb-skeleton-bar-3"></span>
+        </div>
+        <p class="hb-loading-text">Loading your quote form...</p>
+      </div>
+
+      <div class="hb-fallback" data-hb-fallback hidden>
+        <p><strong>This is taking longer than usual.</strong></p>
+        <p>You can keep waiting, or reach us directly and skip the form:</p>
+        <p class="hb-fallback-links">
+          <a href={`mailto:${business.email}`}>Email {business.email}</a>
+          {business.phone && <a href={`tel:${business.phone}`}>Call/text {business.phone}</a>}
+        </p>
+      </div>
+
       <img height="1" width="1" style="display:none" src="https://www.honeybook.com/p.png?pid=69f56e21f1100d21e791fe5c" alt="" />
-      <script is:inline>
-        (function (h, b, s, n, i, p, e, t) {
-          h._HB_ = h._HB_ || {};
-          h._HB_.pid = i;
-          t = b.createElement(s);
-          t.type = 'text/javascript';
-          t.async = !0;
-          t.src = n;
-          e = b.getElementsByTagName(s)[0];
-          e.parentNode.insertBefore(t, e);
-        })(window, document, 'script', 'https://widget.honeybook.com/assets_users_production/websiteplacements/placement-controller.min.js', '69f56e21f1100d21e791fe5c');
-      </script>
     </div>
   </section>
 </BaseLayout>
@@ -34,5 +45,133 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .quote-section {
     padding-top: var(--space-7);
     padding-bottom: var(--space-9);
+    min-height: 60vh;
+  }
+
+  .hb-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-7) var(--space-4);
+  }
+
+  .hb-skeleton {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .hb-skeleton-bar {
+    display: block;
+    height: 14px;
+    border-radius: var(--radius-md, 8px);
+    background: linear-gradient(90deg, var(--color-paper-soft, #f3efe8) 25%, var(--color-border, #e4ddd0) 37%, var(--color-paper-soft, #f3efe8) 63%);
+    background-size: 400% 100%;
+    animation: hb-shimmer 1.4s ease infinite;
+  }
+
+  .hb-skeleton-bar-1 {
+    width: 60%;
+    height: 22px;
+  }
+  .hb-skeleton-bar-2 {
+    width: 100%;
+    height: 120px;
+    border-radius: var(--radius-lg, 12px);
+  }
+  .hb-skeleton-bar-3 {
+    width: 40%;
+  }
+
+  @keyframes hb-shimmer {
+    0% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0 50%;
+    }
+  }
+
+  .hb-loading-text {
+    color: var(--color-ink-soft, #6b6b6b);
+    font-size: var(--font-size-sm);
+  }
+
+  .hb-fallback {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    padding: var(--space-5) var(--space-4);
+    color: var(--color-ink-soft, #6b6b6b);
+  }
+
+  .hb-fallback-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: center;
+    margin-top: var(--space-3);
+  }
+
+  .hb-fallback-links a {
+    color: var(--color-accent-deep, #b06a55);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 </style>
+
+<script is:inline>
+  (function () {
+    var embed = document.querySelector('[data-hb-embed]');
+    var loading = document.querySelector('[data-hb-loading]');
+    var fallback = document.querySelector('[data-hb-fallback]');
+    if (!embed || !loading) return;
+
+    var started = false;
+    var fallbackTimer = null;
+
+    function loadWidget() {
+      if (started) return;
+      started = true;
+
+      (function (h, b, s, n, i, p, e, t) {
+        h._HB_ = h._HB_ || {};
+        h._HB_.pid = i;
+        t = b.createElement(s);
+        t.type = 'text/javascript';
+        t.async = true;
+        t.src = n;
+        e = b.getElementsByTagName(s)[0];
+        e.parentNode.insertBefore(t, e);
+      })(window, document, 'script', 'https://widget.honeybook.com/assets_users_production/websiteplacements/placement-controller.min.js', '69f56e21f1100d21e791fe5c');
+
+      // HoneyBook injects an iframe into the placement div once it loads.
+      // Hide the skeleton as soon as that shows up; otherwise offer the
+      // direct-contact fallback so nobody is stuck staring at a spinner.
+      var observer = new MutationObserver(function () {
+        if (embed.querySelector('iframe')) {
+          loading.style.display = 'none';
+          if (fallbackTimer) window.clearTimeout(fallbackTimer);
+          observer.disconnect();
+        }
+      });
+      observer.observe(embed, { childList: true, subtree: true });
+
+      fallbackTimer = window.setTimeout(function () {
+        if (fallback) fallback.hidden = false;
+      }, 8000);
+    }
+
+    // Defer the third-party script off the critical rendering path. Falls
+    // back to a short timeout on browsers without requestIdleCallback (Safari).
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(loadWidget, { timeout: 2000 });
+    } else {
+      window.setTimeout(loadWidget, 300);
+    }
+  })();
+</script>

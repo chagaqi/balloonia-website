@@ -1,7 +1,7 @@
 ---
 title: Jungle safari first birthday
 eventType: birthdays
-image: /images/portfolio/real/jungle-safari-birthday.png
+image: /images/portfolio/real/jungle-safari-birthday.webp
 alt: Jungle safari first birthday with sage and gold hoop arch and animal-print accents
 featured: true
 order: 5

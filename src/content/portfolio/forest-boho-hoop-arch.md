@@ -1,7 +1,7 @@
 ---
 title: Forest boho hoop arch
 eventType: weddings
-image: /images/portfolio/real/forest-boho-hoop.png
+image: /images/portfolio/real/forest-boho-hoop.webp
 alt: Sage and gold boho hoop arch in a forest setting
 featured: true
 order: 3

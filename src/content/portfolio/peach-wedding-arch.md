@@ -1,7 +1,7 @@
 ---
 title: Peach and blush outdoor wedding arch
 eventType: weddings
-image: /images/portfolio/real/peach-wedding-arch.jpg
+image: /images/portfolio/real/peach-wedding-arch.webp
 alt: Peach and blush balloon arch built over the head table for an outdoor wedding
 featured: true
 order: 1
