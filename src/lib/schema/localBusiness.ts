@@ -20,7 +20,12 @@ function openingHoursSpec() {
 }
 
 function sameAs(): string[] {
-  return [business.social.instagram, business.social.facebook, business.social.googleBusiness].filter(Boolean);
+  return [
+    business.social.instagram,
+    business.social.pinterest,
+    business.social.facebook,
+    business.social.googleBusiness,
+  ].filter(Boolean);
 }
 
 export function localBusinessSchema() {

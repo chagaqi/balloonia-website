@@ -32,7 +32,7 @@ export const business = {
     instagram: 'https://instagram.com/balloonia.co',
     pinterest: 'https://ca.pinterest.com/ballooniaeventscanada/',
     facebook: '',
-    googleBusiness: '',
+    googleBusiness: 'https://maps.google.com/?cid=17219525027009520365',
   },
   honeybookScheduler: import.meta.env.PUBLIC_HONEYBOOK_SCHEDULER,
 } as const;
