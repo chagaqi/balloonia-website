@@ -47,7 +47,8 @@ export const primaryNav: PrimaryNavItem[] = [
         {
           heading: 'By install type',
           items: [
-            { label: 'Arches and garlands', href: '/services/arches-garlands' },
+            { label: 'Balloon arches', href: '/services/balloon-arches' },
+            { label: 'Balloon garlands', href: '/services/balloon-garlands' },
             { label: 'Walls and backdrops', href: '/services/walls-backdrops' },
             { label: 'Centerpieces', href: '/services/centerpieces' },
             { label: 'Number and letter columns', href: '/services/columns' },
@@ -106,6 +107,7 @@ export const primaryNav: PrimaryNavItem[] = [
           items: [
             { label: 'About us', href: '/about' },
             { label: 'Portfolio', href: '/portfolio' },
+            { label: 'FAQ', href: '/faq' },
           ],
         },
       ],
@@ -122,6 +124,7 @@ export const footerNav: NavItem[] = [
   { label: 'Graduations', href: '/services/graduations' },
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
   { label: 'Contact', href: '/contact' },
   { label: 'Get a quote', href: '/quote' },
 ];

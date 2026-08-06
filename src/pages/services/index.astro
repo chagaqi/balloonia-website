@@ -16,16 +16,28 @@ type Section = {
   tagsAny: string[];
   collectionHandle: string | null;
   descriptiveOnly?: boolean;
+  /** Set when this category has its own detail page to link through to. */
+  detailHref?: string;
 };
 
 const sections: Section[] = [
   {
-    anchor: 'arches-garlands',
-    title: 'Balloon arches and garlands',
+    anchor: 'arches',
+    title: 'Balloon arches',
     description:
-      'Custom organic garland arches, classic hoop arches, and geometric designs. Built to your colors and venue dimensions for weddings, showers, birthdays, and more.',
-    tagsAny: ['arch', 'garland'],
+      'Custom organic, hoop, and geometric arches. Built to your colours and venue dimensions for weddings, showers, birthdays, and grand openings.',
+    tagsAny: ['arch'],
     collectionHandle: 'arches-garlands',
+    detailHref: '/services/balloon-arches',
+  },
+  {
+    anchor: 'garlands',
+    title: 'Balloon garlands',
+    description:
+      'Organic garlands built to length and palette. Wrapped along stair rails, draped across head tables, or climbing a full feature wall.',
+    tagsAny: ['garland'],
+    collectionHandle: 'arches-garlands',
+    detailHref: '/services/balloon-garlands',
   },
   {
     anchor: 'walls-backdrops',
@@ -130,7 +142,9 @@ const faqs = (await getCollection('faq'))
 
 const schemas = [
   faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))),
-  ...sections.filter((s) => !s.descriptiveOnly).map((s) =>
+  // Categories with their own detail page emit Service schema there, not here,
+  // so the same service is not declared twice at two different URLs.
+  ...sections.filter((s) => !s.descriptiveOnly && !s.detailHref).map((s) =>
     serviceSchema({
       name: s.title,
       description: s.description,
@@ -168,8 +182,13 @@ function collectionUrl(handle: string): string {
     <section id={s.anchor} class="service-section section">
       <div class="container">
         <header class="service-section-head">
-          <h2>{s.title}</h2>
+          <h2>{s.detailHref ? <a class="service-section-title-link" href={s.detailHref}>{s.title}</a> : s.title}</h2>
           <p class="service-section-desc">{s.description}</p>
+          {s.detailHref && (
+            <p class="service-section-detail-link">
+              <a href={s.detailHref}>Pricing and details for {s.title.toLowerCase()} <span aria-hidden="true">→</span></a>
+            </p>
+          )}
         </header>
 
         {s.descriptiveOnly ? (
@@ -246,6 +265,22 @@ function collectionUrl(handle: string): string {
   .service-section-desc {
     color: var(--color-ink-soft);
     max-width: 60ch;
+  }
+  .service-section-title-link {
+    color: inherit;
+  }
+  .service-section-title-link:hover {
+    color: var(--color-accent-deep);
+  }
+  .service-section-detail-link {
+    margin-top: var(--space-3);
+    font-size: var(--font-size-sm);
+  }
+  .service-section-detail-link a {
+    color: var(--color-accent-deep);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   .service-section-link {
     margin-top: var(--space-5);

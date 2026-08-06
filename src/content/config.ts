@@ -34,7 +34,10 @@ const faq = defineCollection({
     question: z.string(),
     pages: z.array(
       z.enum([
+        'faq',
         'services',
+        'arches',
+        'garlands',
         'weddings',
         'corporate',
         'showers',

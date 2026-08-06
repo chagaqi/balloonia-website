@@ -6,6 +6,13 @@ import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   site: 'https://balloonia.events',
+  // The combined arches-and-garlands page was split into one page per search
+  // intent. Arch and garland queries return different results with different
+  // rankers, so one page could not win both. Old URL points at arches, which
+  // carried the majority of the traffic.
+  redirects: {
+    '/services/arches-garlands': '/services/balloon-arches',
+  },
   integrations: [
     preact(),
     sitemap({

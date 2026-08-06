@@ -1,0 +1,139 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import QuoteForm from '../../components/quote/QuoteForm.tsx';
+import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
+import { getAllProducts } from '../../data/catalog/shopify';
+import '../../styles/quote-form.css';
+
+const allProducts = await getAllProducts();
+const products = allProducts.filter((p) => p.tags.includes('arch')).slice(0, 9);
+
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('arches'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
+const schemas = [
+  serviceSchema({
+    name: 'Balloon arches',
+    description:
+      'Custom organic, hoop, and geometric balloon arches built and installed for events in London Ontario.',
+    startingPrice: 299,
+    url: '/services/balloon-arches',
+  }),
+];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
+---
+
+<BaseLayout
+  topic="Balloon Arches"
+  description="Custom balloon arches in London Ontario. Organic, hoop, and geometric, built to your colours and venue and installed by us. Most arches land between $499 and $999."
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Services', url: '/services' },
+    { name: 'Balloon arches', url: '/services/balloon-arches' },
+  ]}
+  schemas={schemas}
+>
+  <Hero
+    eyebrow="Install type"
+    headline="Balloon arches in London, Ontario"
+    subhead="Organic, hoop, and geometric. Built to your venue's measurements and colour palette, then delivered and installed by us."
+    primaryCta={{ href: '/quote', label: 'Start a quote' }}
+    secondaryCta={{ href: '/portfolio', label: 'See arch work' }}
+    image="/images/categories/arches-garlands.webp"
+    imageAlt="Custom balloon arch framing a venue entrance"
+    variant="page"
+  />
+
+  <section class="install-body section">
+    <div class="container container-narrow prose">
+      <p>
+        The arch is the photo most events end up remembering. Brenda builds organic, hoop, and geometric
+        versions at any scale. Most run six to ten feet tall for doorways, ceremonies, and photo spots.
+        Structural builds for ballrooms, grand openings, and outdoor venues go considerably larger.
+      </p>
+      <p>
+        Small organic arches start around $299. Standard doorway and ceremony arches land between $499
+        and $999. Large statement arches that need framing underneath run past $1,200. What moves the
+        number is height, how many colours are in the blend, and what the venue will let us attach to.
+      </p>
+      <p>
+        People often search for a balloon arch rental, so worth being clear about what we actually do.
+        Nothing here is rented or reused. Every arch is built fresh for your date from new materials in
+        your palette, installed on site, and taken down after if you want that handled. Pricing reflects
+        the build rather than a rental period. More detail on that in the
+        <a href="/faq">frequently asked questions</a>.
+      </p>
+      <p>
+        Looking for something that runs along a wall, a staircase, or a head table instead? That is a
+        <a href="/services/balloon-garlands">balloon garland</a>, and it prices differently.
+      </p>
+    </div>
+  </section>
+
+  {products.length > 0 && (
+    <section class="install-products section">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Balloon arches in the catalog</h2>
+          <p class="lede">Pick a build as-is or use one as the starting point for a custom version.</p>
+        </header>
+        <ProductGrid products={products} columns={3} />
+        <p class="section-link-wrap">
+          <a class="section-link" href="https://shop.balloonia.events/collections/arches-garlands">View all arches →</a>
+        </p>
+      </div>
+    </section>
+  )}
+
+  {faqs.length > 0 && <FAQAccordion heading="Balloon arch questions" faqs={faqs} />}
+
+  <section class="install-quote section">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Custom build</p>
+        <h2>Need something specific?</h2>
+        <p class="lede">Send your venue, colours, and a reference photo. Brenda quotes within 24 hours.</p>
+      </header>
+      <QuoteForm client:load />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose p {
+    color: var(--color-ink-soft);
+    font-size: var(--font-size-lg);
+    line-height: var(--line-relaxed);
+  }
+  .prose a {
+    color: var(--color-accent-deep);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .section-head {
+    margin-bottom: var(--space-6);
+  }
+  .install-quote {
+    background: var(--color-paper-soft);
+  }
+  .section-link {
+    color: var(--color-accent-deep);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .section-link-wrap {
+    margin-top: var(--space-5);
+  }
+</style>
