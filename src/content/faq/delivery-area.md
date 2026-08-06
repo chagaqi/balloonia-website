@@ -1,6 +1,6 @@
 ---
 question: Do you deliver and install outside London?
-pages: ['services', 'contact', 'weddings', 'corporate']
+pages: ['faq', 'services', 'bouquets', 'contact', 'weddings', 'corporate']
 order: 1
 ---
 

@@ -1,6 +1,6 @@
 ---
 question: Can you match specific colors or themes?
-pages: ['services', 'weddings', 'corporate', 'showers']
+pages: ['faq', 'services', 'custom', 'walls', 'arches', 'garlands', 'weddings', 'corporate', 'showers']
 order: 5
 ---
 

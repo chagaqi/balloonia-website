@@ -1,6 +1,6 @@
 ---
 question: Do you do same-day or rush bookings?
-pages: ['services', 'birthdays']
+pages: ['faq', 'services', 'bouquets', 'custom', 'birthdays']
 order: 3
 ---
 

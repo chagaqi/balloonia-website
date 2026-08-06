@@ -1,39 +1,51 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
 import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('themed') || p.tags.includes('custom')).slice(0, 9);
 
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('custom'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
 const schemas = [
   serviceSchema({
     name: 'Custom themed balloon installations',
-    description: 'Fully custom themed balloon installations for any concept or palette in London Ontario.',
-    startingPrice: 500,
+    description:
+      'Fully custom themed balloon installations designed from a concept or palette and built for events in London Ontario.',
+    startingPrice: 299,
     url: '/services/custom-themed',
   }),
 ];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
 ---
 
 <BaseLayout
-  topic="Custom Themed Balloon Installs"
-  description="Fully custom themed balloon installations in London Ontario. Quinceañeras, brand activations, themed kid parties. From $500."
+  topic="Custom Themed Balloon Installations"
+  description="Custom themed balloon installations in London Ontario. Designed from your concept, palette, or reference photo and built to order. Themed builds from $299."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
-    { name: 'Custom themed', url: '/services/custom-themed' },
+    { name: 'Custom themed installs', url: '/services/custom-themed' },
   ]}
   schemas={schemas}
 >
   <Hero
     eyebrow="Install type"
-    headline="Custom themed installations"
-    subhead="Fully custom builds for any theme or concept. Quinceañeras, brand activations, themed kid parties, one-of-a-kind installs."
+    headline="Custom themed balloon installations in London, Ontario"
+    subhead="Start with a reference photo, a mood board, or a colour you cannot find anywhere. Brenda designs the build from there."
     primaryCta={{ href: '/quote', label: 'Start a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See custom work' }}
     image="/images/categories/centerpieces.webp"
@@ -44,10 +56,54 @@ const schemas = [
   <section class="install-body section">
     <div class="container container-narrow prose">
       <p>
-        This is the "I have a specific vision and I can't find anyone who can build it" tier. Themed kid parties with jungle canopies, quinceañera ballroom installs, brand activations with custom logo cutouts, one-of-a-kind concepts.
+        Every install we build is made to order, so custom is the normal rather than the upgrade. This
+        page is for the ones that start from a concept rather than a category. A quinceañera with a
+        specific palette, a brand activation that has to match a colour code exactly, a kid's party
+        built around one character, or an idea you have only ever seen in a photo.
+      </p>
+
+      <h2>What a custom themed build costs</h2>
+      <p>
+        Smaller themed setups start at $299. Full themed builds combining several elements, an arch with
+        a wall and matching table pieces, run $599 to $1,500. Large multi-element concepts for
+        quinceañeras, galas, and brand activations go beyond that depending on scale and how many
+        separate pieces the room needs.
       </p>
       <p>
-        Send a reference photo, a mood board, or a description. Brenda quotes within 24 hours and walks through what's feasible at your budget and timeline.
+        Custom does not automatically mean more expensive. A themed build at the same size and colour
+        count as a catalog build prices close to it. What raises the number is scale, the number of
+        separate pieces, unusual colours that have to be sourced, and anything that needs a frame or a
+        structure built to hold it.
+      </p>
+
+      <h2>How the design actually works</h2>
+      <p>
+        Send whatever you have. A Pinterest board, a screenshot, a photo of your invitations, a fabric
+        swatch, or just a description of the feeling you are going for. Brenda works from that to a
+        proposed build, comes back with what is possible in your space and budget, and adjusts before
+        anything is committed. If your reference photo is a setup that would not work in your venue, she
+        will say so and offer the version that does rather than building something that fails on the day.
+      </p>
+      <p>
+        Colour matching is the request we get most. If you have a brand hex code, a bridesmaid dress
+        swatch, or a specific shade in mind, we match to it rather than picking the nearest standard
+        colour. Some shades are not manufactured in latex at all, and in those cases we will tell you
+        honestly what the closest achievable match looks like before you book.
+      </p>
+
+      <h2>Give it more lead time</h2>
+      <p>
+        Custom concepts need longer than catalog builds. Four to six weeks is comfortable, and specialty
+        colours or anything needing a built structure benefit from more. Shorter timelines are often
+        still possible for smaller themed setups, so ask rather than assuming. Timelines and rush
+        bookings are covered in the <a href="/faq">FAQ</a>.
+      </p>
+      <p>
+        For brand activations and corporate concepts specifically, see
+        <a href="/services/corporate">corporate packages</a>. Individual elements are covered on
+        <a href="/services/balloon-arches">arches</a>,
+        <a href="/services/balloon-garlands">garlands</a>, and
+        <a href="/services/walls-backdrops">walls and backdrops</a>.
       </p>
     </div>
   </section>
@@ -56,9 +112,9 @@ const schemas = [
     <section class="install-products section">
       <div class="container">
         <header class="section-head">
-          <p class="eyebrow">Reference builds</p>
-          <h2>Themed work in the catalog</h2>
-          <p class="lede">Examples of themed and custom builds Brenda has done. Use any as the starting point for your version.</p>
+          <p class="eyebrow">Shop the catalog</p>
+          <h2>Themed builds in the catalog</h2>
+          <p class="lede">Useful as a starting point when you would rather adapt than start blank.</p>
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
@@ -68,12 +124,14 @@ const schemas = [
     </section>
   )}
 
+  {faqs.length > 0 && <FAQAccordion heading="Custom build questions" faqs={faqs} />}
+
   <section class="install-quote section">
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Custom build</p>
-        <h2>Tell us about the theme</h2>
-        <p class="lede">Reference photos, mood boards, event date, venue. Brenda quotes within 24 hours.</p>
+        <h2>Have a concept in mind?</h2>
+        <p class="lede">Send the reference, mood board, or colour code. Brenda designs from it and quotes within 24 hours.</p>
       </header>
       <QuoteForm client:load />
     </div>
@@ -82,6 +140,8 @@ const schemas = [
 
 <style>
   .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .prose a { color: var(--color-accent-deep); text-decoration: underline; text-underline-offset: 4px; }
   .section-head { margin-bottom: var(--space-6); }
   .install-quote { background: var(--color-paper-soft); }
   .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }

@@ -1,6 +1,6 @@
 ---
 question: Do you offer rentals or is everything custom-built?
-pages: ['services']
+pages: ['faq', 'services', 'custom', 'columns']
 order: 9
 ---
 

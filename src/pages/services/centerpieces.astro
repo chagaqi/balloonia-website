@@ -1,28 +1,40 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
 import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('centerpiece')).slice(0, 9);
 
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('centerpieces'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
 const schemas = [
   serviceSchema({
     name: 'Balloon centerpieces',
-    description: 'Custom balloon centerpieces and table arrangements for events in London Ontario.',
-    startingPrice: 60,
+    description:
+      'Custom balloon centerpieces and table arrangements, delivered and placed for events in London Ontario.',
+    startingPrice: 39,
     url: '/services/centerpieces',
   }),
 ];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
 ---
 
 <BaseLayout
   topic="Balloon Centerpieces"
-  description="Custom balloon centerpieces and table arrangements in London Ontario. Delivered, placed, removed. From $60 per table."
+  description="Balloon centerpieces for events in London Ontario. Built to your palette, sized so guests can see across the table, delivered and placed. From $39 per table."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
@@ -32,8 +44,8 @@ const schemas = [
 >
   <Hero
     eyebrow="Install type"
-    headline="Balloon centerpieces"
-    subhead="Table centerpieces and balloon arrangements that match your event theme. One per table or a single statement piece."
+    headline="Balloon centerpieces in London, Ontario"
+    subhead="Table pieces built to your palette and sized so guests can still see each other across the table. Delivered and placed."
     primaryCta={{ href: '/quote', label: 'Start a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See centerpiece work' }}
     image="/images/categories/centerpieces.webp"
@@ -44,10 +56,47 @@ const schemas = [
   <section class="install-body section">
     <div class="container container-narrow prose">
       <p>
-        Centerpieces are the cheapest way to make a room feel set. A single balloon arrangement per table, weighted, anchored, in your palette. Guests sit down and the room already feels finished.
+        Centerpieces are the piece guests spend the most time looking at, because they sit at eye level
+        for however long people are at the table. They are also the easiest thing to get wrong, and
+        almost always in the same way: too tall.
+      </p>
+
+      <h2>What balloon centerpieces cost</h2>
+      <p>
+        Simple table pieces start at $39. Standard centerpieces for a shower, birthday, or corporate
+        lunch run $55 to $109. Larger statement pieces for head tables, gift tables, and dessert
+        displays reach $139 and up. Because most events order several, we quote by the set rather than
+        the piece, and the per-table number comes down as the count rises.
+      </p>
+
+      <h2>How many you actually need</h2>
+      <p>
+        One per guest table is the default, and for most events in London that lands between six and
+        twelve. Before ordering that many, it is worth knowing that not every table needs the same
+        thing. A common approach is a full piece on the head table, the gift table, and the cake or
+        dessert table, then something smaller and lower on guest tables.
       </p>
       <p>
-        Brenda builds short, tall, or asymmetric. Single-color, gradient, or theme-mixed. Delivered to the venue, placed, and collected at the end of the night.
+        Height is the detail that gets missed. Anything above about fourteen inches on a dining table
+        blocks sightlines, and guests quietly move it themselves partway through the meal, which is the
+        clearest sign a centerpiece was built wrong. We build guest table pieces low and wide, and save
+        the tall ones for tables nobody sits at. For corporate events and galas with rounds seating ten,
+        we usually recommend fewer, larger pieces rather than one on every table.
+      </p>
+
+      <h2>Delivered and placed, not dropped off</h2>
+      <p>
+        Centerpieces arrive built and get placed on the tables, so nobody on your side is assembling
+        anything the morning of. If the venue is still setting linens when we arrive, we work around
+        them or come back, and Brenda coordinates that timing directly. For events where the room turns
+        over between a ceremony and a reception, we can place them during the turnover instead.
+      </p>
+      <p>
+        Send your table count and layout and we will tell you where pieces actually earn their spot
+        rather than quoting one for every surface. Quantity guidance is in the
+        <a href="/faq">FAQ</a>. For taller freestanding pieces see
+        <a href="/services/columns">balloon columns</a>, and for something running the length of a head
+        table see <a href="/services/balloon-garlands">balloon garlands</a>.
       </p>
     </div>
   </section>
@@ -58,7 +107,7 @@ const schemas = [
         <header class="section-head">
           <p class="eyebrow">Shop the catalog</p>
           <h2>Centerpieces in the catalog</h2>
-          <p class="lede">Stock designs and base options. Custom palettes built on request.</p>
+          <p class="lede">Pick a build as-is or use it as the base for a custom version.</p>
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
@@ -68,12 +117,14 @@ const schemas = [
     </section>
   )}
 
+  {faqs.length > 0 && <FAQAccordion heading="Centerpiece questions" faqs={faqs} />}
+
   <section class="install-quote section">
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Custom build</p>
-        <h2>Custom centerpiece set?</h2>
-        <p class="lede">Send your table count, palette, and theme. Brenda quotes within 24 hours.</p>
+        <h2>Working out a table plan?</h2>
+        <p class="lede">Send your table count, layout, and colours. Brenda quotes the set within 24 hours.</p>
       </header>
       <QuoteForm client:load />
     </div>
@@ -82,6 +133,8 @@ const schemas = [
 
 <style>
   .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .prose a { color: var(--color-accent-deep); text-decoration: underline; text-underline-offset: 4px; }
   .section-head { margin-bottom: var(--space-6); }
   .install-quote { background: var(--color-paper-soft); }
   .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }

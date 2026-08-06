@@ -1,28 +1,40 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
 import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('themed') || p.tags.includes('backdrop')).slice(0, 9);
 
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('photo-booth'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
 const schemas = [
   serviceSchema({
     name: 'Photo booth balloon setups',
-    description: 'Custom balloon backdrops, arches, and props for photo booth areas in London Ontario.',
-    startingPrice: 250,
+    description:
+      'Balloon backdrops and props built around photo booth areas for events in London Ontario.',
+    startingPrice: 249,
     url: '/services/photo-booth',
   }),
 ];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
 ---
 
 <BaseLayout
   topic="Photo Booth Balloon Setups"
-  description="Custom balloon backdrops and props for photo booths in London Ontario. Sized to your booth and lit so photos read clean. From $250."
+  description="Photo booth balloon backdrops in London Ontario. Sized to your booth's frame and built in colours that photograph clean under booth lighting. From $249."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
@@ -32,10 +44,10 @@ const schemas = [
 >
   <Hero
     eyebrow="Install type"
-    headline="Photo booth setups"
-    subhead="Balloon backdrops, arches, and props designed around photo booth areas. Sized for your booth and lit so the photos read clean."
+    headline="Photo booth balloon setups in London, Ontario"
+    subhead="Built around the booth rather than beside it. Sized to the camera's frame and in colours that hold up under booth lighting."
     primaryCta={{ href: '/quote', label: 'Start a quote' }}
-    secondaryCta={{ href: '/portfolio', label: 'See photo booth work' }}
+    secondaryCta={{ href: '/portfolio', label: 'See booth work' }}
     image="/images/categories/walls-backdrops.webp"
     imageAlt="Photo booth balloon backdrop"
     variant="page"
@@ -44,10 +56,47 @@ const schemas = [
   <section class="install-body section">
     <div class="container container-narrow prose">
       <p>
-        Photo booth backdrops have one job: make every photo look intentional. Sized to your booth's frame, color-matched to your event, and lit so the shots don't shadow weirdly.
+        A photo booth backdrop has a harder job than a regular backdrop, because it has to work through
+        a specific lens at a fixed distance under a flash. Colours that look right in the room can go
+        flat or blow out on camera, and a backdrop built to look good standing in front of it often
+        crops badly once the booth frames the shot.
+      </p>
+
+      <h2>What photo booth setups cost</h2>
+      <p>
+        A backdrop sized to a standard booth frame starts at $249. Setups with a themed build, props, or
+        a name and neon accent run $349 to $699. Larger open-air booth walls that need to cover a wider
+        frame land past $699. If you are already booking a balloon install elsewhere at the same event,
+        a booth backdrop built at the same time costs less than booking it on its own, since it shares
+        the same delivery and setup trip.
+      </p>
+
+      <h2>Building for the camera, not the room</h2>
+      <p>
+        Enclosed booths usually frame tight, so the backdrop needs to fill roughly eight feet wide by
+        eight tall and no more, since anything past that is out of frame and wasted. Open-air booths
+        shoot wider and take groups, which means ten to twelve feet to keep people off the edges.
       </p>
       <p>
-        Themed builds, branded backdrops, custom letter or name accents. Built before the event opens, broken down after the last photo.
+        Colour behaves differently under a booth flash than under room light. Deep saturated tones hold
+        up. Very pale pastels can wash out, and chrome and metallic finishes throw hot spots straight
+        back at the lens. We build with that in mind, and if you tell us the booth vendor or send a
+        photo of the booth, we can size and colour for that specific setup. Placement matters too, since
+        a backdrop needs clear floor in front of it for the booth to sit at the right distance.
+      </p>
+
+      <h2>Working alongside your booth vendor</h2>
+      <p>
+        Booth companies typically arrive an hour or two before guests and need the corner clear when they
+        do. We schedule our setup to finish before they start, so nobody is working around anybody. If
+        you give us the booth company's name when you book, Brenda coordinates the timing with them
+        directly rather than leaving you to relay it.
+      </p>
+      <p>
+        Sizing detail is in the <a href="/faq">FAQ</a>. If you want a backdrop for general photos rather
+        than a booth specifically, that is a <a href="/services/walls-backdrops">balloon wall</a>. For a
+        fully themed concept built around a character or palette, see
+        <a href="/services/custom-themed">custom themed installs</a>.
       </p>
     </div>
   </section>
@@ -57,8 +106,8 @@ const schemas = [
       <div class="container">
         <header class="section-head">
           <p class="eyebrow">Shop the catalog</p>
-          <h2>Photo booth setups in the catalog</h2>
-          <p class="lede">Themed and styled builds, ready to order. Custom backdrops sized to your booth on request.</p>
+          <h2>Booth-friendly builds in the catalog</h2>
+          <p class="lede">Starting points we can resize to your booth's frame.</p>
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
@@ -68,12 +117,14 @@ const schemas = [
     </section>
   )}
 
+  {faqs.length > 0 && <FAQAccordion heading="Photo booth backdrop questions" faqs={faqs} />}
+
   <section class="install-quote section">
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Custom build</p>
-        <h2>Custom photo booth setup?</h2>
-        <p class="lede">Send your booth dimensions, theme, and event date. Brenda quotes within 24 hours.</p>
+        <h2>Know your booth already?</h2>
+        <p class="lede">Send the booth type or vendor and your colours. Brenda sizes it and quotes within 24 hours.</p>
       </header>
       <QuoteForm client:load />
     </div>
@@ -82,6 +133,8 @@ const schemas = [
 
 <style>
   .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .prose a { color: var(--color-accent-deep); text-decoration: underline; text-underline-offset: 4px; }
   .section-head { margin-bottom: var(--space-6); }
   .install-quote { background: var(--color-paper-soft); }
   .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }

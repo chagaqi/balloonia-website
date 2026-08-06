@@ -1,28 +1,40 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
 import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('wall') || p.tags.includes('backdrop')).slice(0, 9);
 
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('walls'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
 const schemas = [
   serviceSchema({
     name: 'Balloon walls and backdrops',
-    description: 'Custom balloon walls and event backdrops in London Ontario. Photo-ready, sized to your venue.',
-    startingPrice: 300,
+    description:
+      'Custom balloon walls and photo backdrops built to venue dimensions and installed for events in London Ontario.',
+    startingPrice: 200,
     url: '/services/walls-backdrops',
   }),
 ];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
 ---
 
 <BaseLayout
   topic="Balloon Walls and Backdrops"
-  description="Custom balloon walls and backdrops in London Ontario. Photo-ready focal points sized to your venue and built in any palette. From $300."
+  description="Custom balloon backdrops and walls in London Ontario. Built to your dimensions and palette, delivered and installed. Accent walls from $200, full feature walls to $1,750."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
@@ -32,8 +44,8 @@ const schemas = [
 >
   <Hero
     eyebrow="Install type"
-    headline="Balloon walls and backdrops"
-    subhead="Full balloon walls for photo backdrops, ceremony backgrounds, and event focal points. Sized to your photographer's frame, any palette."
+    headline="Balloon backdrops and walls in London, Ontario"
+    subhead="Photo-ready focal points sized to your venue and your photographer's frame. Any palette, built to order, installed by us."
     primaryCta={{ href: '/quote', label: 'Start a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See backdrop work' }}
     image="/images/categories/BalloonHeartWall.webp"
@@ -44,10 +56,55 @@ const schemas = [
   <section class="install-body section">
     <div class="container container-narrow prose">
       <p>
-        A balloon wall does what a banner can't. It frames your event's photo moment with depth, color, and texture, and it carries the photos for the rest of the night.
+        A balloon backdrop does the job a banner cannot. It gives the photo depth, colour, and texture,
+        and it keeps working all night because every guest ends up standing in front of it at some
+        point. It is the piece that shows up in the most photos afterward, which is why it is worth
+        sizing properly rather than ordering by price alone.
+      </p>
+
+      <h2>What a balloon backdrop costs in London</h2>
+      <p>
+        Accent walls and half-height backdrops start around $200. A standard photo backdrop, the eight
+        by eight foot size most events want, runs $349 to $699. Full feature walls that span a room,
+        include a neon sign or name cutout, or carry floral and greenery inserts land between $699 and
+        $1,750.
       </p>
       <p>
-        Popular for showers, milestone birthdays, brand activations, and small intimate weddings. Brenda builds them in any color combination, with name accents, neon signs, or floral inserts if you want.
+        Three things move that number. Coverage is the biggest one, because a densely packed wall uses
+        several times the balloons of an organic wall of the same dimensions. Colour count is next,
+        since every added colour is a separate inflation batch before Brenda starts building. Then the
+        surface, because a freestanding frame is a different build from something anchored to a wall,
+        and some venues will not let anything touch their walls at all.
+      </p>
+
+      <h2>Getting the size right</h2>
+      <p>
+        Most people undersize a backdrop. Eight feet wide by eight tall covers one or two people
+        comfortably. Group shots need ten to twelve feet wide, because a row of six guests takes up
+        more room than it looks like it will, and a backdrop that stops behind someone's shoulder is
+        the thing you notice in every photo later. Height matters more than width once people are
+        standing, and anything under seven feet tall starts showing the ceiling behind it at eye level.
+        Send a photo of the wall or corner you have in mind and we will tell you what actually fits.
+      </p>
+
+      <h2>Branded walls for corporate events</h2>
+      <p>
+        For grand openings, brand activations, and conference booths around London and southwestern
+        Ontario, we build to a brand palette rather than a stock colour set. That means matching your
+        specific colours instead of picking the closest standard shade, and working a logo, name, or
+        hashtag into the wall as a cutout or sign. Step-and-repeat style walls for media photos work
+        the same way. If you are coordinating this alongside other vendors, Brenda deals with the venue
+        on load-in timing directly. See the <a href="/services/corporate">corporate packages</a> page
+        for how the rest of that fits together.
+      </p>
+
+      <h2>Related install types</h2>
+      <p>
+        A backdrop framing a doorway or an entrance is usually a
+        <a href="/services/balloon-arches">balloon arch</a> instead. Something running along a wall,
+        rail, or head table is a <a href="/services/balloon-garlands">balloon garland</a>. Many setups
+        combine a wall with a garland trailing off one corner, which reads bigger than either on its
+        own. Pricing and timelines for all of it are in the <a href="/faq">FAQ</a>.
       </p>
     </div>
   </section>
@@ -58,7 +115,7 @@ const schemas = [
         <header class="section-head">
           <p class="eyebrow">Shop the catalog</p>
           <h2>Walls and backdrops in the catalog</h2>
-          <p class="lede">Pick a stock build or use it as a base for a custom version.</p>
+          <p class="lede">Pick a build as-is or use it as the base for a custom version.</p>
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
@@ -67,6 +124,8 @@ const schemas = [
       </div>
     </section>
   )}
+
+  {faqs.length > 0 && <FAQAccordion heading="Balloon backdrop questions" faqs={faqs} />}
 
   <section class="install-quote section">
     <div class="container">
@@ -82,6 +141,8 @@ const schemas = [
 
 <style>
   .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .prose a { color: var(--color-accent-deep); text-decoration: underline; text-underline-offset: 4px; }
   .section-head { margin-bottom: var(--space-6); }
   .install-quote { background: var(--color-paper-soft); }
   .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }

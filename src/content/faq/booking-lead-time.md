@@ -1,6 +1,6 @@
 ---
 question: How far in advance should I book?
-pages: ['services', 'weddings', 'corporate', 'showers', 'birthdays', 'graduations']
+pages: ['faq', 'services', 'ceiling', 'custom', 'weddings', 'corporate', 'showers', 'birthdays', 'graduations']
 order: 2
 ---
 

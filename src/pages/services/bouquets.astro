@@ -1,28 +1,40 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
 import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('bouquet')).slice(0, 9);
 
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('bouquets'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
 const schemas = [
   serviceSchema({
     name: 'Balloon bouquets',
-    description: 'Helium balloon bouquets and accent clusters delivered around London Ontario.',
-    startingPrice: 35,
+    description:
+      'Helium balloon bouquets and accent clusters delivered across London Ontario and the surrounding area.',
+    startingPrice: 49,
     url: '/services/bouquets',
   }),
 ];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
 ---
 
 <BaseLayout
   topic="Balloon Bouquets"
-  description="Helium balloon bouquets and accent clusters in London Ontario. Surprise parties, small celebrations, and add-ons. From $35."
+  description="Balloon bouquets delivered in London Ontario and surrounding area. Birthdays, new babies, congratulations, office desks. Same-day when the calendar allows. From $49."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
@@ -32,22 +44,58 @@ const schemas = [
 >
   <Hero
     eyebrow="Install type"
-    headline="Balloon bouquets"
-    subhead="Helium bouquets and accent clusters. Surprise parties, small celebrations, and add-ons to a larger install."
-    primaryCta={{ href: '/quote', label: 'Start a quote' }}
-    secondaryCta={{ href: 'https://shop.balloonia.events/collections/bouquets', label: 'Shop bouquets' }}
+    headline="Balloon bouquets delivered in London, Ontario"
+    subhead="Hand-built helium bouquets for birthdays, new babies, and congratulations. Delivered by us, not handed to a courier."
+    primaryCta={{ href: 'https://shop.balloonia.events/collections/bouquets', label: 'Shop bouquets' }}
+    secondaryCta={{ href: '/quote', label: 'Custom colours' }}
     image="/images/categories/CuteBalloonBouquet_ceae58e2-990e-41ed-9fb9-775f7ae98ff2.webp"
-    imageAlt="Cute helium balloon bouquet"
+    imageAlt="Helium balloon bouquet in bright colours"
     variant="page"
   />
 
   <section class="install-body section">
     <div class="container container-narrow prose">
       <p>
-        Bouquets are the entry-tier option: small, mobile, deliverable around London. Birthdays, baby reveals, surprise parties, anniversaries, hospital congrats. Or as an accent piece to a larger build.
+        Bouquets are the one thing we make that can often go out the same day. They are also the piece
+        people order for reasons that have nothing to do with an event: a birthday at the office, a new
+        baby, someone getting good news, someone needing cheering up.
+      </p>
+
+      <h2>What bouquets cost and where we deliver</h2>
+      <p>
+        Bouquets start at $49 and most land between $49 and $179 depending on the count and whether
+        there are foil or number balloons in the mix. Larger presentation bouquets and multi-cluster
+        arrangements run to $399. We deliver across London and the surrounding area, including
+        St. Thomas, Strathroy, Ingersoll, and Woodstock.
+      </p>
+
+      <h2>Timing matters more than ordering early</h2>
+      <p>
+        Latex helium balloons float for roughly eight to twelve hours, and foil balloons hold for
+        several days. That makes bouquets different from everything else we build, because ordering
+        weeks ahead does not help. What helps is delivering close to when it needs to look its best.
+        Tell us the moment it is for, not just the date, and we will time it to that.
       </p>
       <p>
-        Built in any palette. Weighted with a matching base. Delivered within the 50km London service area.
+        We deliver bouquets ourselves rather than handing them to a courier, because balloons do not
+        survive a hot car or a parcel van. If you need same-day, message us and we will tell you
+        honestly whether today works rather than taking the order and hoping.
+      </p>
+
+      <h2>Two things worth checking before you order</h2>
+      <p>
+        For workplace deliveries, check the recipient is actually in that day and that reception will
+        accept balloons, since a bouquet sitting at a front desk overnight loses most of its float. For
+        hospital deliveries in London, check the unit first. Many wards do not permit latex at all
+        because of allergy policy, and foil-only bouquets are usually the way around it. We can build
+        foil-only if you tell us that is the situation.
+      </p>
+      <p>
+        Order directly from the shop for stock combinations, or send us your colours if you want
+        something not listed. Float times and delivery detail are in the <a href="/faq">FAQ</a>. If the
+        occasion calls for something with more presence, a
+        <a href="/services/columns">number balloon column</a> or a
+        <a href="/services/centerpieces">table centerpiece</a> covers that.
       </p>
     </div>
   </section>
@@ -58,7 +106,7 @@ const schemas = [
         <header class="section-head">
           <p class="eyebrow">Shop the catalog</p>
           <h2>Bouquets in the catalog</h2>
-          <p class="lede">Stock bouquets, ready to order with quick delivery. Custom palettes available on request.</p>
+          <p class="lede">Order directly, or send us colours for a custom combination.</p>
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
@@ -68,12 +116,14 @@ const schemas = [
     </section>
   )}
 
+  {faqs.length > 0 && <FAQAccordion heading="Bouquet questions" faqs={faqs} />}
+
   <section class="install-quote section">
     <div class="container">
       <header class="section-head">
-        <p class="eyebrow">Custom build</p>
-        <h2>Custom bouquet?</h2>
-        <p class="lede">Send your palette, size, and delivery date. Brenda quotes within 24 hours.</p>
+        <p class="eyebrow">Custom colours</p>
+        <h2>Want a combination that is not listed?</h2>
+        <p class="lede">Send your colours and the delivery date. We will confirm same-day availability if you need it.</p>
       </header>
       <QuoteForm client:load />
     </div>
@@ -82,6 +132,8 @@ const schemas = [
 
 <style>
   .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .prose a { color: var(--color-accent-deep); text-decoration: underline; text-underline-offset: 4px; }
   .section-head { margin-bottom: var(--space-6); }
   .install-quote { background: var(--color-paper-soft); }
   .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }

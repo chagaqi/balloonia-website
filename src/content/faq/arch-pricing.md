@@ -1,6 +1,6 @@
 ---
 question: What is the price range for a balloon arch?
-pages: ['services', 'weddings', 'birthdays']
+pages: ['faq', 'services', 'arches', 'weddings', 'birthdays']
 order: 4
 ---
 

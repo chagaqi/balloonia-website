@@ -1,6 +1,6 @@
 ---
 question: Do you provide setup and installation at the venue?
-pages: ['services', 'weddings', 'corporate', 'showers', 'birthdays', 'graduations']
+pages: ['faq', 'services', 'walls', 'ceiling', 'centerpieces', 'photo-booth', 'weddings', 'corporate', 'showers', 'birthdays', 'graduations']
 order: 8
 ---
 

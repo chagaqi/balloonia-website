@@ -1,53 +1,99 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
 import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('column')).slice(0, 9);
 
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('columns'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
 const schemas = [
   serviceSchema({
-    name: 'Balloon number and letter columns',
-    description: 'Custom freestanding number and letter columns for milestone events in London Ontario.',
-    startingPrice: 160,
+    name: 'Balloon columns and number balloons',
+    description:
+      'Freestanding balloon columns, number balloons, and letter displays for milestone events in London Ontario.',
+    startingPrice: 149,
     url: '/services/columns',
   }),
 ];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
 ---
 
 <BaseLayout
-  topic="Number and Letter Balloon Columns"
-  description="Custom freestanding number and letter columns in London Ontario. Class of 2026, milestone birthdays, anniversaries. From $160 per column."
+  topic="Balloon Columns and Number Balloons"
+  description="Balloon columns and number balloons in London Ontario. Freestanding, weighted, built in your colours for milestone birthdays, grads, and anniversaries. From $149."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
-    { name: 'Number and letter columns', url: '/services/columns' },
+    { name: 'Columns and number balloons', url: '/services/columns' },
   ]}
   schemas={schemas}
 >
   <Hero
     eyebrow="Install type"
-    headline="Number and letter columns"
-    subhead="Freestanding number and letter columns for milestone events. Class of 2026, Sweet 16, anniversaries, brand activations."
+    headline="Balloon columns and number balloons in London, Ontario"
+    subhead="Freestanding, weighted, and built in your colours. The install that works in venues where nothing is allowed on the walls."
     primaryCta={{ href: '/quote', label: 'Start a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See column work' }}
     image="/images/categories/centerpieces.webp"
-    imageAlt="Number column balloon display"
+    imageAlt="Number balloon column display"
     variant="page"
   />
 
   <section class="install-body section">
     <div class="container container-narrow prose">
       <p>
-        Columns are the milestone-event workhorse. Number columns for birthdays and anniversaries, "Class of" letters for grad parties, brand letters or numbers for corporate launches.
+        Columns solve a problem the other install types cannot. They stand on their own, weighted at the
+        base, attached to nothing. That makes them the answer for venues with rules about walls and
+        ceilings, for outdoor setups where there is nothing to build against, and for events where the
+        room has to be cleared quickly afterward.
+      </p>
+
+      <h2>What balloon columns cost</h2>
+      <p>
+        A single freestanding column starts at $149. Columns topped with a large foil number or letter
+        run $249 to $325. Oversized mosaic numbers, the four-foot floor-standing kind you fill with
+        balloons, and matched pairs flanking an entrance sit at the upper end. Most milestone setups in
+        London are a pair rather than a single, because two columns framing a doorway, a cake table, or
+        a stage read as an intentional install where one alone reads like a leftover.
+      </p>
+
+      <h2>Sizes, and what actually reads across a room</h2>
+      <p>
+        Standard columns are six to seven feet tall, which puts the top just above head height so they
+        stay visible once guests are standing. Large foil numbers are about three feet and work mounted
+        on a column base or floating in a cluster. Mosaic numbers stand four feet and hold their own as
+        a photo backdrop without anything else around them. For a Class of 2026 grad setup or a
+        milestone birthday, a pair of numbers on column bases at the entrance is the build we do most.
+      </p>
+
+      <h2>Where they work best</h2>
+      <p>
+        Milestone birthdays, graduations, anniversaries, retirements, and grand openings. Anywhere a
+        specific number is the point of the event, a column puts that number at eye level and in every
+        photo taken at the door. They also travel well between rooms, which matters for events that
+        move from a ceremony space to a reception space.
       </p>
       <p>
-        Built freestanding so they can sit anywhere in the room. Any color combination, any height. Delivered, set up, and broken down by Brenda.
+        Outdoors they need extra weight or an anchor, because wind moves a freestanding column faster
+        than people expect. Tell us if the setup is outdoors and we will build the base accordingly
+        rather than leaving you to hope. Sizing details are in the <a href="/faq">FAQ</a>. If you want
+        something spanning a doorway instead of standing beside it, look at
+        <a href="/services/balloon-arches">balloon arches</a>, and for table-level pieces see
+        <a href="/services/centerpieces">balloon centerpieces</a>.
       </p>
     </div>
   </section>
@@ -57,8 +103,8 @@ const schemas = [
       <div class="container">
         <header class="section-head">
           <p class="eyebrow">Shop the catalog</p>
-          <h2>Columns in the catalog</h2>
-          <p class="lede">Stock builds, ready to order. Custom numbers and color combinations on request.</p>
+          <h2>Columns and number balloons in the catalog</h2>
+          <p class="lede">Pick a build as-is or use it as the base for a custom version.</p>
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
@@ -68,12 +114,14 @@ const schemas = [
     </section>
   )}
 
+  {faqs.length > 0 && <FAQAccordion heading="Column and number balloon questions" faqs={faqs} />}
+
   <section class="install-quote section">
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Custom build</p>
-        <h2>Custom column?</h2>
-        <p class="lede">Send the number or letters, palette, and event date. Brenda quotes within 24 hours.</p>
+        <h2>Need a specific number or colour?</h2>
+        <p class="lede">Send the number, your colours, and where they are standing. Brenda quotes within 24 hours.</p>
       </header>
       <QuoteForm client:load />
     </div>
@@ -82,6 +130,8 @@ const schemas = [
 
 <style>
   .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .prose a { color: var(--color-accent-deep); text-decoration: underline; text-underline-offset: 4px; }
   .section-head { margin-bottom: var(--space-6); }
   .install-quote { background: var(--color-paper-soft); }
   .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }

@@ -1,39 +1,51 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
+import { faqPageSchema } from '../../lib/schema/faqPage';
 import { getAllProducts } from '../../data/catalog/shopify';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
 const products = allProducts.filter((p) => p.tags.includes('ceiling')).slice(0, 9);
 
+const faqs = (await getCollection('faq'))
+  .filter((f) => f.data.pages.includes('ceiling'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((f) => ({ question: f.data.question, body: f.body.trim() }));
+
 const schemas = [
   serviceSchema({
     name: 'Ceiling balloon installations',
-    description: 'Overhead balloon clusters, canopies, and floating displays for indoor events in London Ontario.',
-    startingPrice: 400,
+    description:
+      'Suspended balloon clusters, canopies, and overhead installations for venues and events in London Ontario.',
+    startingPrice: 699,
     url: '/services/ceiling',
   }),
 ];
+if (faqs.length > 0) {
+  schemas.push(faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.body }))));
+}
 ---
 
 <BaseLayout
   topic="Ceiling Balloon Installations"
-  description="Overhead balloon clusters, canopies, and floating ceiling displays in London Ontario. Indoor weddings, ballroom events, brand activations. From $400."
+  description="Ceiling balloon installations in London Ontario. Suspended clusters, canopies, and overhead displays for ballrooms and venues. Installs from $699."
   breadcrumbs={[
     { name: 'Home', url: '/' },
     { name: 'Services', url: '/services' },
-    { name: 'Ceiling installations', url: '/services/ceiling' },
+    { name: 'Ceiling installs', url: '/services/ceiling' },
   ]}
   schemas={schemas}
 >
   <Hero
     eyebrow="Install type"
-    headline="Ceiling installations"
-    subhead="Overhead balloon clusters, canopies, and floating displays. Indoor weddings, ballroom events, brand activations."
+    headline="Ceiling balloon installations in London, Ontario"
+    subhead="Suspended clusters, canopies, and overhead displays. The install that changes how a whole room feels rather than one wall of it."
     primaryCta={{ href: '/quote', label: 'Start a quote' }}
     secondaryCta={{ href: '/portfolio', label: 'See ceiling work' }}
     image="/images/categories/ceiling.webp"
@@ -44,10 +56,55 @@ const schemas = [
   <section class="install-body section">
     <div class="container container-narrow prose">
       <p>
-        Ceiling installs are the work most local vendors don't take on. Done right, they transform the volume of the room. Done wrong, they sag, drop balloons mid-event, or fall.
+        Every other install type decorates a wall or a corner. A ceiling install changes the room
+        itself. Guests walk in and the space reads differently before they have looked at anything in
+        particular, which is why venues and corporate clients ask for it when a room is large and
+        otherwise plain. It is also the most technical thing we build, so it rewards booking early.
+      </p>
+
+      <h2>What a ceiling balloon installation costs</h2>
+      <p>
+        Small overhead clusters and floating accents over a head table or bar start around $699. Larger
+        canopies and multi-cluster installs across a ballroom run $1,200 to $1,999. Full-room canopies
+        and suspended feature pieces reach $2,400 and beyond. This is the highest-ticket category we
+        build, and the reason is labour and access rather than materials. Overhead work is measured,
+        rigged, and hung piece by piece from a ladder or a lift, and that time is most of the cost.
+      </p>
+
+      <h2>What your venue needs to allow</h2>
+      <p>
+        Three things decide whether a ceiling install is possible, and all three are worth confirming
+        before you book rather than on the day. There has to be an attachment point, which usually means
+        existing rigging, beams, light bars, or drop ceiling grid. Some venues in London allow fishing
+        line and clips, some allow nothing overhead at all, and a few have rigging that only their own
+        staff may touch. There has to be access, since anything above roughly twelve feet needs a ladder
+        or lift brought in and floor space clear to set it up. And there has to be a setup window with
+        the room empty, because this is the one install that cannot happen around guests or around
+        another vendor dressing tables underneath.
       </p>
       <p>
-        Brenda's ceiling builds use rigged anchoring, not tape and prayer. She coordinates with the venue on access and load-in windows. Most ceiling installs stay tight from setup to teardown.
+        Brenda confirms all of that with the venue coordinator directly, so you are not carrying
+        messages between two vendors the week of your event. Tell us the venue name when you enquire and
+        there is a good chance we already know their rules.
+      </p>
+
+      <h2>Where overhead work earns its cost</h2>
+      <p>
+        Indoor weddings with height, corporate galas and award banquets, product launches, and large
+        milestone parties are where this lands best. In a room with a plain ceiling and good height, an
+        overhead install does more than the same budget spent on floor pieces, because it is visible
+        from every seat rather than only from the side of the room it sits on. In a low-ceiling room it
+        is usually the wrong call, and we will say so rather than sell it to you. If your ceiling is low
+        or the venue does not permit overhead work, a
+        <a href="/services/walls-backdrops">balloon wall</a> or a tall
+        <a href="/services/balloon-arches">arch</a> gets you scale a different way.
+      </p>
+      <p>
+        Because of the rigging and access requirements, book overhead work earlier than other install
+        types. Four to six weeks leaves room to confirm venue rules and lock a setup window. Timelines
+        are covered in the <a href="/faq">FAQ</a>, and
+        <a href="/services/corporate">corporate packages</a> covers recurring venue work and standing
+        arrangements.
       </p>
     </div>
   </section>
@@ -58,7 +115,7 @@ const schemas = [
         <header class="section-head">
           <p class="eyebrow">Shop the catalog</p>
           <h2>Ceiling installs in the catalog</h2>
-          <p class="lede">Base packages and stock builds. Custom configurations sized to your ceiling height on request.</p>
+          <p class="lede">Starting points for a custom overhead build.</p>
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
@@ -68,12 +125,14 @@ const schemas = [
     </section>
   )}
 
+  {faqs.length > 0 && <FAQAccordion heading="Ceiling installation questions" faqs={faqs} />}
+
   <section class="install-quote section">
     <div class="container">
       <header class="section-head">
         <p class="eyebrow">Custom build</p>
-        <h2>Custom ceiling install?</h2>
-        <p class="lede">Send your venue, ceiling height, and event date. Brenda quotes within 24 hours.</p>
+        <h2>Planning an overhead install?</h2>
+        <p class="lede">Send your venue and ceiling height. Brenda confirms what is possible there and quotes within 24 hours.</p>
       </header>
       <QuoteForm client:load />
     </div>
@@ -82,6 +141,8 @@ const schemas = [
 
 <style>
   .prose p { color: var(--color-ink-soft); font-size: var(--font-size-lg); line-height: var(--line-relaxed); }
+  .prose h2 { margin-top: var(--space-6); margin-bottom: var(--space-3); }
+  .prose a { color: var(--color-accent-deep); text-decoration: underline; text-underline-offset: 4px; }
   .section-head { margin-bottom: var(--space-6); }
   .install-quote { background: var(--color-paper-soft); }
   .section-link { color: var(--color-accent-deep); font-size: var(--font-size-sm); font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
