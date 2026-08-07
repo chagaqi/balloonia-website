@@ -16,7 +16,12 @@ export default defineConfig({
   integrations: [
     preact(),
     sitemap({
-      filter: (page) => !page.includes('/quote/thanks') && !page.includes('/404'),
+      filter: (page) =>
+        !page.includes('/quote/thanks') &&
+        !page.includes('/404') &&
+        // Gated magnet deliverable + its thank-you page stay out of the sitemap.
+        !page.includes('/guide/') &&
+        !page.includes('/side-hustle-guide/thanks'),
     }),
     mdx(),
   ],

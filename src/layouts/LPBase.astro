@@ -39,6 +39,9 @@ const { title, description, canonical, ogImage = '/og-default.png' } = Astro.pro
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Per-page head additions (e.g. noindex on thank-you pages) -->
+    <slot name="head" />
   </head>
   <body>
     <slot />

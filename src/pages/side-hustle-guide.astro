@@ -1,0 +1,446 @@
+---
+// Lead-magnet opt-in page for the global Pinterest audience.
+// One job: the email form. Stripped chrome (LPBase), no site nav to leak clicks.
+import LPBase from '../layouts/LPBase.astro';
+
+const title = 'Balloon Side Hustle Starter Guide (Free) | Balloonia Events';
+const description =
+  'Free guide from a working balloon studio: the $150 starter kit, your first three builds, real pricing, and how to land your first $500 client with no ad budget.';
+---
+
+<LPBase title={title} description={description} canonical="https://balloonia.events/side-hustle-guide" ogImage="/images/categories/arches-garlands.webp">
+  <main class="magnet">
+    <!-- Hero + form -->
+    <section class="magnet-hero">
+      <div class="magnet-wrap magnet-hero-grid">
+        <div class="magnet-hero-copy">
+          <p class="magnet-eyebrow">Free guide · from a working balloon studio</p>
+          <h1>Start a balloon side hustle that actually pays</h1>
+          <p class="magnet-sub">
+            You have seen the garlands all over Pinterest. Here is the part the pretty pins leave
+            out: what the builds cost, what they sell for, and how a side hustle gets its first
+            paying client. Written by a real studio in London, Canada that publishes its prices.
+          </p>
+
+          <form class="magnet-form" data-guide-form>
+            <label class="sr-only" for="email-hero">Email address</label>
+            <input id="email-hero" type="email" name="email" placeholder="Your email" required autocomplete="email" />
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+            <button type="submit">Send me the free guide</button>
+          </form>
+          <p class="magnet-micro">Instant access, delivered to your inbox too. No spam, unsubscribe anytime.</p>
+          <p class="magnet-error" data-form-error hidden>That did not go through. Try again, or email contact@balloonia.events and we will send it by hand.</p>
+
+          <ul class="magnet-bullets">
+            <li>The <strong>$150 starter kit</strong>, exact tools, nothing extra</li>
+            <li><strong>Real prices</strong>: what garlands, arches, and backdrops really sell for</li>
+            <li><strong>Three free channels</strong> that land a first client with a $0 ad budget</li>
+          </ul>
+        </div>
+        <div class="magnet-hero-img">
+          <img src="/images/categories/arches-garlands.webp" alt="Organic balloon garland arch built by Balloonia Events" width="560" height="420" loading="eager" />
+          <p class="magnet-img-caption">Built and installed by our studio. Everything in the guide comes from work like this.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proof strip -->
+    <section class="magnet-proof">
+      <div class="magnet-wrap magnet-proof-row">
+        <p><strong>650,000+</strong> Pinterest impressions and counting</p>
+        <p><strong>120 products</strong> with published prices</p>
+        <p>The studio prices in the guide are the ones <strong>we publish and charge</strong></p>
+      </div>
+    </section>
+
+    <!-- What's inside -->
+    <section class="magnet-inside">
+      <div class="magnet-wrap">
+        <h2>What is in the guide</h2>
+        <div class="magnet-grid">
+          <div class="magnet-card">
+            <p class="magnet-card-num">01</p>
+            <h3>The honest math</h3>
+            <p>What a $300 garland costs to build in materials and hours, and why the margin only works if you refuse to price like a hobbyist.</p>
+          </div>
+          <div class="magnet-card">
+            <p class="magnet-card-num">02</p>
+            <h3>The $150 starter kit</h3>
+            <p>Seven items, roughly $115 to $160 all in. Including the one tool that is non-negotiable and the two purchases beginners waste money on.</p>
+          </div>
+          <div class="magnet-card">
+            <p class="magnet-card-num">03</p>
+            <h3>First three builds</h3>
+            <p>Garland, then arch, then backdrop, in that order for a reason. Plus the sizing traps that make beginner work look beginner.</p>
+          </div>
+          <div class="magnet-card">
+            <p class="magnet-card-num">04</p>
+            <h3>Pricing from day one</h3>
+            <p>The three things that move every quote, the never-go-below floor, and how to say a number without apologizing for it.</p>
+          </div>
+          <div class="magnet-card">
+            <p class="magnet-card-num">05</p>
+            <h3>The first paying client</h3>
+            <p>Three channels that cost nothing: the free Google listing that shows up above websites, the photographer trade, and the community build chosen coldly.</p>
+          </div>
+          <div class="magnet-card">
+            <p class="magnet-card-num">06</p>
+            <h3>When it becomes a business</h3>
+            <p>The pipeline every booking runs through, what to systematize first, and the two rules that turn weekends into a business.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Who it's from -->
+    <section class="magnet-who">
+      <div class="magnet-wrap magnet-who-inner">
+        <h2>Who is behind this</h2>
+        <p>
+          Balloonia Events is a custom balloon studio in London, Canada. Brenda, our lead artist,
+          is a formally trained artist and builds everything from $50 bouquets to $5,000 corporate
+          installations. One thing matters for this guide: we publish our prices, all 120
+          products, on a public storefront. The numbers in the guide are the numbers we run the
+          studio on.
+        </p>
+        <p>
+          We are also documenting the entire playbook of building this studio as we go. The guide
+          is chapter one. If you want the rest, it will reach the list first.
+        </p>
+      </div>
+    </section>
+
+    <!-- Mini FAQ -->
+    <section class="magnet-faq">
+      <div class="magnet-wrap">
+        <h2>Quick questions</h2>
+        <details>
+          <summary>How much can I realistically make?</summary>
+          <p>At our studio a standard garland sells for $200 to $500 and carries $40 to $60 in materials, with three to four hours of real time all in. Your market sets your numbers, the guide teaches you how to find them and hold them.</p>
+        </details>
+        <details>
+          <summary>How much time does this take next to a job?</summary>
+          <p>It starts as one build at a time, mostly weekends. The kit takes an evening to learn, a booked garland takes a Saturday morning. You control the volume by how much you take on.</p>
+        </details>
+        <details>
+          <summary>Is it free?</summary>
+          <p>Yes. You give an email, you get the guide instantly, and occasionally we send a build tip or pricing lesson. Unsubscribe whenever.</p>
+        </details>
+        <details>
+          <summary>Do I need any experience?</summary>
+          <p>No. The guide assumes you have never inflated anything more ambitious than a birthday balloon. It starts at the shopping list.</p>
+        </details>
+        <details>
+          <summary>Does this work outside Canada?</summary>
+          <p>Yes. Prices are in CAD and your market will set its own numbers, but the kit, the builds, the pricing logic, and the free channels work anywhere people throw events.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="magnet-final">
+      <div class="magnet-wrap magnet-final-inner">
+        <h2>Get the guide</h2>
+        <p>Ten minutes of reading, one $150 shopping list, and your first build this weekend.</p>
+        <form class="magnet-form" data-guide-form>
+          <label class="sr-only" for="email-final">Email address</label>
+          <input id="email-final" type="email" name="email" placeholder="Your email" required autocomplete="email" />
+          <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+          <button type="submit">Send me the free guide</button>
+        </form>
+        <p class="magnet-micro">Instant access. No spam, unsubscribe anytime.</p>
+        <p class="magnet-error" data-form-error hidden>That did not go through. Try again, or email contact@balloonia.events and we will send it by hand.</p>
+      </div>
+    </section>
+
+    <footer class="magnet-footer">
+      <div class="magnet-wrap">
+        <p>Balloonia Events · London, Canada · <a href="https://balloonia.events">balloonia.events</a></p>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const forms = document.querySelectorAll('[data-guide-form]');
+    forms.forEach((form, i) => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const f = e.currentTarget as HTMLFormElement;
+        // Each form reports errors to its own sibling error element.
+        const errEl = f.parentElement?.querySelector('[data-form-error]');
+        const btn = f.querySelector('button');
+        const email = (f.querySelector('input[name="email"]') as HTMLInputElement).value;
+        const website = (f.querySelector('input[name="website"]') as HTMLInputElement).value;
+        errEl?.setAttribute('hidden', '');
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = 'Sending…';
+        }
+        try {
+          const res = await fetch('/api/guide', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, website, source: i === 0 ? 'side-hustle-lp-hero' : 'side-hustle-lp-final' }),
+          });
+          if (!res.ok) throw new Error('bad status');
+          window.location.href = '/side-hustle-guide/thanks';
+        } catch {
+          errEl?.removeAttribute('hidden');
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Send me the free guide';
+          }
+        }
+      });
+    });
+  </script>
+
+  <style>
+    .magnet {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #21201d;
+      background: #faf7f2;
+    }
+    .magnet-wrap {
+      max-width: 68rem;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    .hp {
+      position: absolute;
+      left: -9999px;
+      height: 1px;
+      width: 1px;
+      opacity: 0;
+    }
+
+    .magnet-hero {
+      padding: 3.5rem 0 3rem;
+    }
+    .magnet-hero-grid {
+      display: grid;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .magnet-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #1c3d34;
+      margin: 0 0 0.75rem;
+    }
+    .magnet h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
+      margin: 0 0 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .magnet-sub {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #4b4a45;
+      margin: 0 0 1.25rem;
+    }
+    .magnet-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.75rem;
+    }
+    .magnet-bullets li {
+      padding-left: 1.5rem;
+      position: relative;
+      margin-bottom: 0.5rem;
+      color: #4b4a45;
+      line-height: 1.5;
+    }
+    .magnet-bullets li::before {
+      content: '🎈';
+      position: absolute;
+      left: 0;
+      font-size: 0.85rem;
+    }
+
+    .magnet-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .magnet-form input[type='email'] {
+      flex: 1 1 14rem;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      border: 1.5px solid #d9d2c5;
+      border-radius: 0.6rem;
+      background: #fff;
+    }
+    .magnet-form input[type='email']:focus {
+      outline: 2px solid #1c3d34;
+      border-color: #1c3d34;
+    }
+    .magnet-form button {
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background: #1c3d34;
+      border-radius: 0.6rem;
+      transition: background 0.15s ease;
+    }
+    .magnet-form button:hover {
+      background: #142c26;
+    }
+    .magnet-form button:disabled {
+      opacity: 0.7;
+      cursor: wait;
+    }
+    .magnet-micro {
+      font-size: 0.85rem;
+      color: #8a877f;
+      margin: 0.6rem 0 0;
+    }
+    .magnet-error {
+      color: #a33;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    .magnet-hero-img img {
+      border-radius: 1rem;
+      width: 100%;
+      height: auto;
+    }
+    .magnet-img-caption {
+      font-size: 0.85rem;
+      color: #8a877f;
+      margin-top: 0.6rem;
+    }
+
+    .magnet-proof {
+      background: #1c3d34;
+      color: #f5f1e8;
+      padding: 1.1rem 0;
+    }
+    .magnet-proof-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 2.5rem;
+      justify-content: center;
+      text-align: center;
+    }
+    .magnet-proof-row p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .magnet-inside,
+    .magnet-faq {
+      padding: 3.5rem 0;
+    }
+    .magnet h2 {
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      margin: 0 0 1.75rem;
+      letter-spacing: -0.01em;
+    }
+    .magnet-grid {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+    .magnet-card {
+      background: #fff;
+      border: 1px solid #eee7da;
+      border-radius: 0.9rem;
+      padding: 1.5rem;
+    }
+    .magnet-card-num {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #b9b2a4;
+      margin: 0 0 0.4rem;
+      letter-spacing: 0.06em;
+    }
+    .magnet-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+    .magnet-card p {
+      margin: 0;
+      color: #4b4a45;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .magnet-who {
+      background: #fff;
+      border-top: 1px solid #eee7da;
+      border-bottom: 1px solid #eee7da;
+      padding: 3.5rem 0;
+    }
+    .magnet-who-inner {
+      max-width: 46rem;
+    }
+    .magnet-who p {
+      color: #4b4a45;
+      line-height: 1.65;
+    }
+
+    .magnet-faq details {
+      border-bottom: 1px solid #e5ddcf;
+      padding: 0.9rem 0;
+      max-width: 46rem;
+    }
+    .magnet-faq summary {
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .magnet-faq p {
+      color: #4b4a45;
+      margin: 0.6rem 0 0;
+      line-height: 1.55;
+    }
+
+    .magnet-final {
+      padding: 3.5rem 0 4rem;
+      text-align: center;
+    }
+    .magnet-final-inner {
+      max-width: 34rem;
+    }
+    .magnet-final p {
+      color: #4b4a45;
+    }
+    .magnet-final .magnet-form {
+      justify-content: center;
+    }
+
+    .magnet-footer {
+      border-top: 1px solid #e5ddcf;
+      padding: 1.5rem 0;
+      font-size: 0.85rem;
+      color: #8a877f;
+      text-align: center;
+    }
+    .magnet-footer a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (min-width: 860px) {
+      .magnet-hero-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+      .magnet-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</LPBase>

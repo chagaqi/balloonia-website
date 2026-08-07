@@ -1,0 +1,83 @@
+---
+// Post-opt-in instant access. Noindex, minimal, one job: get them into the guide.
+import LPBase from '../../layouts/LPBase.astro';
+---
+
+<LPBase
+  title="Your guide is ready | Balloonia Events"
+  description="Your Balloon Side Hustle Starter Guide is ready to read."
+  canonical="https://balloonia.events/side-hustle-guide/thanks"
+>
+  <main class="thanks">
+    <div class="thanks-card">
+      <p class="thanks-eyebrow">You are in 🎈</p>
+      <h1>Your guide is ready</h1>
+      <p>
+        We also emailed you the link, so it is saved for later. If it is not there in a couple of
+        minutes, check spam and drag it out.
+      </p>
+      <a class="thanks-cta" href="/guide/balloon-side-hustle">Read the guide now</a>
+      <p class="thanks-micro">Want a PDF? Open the guide and hit print, it comes out clean.</p>
+    </div>
+  </main>
+
+  <style>
+    .thanks {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #faf7f2;
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #21201d;
+      padding: 1.5rem;
+    }
+    .thanks-card {
+      max-width: 30rem;
+      background: #fff;
+      border: 1px solid #eee7da;
+      border-radius: 1.1rem;
+      padding: 2.5rem 2.25rem;
+      text-align: center;
+    }
+    .thanks-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #1c3d34;
+      margin: 0 0 0.75rem;
+    }
+    .thanks h1 {
+      font-size: 1.8rem;
+      margin: 0 0 0.9rem;
+      letter-spacing: -0.01em;
+    }
+    .thanks p {
+      color: #4b4a45;
+      line-height: 1.6;
+      margin: 0 0 1.4rem;
+    }
+    .thanks-cta {
+      display: inline-block;
+      background: #1c3d34;
+      color: #fff;
+      font-weight: 600;
+      padding: 0.9rem 1.7rem;
+      border-radius: 999px;
+      text-decoration: none;
+    }
+    .thanks-cta:hover {
+      background: #142c26;
+    }
+    .thanks-micro {
+      font-size: 0.85rem;
+      color: #8a877f;
+      margin: 1.1rem 0 0;
+    }
+  </style>
+
+  <Fragment slot="head">
+    <meta name="robots" content="noindex,nofollow" />
+  </Fragment>
+</LPBase>
