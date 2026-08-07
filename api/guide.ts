@@ -1,15 +1,14 @@
 // Side-hustle guide opt-in endpoint. Receives POST from /side-hustle-guide.
 //
-// Order matters (review finding): capture the lead FIRST, then attempt delivery,
-// and never block the user's instant access on the email succeeding. A Resend
-// outage should cost us a delayed email, not a lost subscriber.
+// Storage: a Resend Audience named "Side Hustle Guide" (find-or-create at
+// runtime, id cached between warm invocations). Contacts are visible in the
+// Resend dashboard under Audiences and export to CSV. No other services.
 //
-// Env vars (Vercel project settings):
-//   RESEND_API_KEY          — already set (used by /api/lead)
-//   LEAD_FROM_ADDRESS       — already set, verified sender
-//   LEAD_REPLY_TO           — already set
-//   CUSTOMERIO_SITE_ID      — optional, Track API site id (enables list sync)
-//   CUSTOMERIO_TRACK_KEY    — optional, Track API key
+// Order matters: store the contact FIRST, then attempt the delivery email,
+// and never block the user's instant access on the send succeeding.
+//
+// Env vars (all already set on this Vercel project):
+//   RESEND_API_KEY, LEAD_FROM_ADDRESS, LEAD_REPLY_TO
 //
 // Native Vercel function, deploys as /api/guide.
 
@@ -31,6 +30,42 @@ const cleanEnv = (v: string | undefined): string =>
   (v || '').trim().replace(/^['"](.+)['"]$/, '$1').trim();
 
 const GUIDE_URL = 'https://balloonia.events/guide/balloon-side-hustle';
+const AUDIENCE_NAME = 'Side Hustle Guide';
+
+// Cached across warm invocations so steady-state is one API call per opt-in.
+let cachedAudienceId: string | null = null;
+
+async function getAudienceId(apiKey: string): Promise<string | null> {
+  if (cachedAudienceId) return cachedAudienceId;
+  const headers = { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
+  try {
+    const listRes = await fetch('https://api.resend.com/audiences', { headers });
+    if (listRes.ok) {
+      const list = (await listRes.json()) as { data?: { id: string; name: string }[] };
+      const hit = (list.data || []).find((a) => a.name === AUDIENCE_NAME);
+      if (hit) {
+        cachedAudienceId = hit.id;
+        return hit.id;
+      }
+    }
+    const createRes = await fetch('https://api.resend.com/audiences', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ name: AUDIENCE_NAME }),
+    });
+    if (createRes.ok) {
+      const created = (await createRes.json()) as { id?: string };
+      if (created.id) {
+        cachedAudienceId = created.id;
+        return created.id;
+      }
+    }
+    console.error('Audience find-or-create failed:', createRes.status);
+  } catch (e) {
+    console.error('Audience lookup threw:', e);
+  }
+  return null;
+}
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') {
@@ -56,40 +91,40 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ error: 'Invalid email' }, 400);
   }
 
-  // ---- 1. Capture the lead (before any delivery attempt) -------------------
-  const cioSite = cleanEnv(process.env.CUSTOMERIO_SITE_ID);
-  const cioKey = cleanEnv(process.env.CUSTOMERIO_TRACK_KEY);
-  if (cioSite && cioKey) {
+  const apiKey = cleanEnv(process.env.RESEND_API_KEY);
+  if (!apiKey) {
+    console.error('RESEND_API_KEY not configured');
+    return json({ error: 'Server misconfigured' }, 500);
+  }
+
+  // ---- 1. Store the contact (before any delivery attempt) ------------------
+  const audienceId = await getAudienceId(apiKey);
+  if (audienceId) {
     try {
-      await fetch(`https://track.customer.io/api/v1/customers/${encodeURIComponent(email)}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Basic ${btoa(`${cioSite}:${cioKey}`)}`,
-          'Content-Type': 'application/json',
-        },
+      const contactRes = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          guide_optin: true,
-          optin_source: source,
-          created_at: Math.floor(Date.now() / 1000),
+          unsubscribed: false,
+          // Resend contacts support first/last name only; stash the source in last_name-free
+          // fashion is not possible, so the send tag below carries it instead.
         }),
       });
+      // 409 = already a contact, which is fine (repeat opt-in).
+      if (!contactRes.ok && contactRes.status !== 409) {
+        console.error('Contact store failed:', contactRes.status, await contactRes.text());
+      }
     } catch (e) {
-      console.error('Customer.io capture failed (non-blocking):', e);
+      console.error('Contact store threw (non-blocking):', e);
     }
   }
 
   // ---- 2. Attempt delivery email. Failure logs, never blocks access. -------
-  const apiKey = cleanEnv(process.env.RESEND_API_KEY);
   let fromAddress = cleanEnv(process.env.LEAD_FROM_ADDRESS) || 'Balloonia Events <hello@mail.balloonia.events>';
   const replyTo = cleanEnv(process.env.LEAD_REPLY_TO) || 'contact@balloonia.events';
   const fromValid = /^([^<>]+<[^\s<>]+@[^\s<>]+>|[^\s<>]+@[^\s<>]+)$/.test(fromAddress);
   if (!fromValid) fromAddress = 'Balloonia Events <hello@mail.balloonia.events>';
-
-  if (!apiKey) {
-    console.error('RESEND_API_KEY not configured — opt-in captured, no delivery email sent');
-    return json({ ok: true });
-  }
 
   const text = [
     'Here it is:',
@@ -106,7 +141,7 @@ export default async function handler(req: Request): Promise<Response> {
     'Brenda',
     'Balloonia Events · 412 Newbold St, Unit 4, London ON, Canada',
     '',
-    `To unsubscribe, reply with the word "unsubscribe" and we will take you off the same day.`,
+    'To unsubscribe, reply with the word "unsubscribe" and we will take you off the same day.',
   ].join('\n');
 
   const html = `
