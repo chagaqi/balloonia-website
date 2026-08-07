@@ -20,6 +20,10 @@ Send a Pantone reference, hex code, or your brand guidelines PDF and Brenda will
 - Trade shows and client visits: booth backdrops, branded columns, ceiling features
 - Auto dealer events: showroom decor for new model launches, weekend sales events, customer appreciation days
 
+## Grand opening balloon decor
+
+A grand opening is the one day your storefront has to look like an event, and balloons are how most businesses in London do it. The usual build is a grand opening balloon arch over the entrance in your brand colours, columns flanking the door, or a balloon garland across the front window, and it goes up before your first customer arrives. For ribbon cuttings we set up around the ribbon point so the photo that ends up in the paper or the chamber newsletter has the install behind it. Franchise locations get an exact colour match to brand guidelines, not the closest stock shade. If you are opening a second location later, we keep the spec on file so the next launch looks identical. Grand opening installs run $1,500 to $5,000 depending on scale, and smaller storefront setups start well under that.
+
 ## How it works
 
 1. Tell us your event. Date, venue, brand colors, headcount, scope. 5-minute form or a quick call.
