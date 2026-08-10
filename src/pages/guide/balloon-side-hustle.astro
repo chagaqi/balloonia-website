@@ -1,8 +1,12 @@
 ---
 // The lead-magnet deliverable. Gated softly: linked from the opt-in thank-you page
 // and the delivery email, noindex so search never hands it out for free.
-// Print CSS makes Ctrl+P produce a clean PDF, so the "PDF version" is this page.
+// A static PDF snapshot lives at public/downloads/balloon-side-hustle-starter-guide.pdf.
+// IT DOES NOT REGENERATE ITSELF: after any copy change here, re-print it from the live
+// page (headless Edge: msedge --headless --no-pdf-header-footer --print-to-pdf=<out> <url>).
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const pdfHref = '/downloads/balloon-side-hustle-starter-guide.pdf';
 ---
 
 <BaseLayout
@@ -16,7 +20,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <p class="eyebrow">Free guide · from Balloonia Events, a working balloon studio</p>
         <h1>The Balloon Side Hustle Starter Guide</h1>
         <p class="guide-sub">From your first garland to your first $500 client. Real numbers from a working studio in London, Canada. Everything we wish someone had told us before the first build.</p>
-        <p class="guide-meta">12 minute read · prices in CAD · your market will vary, the logic will not</p>
+        <p class="guide-meta">12 minute read · prices in CAD · your market will vary, the logic will not · <a class="guide-pdf-link" href={pdfHref}>download as PDF</a></p>
       </div>
     </header>
 
@@ -335,6 +339,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   /* Print = the PDF version. Strip chrome, tighten type. */
   @media print {
+    .guide-pdf-link {
+      display: none;
+    }
     .guide-hero {
       background: none;
       padding-top: 0;

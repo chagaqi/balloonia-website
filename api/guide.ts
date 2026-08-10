@@ -30,6 +30,7 @@ const cleanEnv = (v: string | undefined): string =>
   (v || '').trim().replace(/^['"](.+)['"]$/, '$1').trim();
 
 const GUIDE_URL = 'https://balloonia.events/guide/balloon-side-hustle';
+const PDF_URL = 'https://balloonia.events/downloads/balloon-side-hustle-starter-guide.pdf';
 const AUDIENCE_NAME = 'Side Hustle Guide';
 
 // Cached across warm invocations so steady-state is one API call per opt-in.
@@ -131,9 +132,9 @@ export default async function handler(req: Request): Promise<Response> {
     '',
     `Read the Balloon Side Hustle Starter Guide: ${GUIDE_URL}`,
     '',
-    'It covers the $150 starter kit, your first three builds in the right order, how to price from day one, and the three free channels we would use to land a first paying client. The studio prices in it are the ones we publish and charge.',
+    'It covers the full starter kit list, your first three builds in the right order, how to price from day one, your first 10 customers in the first 4 weeks, and three paths to scale past a side hustle. The studio prices in it are the ones we publish and charge.',
     '',
-    'Tip: the guide prints clean, so if you want a PDF copy, open it and hit print.',
+    `Prefer it as a file? Download the PDF: ${PDF_URL}`,
     '',
     'Once in a while we will send a build tip or a pricing lesson from the studio. When we publish the full playbook of how this business runs, you will hear it here first.',
     '',
@@ -151,8 +152,8 @@ export default async function handler(req: Request): Promise<Response> {
         <a href="${GUIDE_URL}" style="display: inline-block; background: #1c3d34; color: #ffffff; padding: 12px 22px; border-radius: 999px; font-weight: 600; text-decoration: none;">Read the Balloon Side Hustle Starter Guide</a>
       </p>
       <p style="font-size: 14px; color: #6b6b6b; margin-top: -8px;">Or copy the link: <a href="${GUIDE_URL}" style="color: #1c3d34;">${GUIDE_URL}</a></p>
-      <p>It covers the $150 starter kit, your first three builds in the right order, how to price from day one, and the three free channels we would use to land a first paying client. The studio prices in it are the ones we publish and charge.</p>
-      <p>Tip: the guide prints clean, so if you want a PDF copy, open it and hit print.</p>
+      <p>It covers the full starter kit list, your first three builds in the right order, how to price from day one, your first 10 customers in the first 4 weeks, and three paths to scale past a side hustle. The studio prices in it are the ones we publish and charge.</p>
+      <p>Prefer it as a file? <a href="${PDF_URL}" style="color: #1c3d34;">Download the PDF</a> and keep it on your phone.</p>
       <p>Once in a while we will send a build tip or a pricing lesson from the studio. When we publish the full playbook of how this business runs, you will hear it here first.</p>
       <p style="margin-bottom: 0;">Go build the first garland,</p>
       <p style="margin-top: 0;"><strong>Brenda</strong><br/>Balloonia Events · 412 Newbold St, Unit 4, London ON, Canada</p>
