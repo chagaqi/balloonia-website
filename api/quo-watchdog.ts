@@ -48,8 +48,13 @@ export default async function handler(req: Request): Promise<Response> {
   if (health.telegram?.verdict && health.telegram.verdict !== 'ok') {
     problems.push(`Telegram: ${health.telegram.verdict}`);
   }
-  if (health.quo?.verdict && health.quo.verdict !== 'ok') {
-    problems.push(`Quo: ${health.quo.verdict}`);
+  // Only a verdict we can stand behind counts as a problem. The Quo list API
+  // has reported nothing while a webhook was registered and firing, so an
+  // UNKNOWN there is a gap in our visibility, not a broken pipeline, and
+  // paging DH about it every day would train him to ignore this alert.
+  const quoVerdict = health.quo?.verdict;
+  if (quoVerdict && quoVerdict.startsWith('BROKEN')) {
+    problems.push(`Quo: ${quoVerdict}`);
   }
 
   if (!problems.length && !force) {

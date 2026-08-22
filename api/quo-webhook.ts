@@ -477,7 +477,7 @@ async function telegramHealth(): Promise<Record<string, unknown>> {
 
 async function quoWebhookHealth(canonical: string): Promise<Record<string, unknown>> {
   const key = process.env.QUO_API_KEY;
-  if (!key) return { configured: false, verdict: 'QUO_API_KEY missing - cannot check what Quo has registered' };
+  if (!key) return { configured: false, verdict: 'UNKNOWN - QUO_API_KEY missing, cannot check what Quo has registered' };
 
   try {
     const r = await fetchWithTimeout(
@@ -487,11 +487,19 @@ async function quoWebhookHealth(canonical: string): Promise<Record<string, unkno
       'Quo webhook list',
     );
     if (!r.ok) {
-      return { configured: true, verdict: `could not list webhooks: ${r.status} ${(await r.text()).slice(0, 160)}` };
+      return {
+        configured: true,
+        apiStatus: r.status,
+        verdict: `UNKNOWN - could not list webhooks: ${r.status} ${(await r.text()).slice(0, 160)}. Check the Quo dashboard directly.`,
+      };
     }
 
     const body = (await r.json()) as any;
-    const all: any[] = Array.isArray(body?.data) ? body.data : [];
+    // Shape is not guaranteed: this API returned 200 with nothing usable on
+    // 2026-08-22 while a webhook was registered and firing, so surface the
+    // actual response keys rather than silently reading it as "none".
+    const responseShape = body && typeof body === 'object' ? Object.keys(body) : typeof body;
+    const all: any[] = Array.isArray(body?.data) ? body.data : Array.isArray(body) ? body : [];
     const ours = all.filter((h) => typeof h?.url === 'string' && h.url.includes('quo-webhook'));
     const others = all
       .filter((h) => !ours.includes(h))
@@ -507,19 +515,33 @@ async function quoWebhookHealth(canonical: string): Promise<Record<string, unkno
       })),
     );
 
+    // An empty list is NOT evidence that no webhook exists — dashboard-created
+    // webhooks did not show up here. Only a webhook we can actually see and
+    // probe is worth calling broken; anything else is UNKNOWN, and a monitor
+    // that cries wolf daily is a monitor everyone learns to ignore.
     let verdict: string;
     if (!all.length) {
-      verdict = 'Quo has NO webhooks at all on this account. Nothing will ever be delivered until one is created.';
+      verdict = 'UNKNOWN - this API returned no webhooks. It has done that while one was registered and firing, so check the Quo dashboard events log before believing it.';
     } else if (!registered.length) {
-      verdict = `Quo has ${all.length} webhook(s), but NONE point at quo-webhook. See otherWebhooks.`;
+      verdict = `UNKNOWN - Quo returned ${all.length} webhook(s), none matching quo-webhook. See otherWebhooks.`;
     } else if (registered.every((h) => h.probe.verdict === 'reachable')) {
       verdict = 'ok';
     } else {
       verdict = 'BROKEN - a registered webhook URL does not answer. See probe.verdict on each entry.';
     }
-    return { configured: true, canonical, totalWebhooks: all.length, registered, otherWebhooks: others, verdict };
+    return {
+      configured: true,
+      canonical,
+      apiStatus: r.status,
+      responseShape,
+      totalWebhooks: all.length,
+      registered,
+      otherWebhooks: others,
+      dashboard: 'https://my.quo.com/settings/webhooks - the events log there is authoritative',
+      verdict,
+    };
   } catch (err) {
-    return { configured: true, verdict: err instanceof Error ? err.message : 'webhook list failed' };
+    return { configured: true, verdict: `UNKNOWN - ${err instanceof Error ? err.message : 'webhook list failed'}` };
   }
 }
 
