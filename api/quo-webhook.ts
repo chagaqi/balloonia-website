@@ -426,6 +426,12 @@ function maskChat(id: string): string {
   return id.length <= 4 ? '****' : `...${id.slice(-4)}`;
 }
 
+// Chat ids come from env and have arrived with trailing whitespace before,
+// which would split the dedup set and double-send.
+function chatTargets(): string[] {
+  return [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].map((v) => v?.trim()).filter(Boolean))] as string[];
+}
+
 async function telegramHealth(): Promise<Record<string, unknown>> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   if (!token) return { configured: false, verdict: 'TELEGRAM_BOT_TOKEN missing' };
@@ -440,7 +446,7 @@ async function telegramHealth(): Promise<Record<string, unknown>> {
     out.bot = err instanceof Error ? err.message : 'getMe failed';
   }
 
-  const targets = [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].filter(Boolean))] as string[];
+  const targets = chatTargets();
   out.chats = await Promise.all(
     targets.map(async (chatId) => {
       try {
@@ -487,6 +493,9 @@ async function quoWebhookHealth(canonical: string): Promise<Record<string, unkno
     const body = (await r.json()) as any;
     const all: any[] = Array.isArray(body?.data) ? body.data : [];
     const ours = all.filter((h) => typeof h?.url === 'string' && h.url.includes('quo-webhook'));
+    const others = all
+      .filter((h) => !ours.includes(h))
+      .map((h) => ({ url: h?.url, events: h?.events, status: h?.status }));
 
     const registered = await Promise.all(
       ours.map(async (h) => ({
@@ -499,14 +508,16 @@ async function quoWebhookHealth(canonical: string): Promise<Record<string, unkno
     );
 
     let verdict: string;
-    if (!registered.length) {
-      verdict = 'NO WEBHOOK REGISTERED pointing at quo-webhook - Quo will never call us. Add one in the Quo dashboard.';
+    if (!all.length) {
+      verdict = 'Quo has NO webhooks at all on this account. Nothing will ever be delivered until one is created.';
+    } else if (!registered.length) {
+      verdict = `Quo has ${all.length} webhook(s), but NONE point at quo-webhook. See otherWebhooks.`;
     } else if (registered.every((h) => h.probe.verdict === 'reachable')) {
       verdict = 'ok';
     } else {
       verdict = 'BROKEN - a registered webhook URL does not answer. See probe.verdict on each entry.';
     }
-    return { configured: true, canonical, registered, verdict };
+    return { configured: true, canonical, totalWebhooks: all.length, registered, otherWebhooks: others, verdict };
   } catch (err) {
     return { configured: true, verdict: err instanceof Error ? err.message : 'webhook list failed' };
   }
@@ -573,7 +584,7 @@ export default async function handler(req: Request): Promise<Response> {
   console.log('[quo-webhook] payload:', JSON.stringify(body).slice(0, 1500));
 
   // Send every packet to everyone configured — Brenda AND DH (dedup, drop blanks).
-  const targets = [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].filter(Boolean))] as string[];
+  const targets = chatTargets();
   if (!targets.length) {
     console.error('[quo-webhook] no chat target configured');
     return new Response('No target chat configured', { status: 500 });
