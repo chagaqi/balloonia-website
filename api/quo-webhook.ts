@@ -13,12 +13,25 @@
 //   QUO_API_KEY         - Quo API for fetching transcript by call id
 //   QUO_SIGNING_KEY     - (optional) webhook signature secret if Quo signs
 //
-// Quo webhook setup: POST https://www.balloonia.events/api/quo-webhook
-//   on event `call.summary.completed`
-//   MUST be the www URL — the apex (balloonia.events) 307-redirects to www and
-//   webhook senders don't follow redirects, which silently kills delivery.
+// Quo webhook setup: POST https://balloonia.events/api/quo-webhook
+//   on event `call.summary.completed` (and optionally `call.transcript.completed`)
+//
+//   THE URL MATTERS AND IT HAS BITTEN US TWICE. Vercel serves ONE of the two
+//   hostnames and 30x-redirects the other, and webhook senders do not follow
+//   redirects — a POST to the redirecting host is silently dropped. Which host
+//   is canonical FLIPS whenever the primary domain changes in the Vercel
+//   dashboard (2026-07: apex -> www, so we registered www; 2026-08: www -> apex,
+//   which killed delivery again).
+//
+//   Never trust this comment. Ask the endpoint:
+//     curl -s 'https://balloonia.events/api/quo-webhook?health=1'
+//   The health report lists every webhook Quo has registered, probes each one,
+//   and flags any that redirect. Whatever it reports as `reachable` is the URL
+//   that belongs in the Quo dashboard.
 
 export const config = { runtime: 'edge' };
+
+const VERSION = 'quo-webhook v4';
 
 type ExtractedLead = {
   event_type: string;
@@ -81,10 +94,34 @@ If a field is missing from the call, return empty string "" or "(not captured)".
 const LLM_API_URL = process.env.LLM_API_URL || 'https://api.minimax.io/anthropic/v1/messages';
 const LLM_MODEL = process.env.LLM_MODEL || 'MiniMax-M3';
 
+// The edge runtime kills the whole invocation at ~25s. A slow provider must
+// never eat that budget, or the function dies mid-await and NOTHING is sent —
+// not even the raw fallback. Every outbound call is time-boxed.
+const LLM_TIMEOUT_MS = 12_000;
+const QUO_TIMEOUT_MS = 6_000;
+const TELEGRAM_TIMEOUT_MS = 8_000;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
+async function fetchWithTimeout(url: string, init: RequestInit, ms: number, label: string): Promise<Response> {
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), ms);
+  try {
+    return await fetch(url, { ...init, signal: ctl.signal });
+  } catch (err) {
+    const aborted = err instanceof Error && err.name === 'AbortError';
+    throw new Error(aborted ? `${label} timed out after ${ms}ms` : `${label} failed: ${err instanceof Error ? err.message : String(err)}`);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function extractFields(transcript: string): Promise<ExtractedLead> {
   const apiKey = process.env.MINIMAX_API_KEY;
   if (!apiKey) throw new Error('MINIMAX_API_KEY missing');
-  const r = await fetch(LLM_API_URL, {
+  const r = await fetchWithTimeout(LLM_API_URL, {
     method: 'POST',
     headers: {
       'x-api-key': apiKey,
@@ -104,9 +141,9 @@ async function extractFields(transcript: string): Promise<ExtractedLead> {
         },
       ],
     }),
-  });
+  }, LLM_TIMEOUT_MS, 'LLM API');
   if (!r.ok) {
-    throw new Error(`LLM API ${r.status}: ${await r.text()}`);
+    throw new Error(`LLM API ${r.status}: ${(await r.text()).slice(0, 300)}`);
   }
   const data = (await r.json()) as { content: { type: string; text: string }[] };
   const text = data.content.find((c) => c.type === 'text')?.text ?? '';
@@ -121,8 +158,10 @@ function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; durat
 
   lines.push('🎈 *NEW LEAD PACKET*');
   lines.push('━━━━━━━━━━━━━━━━━━');
-  lines.push(`📞 Call: ${lead.contact_name || '(name?)'} · ${callMeta.duration || '?'}`);
-  if (callMeta.recordingUrl) lines.push(`🎵 Recording: ${callMeta.recordingUrl}`);
+  lines.push(`📞 Call: ${mdEscape(lead.contact_name) || '(name?)'} · ${callMeta.duration || '?'}`);
+  // Quo deep links are full of underscores, which is exactly what the legacy
+  // Markdown parser chokes on.
+  if (callMeta.recordingUrl) lines.push(`🎵 Recording: ${mdEscape(callMeta.recordingUrl)}`);
   lines.push('');
 
   lines.push('*CONTACT*');
@@ -148,22 +187,22 @@ function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; durat
 
   if (lead.wants?.length) {
     lines.push('*WANTS*');
-    lead.wants.forEach((w) => lines.push(`• ${w}`));
+    lead.wants.forEach((w) => lines.push(`• ${mdEscape(w)}`));
     lines.push('');
   }
 
   if (lead.must_avoid?.length) {
     lines.push('*MUST AVOID*');
-    lead.must_avoid.forEach((m) => lines.push(`• ${m}`));
+    lead.must_avoid.forEach((m) => lines.push(`• ${mdEscape(m)}`));
     lines.push('');
   }
 
   lines.push('*DECISION TIMELINE*');
-  lines.push(lead.decision_timeline || '(not captured)');
+  lines.push(mdEscape(lead.decision_timeline) || '(not captured)');
   lines.push('');
 
   lines.push('*RED FLAGS*');
-  lines.push(lead.red_flags || 'None');
+  lines.push(mdEscape(lead.red_flags) || 'None');
   lines.push('');
 
   lines.push('━━━━━━━━━━━━━━━━━━');
@@ -172,7 +211,7 @@ function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; durat
   lead.render_prompts?.forEach((p, i) => {
     lines.push(`*${i + 1}.*`);
     lines.push('```');
-    lines.push(p);
+    lines.push((p || '').replace(/`/g, 'ˋ'));
     lines.push('```');
     lines.push('');
   });
@@ -180,38 +219,115 @@ function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; durat
   return lines.join('\n');
 }
 
-async function sendTelegram(chatId: string, text: string): Promise<void> {
+// Telegram's legacy Markdown parser rejects the ENTIRE message with a 400 if
+// these characters appear unbalanced anywhere in it. Call transcripts are full
+// of them, which made delivery depend on the wording of the call.
+function mdEscape(v: string): string {
+  return (v || '').replace(/([_*[`])/g, '\\$1');
+}
+
+// Telegram caps a message at 4096 characters. Splitting naively can cut a ```
+// fence in half, which breaks parsing on both halves, so carry the fence over.
+function chunkForTelegram(text: string, limit = 3500): string[] {
+  const chunks: string[] = [];
+  let buf = '';
+  let fenceOpen = false;
+
+  const flush = () => {
+    if (!buf.trim()) {
+      buf = '';
+      return;
+    }
+    chunks.push(fenceOpen ? buf + '```' : buf);
+    buf = fenceOpen ? '```\n' : '';
+  };
+
+  for (const rawLine of text.split('\n')) {
+    // A single line longer than the limit still has to be broken up.
+    const pieces =
+      rawLine.length > limit ? rawLine.match(new RegExp(`.{1,${limit}}`, 'g')) || [rawLine] : [rawLine];
+    for (const line of pieces) {
+      if ((buf + line + '\n').length > limit) flush();
+      buf += line + '\n';
+      if (line.trim() === '```') fenceOpen = !fenceOpen;
+    }
+  }
+  if (buf.trim()) chunks.push(fenceOpen ? buf + '```' : buf);
+  return chunks;
+}
+
+async function tgPost(
+  token: string,
+  chatId: string,
+  text: string,
+  parseMode?: string,
+): Promise<{ ok: boolean; status: number; body: string; retryAfter?: number }> {
+  const payload: Record<string, unknown> = { chat_id: chatId, text, disable_web_page_preview: true };
+  if (parseMode) payload.parse_mode = parseMode;
+
+  let r: Response;
+  try {
+    r = await fetchWithTimeout(
+      `https://api.telegram.org/bot${token}/sendMessage`,
+      { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) },
+      TELEGRAM_TIMEOUT_MS,
+      'Telegram sendMessage',
+    );
+  } catch (err) {
+    return { ok: false, status: 0, body: err instanceof Error ? err.message : 'network error' };
+  }
+
+  const body = await r.text();
+  let retryAfter: number | undefined;
+  try {
+    retryAfter = JSON.parse(body)?.parameters?.retry_after;
+  } catch {
+    // non-JSON error body, nothing to read
+  }
+  return { ok: r.ok, status: r.status, body: body.slice(0, 300), retryAfter };
+}
+
+// Returns whether every chunk landed. A dropped packet is a lost lead, so this
+// never gives up after one try: bad formatting falls back to plain text, rate
+// limits wait out their retry_after, and network blips get one more shot.
+async function sendTelegram(chatId: string, text: string): Promise<boolean> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   if (!token) throw new Error('TELEGRAM_BOT_TOKEN missing');
 
-  // Telegram has a 4096-character limit per message. Split if needed.
-  const chunks: string[] = [];
-  let buf = '';
-  for (const line of text.split('\n')) {
-    if ((buf + line + '\n').length > 3800) {
-      chunks.push(buf);
-      buf = '';
-    }
-    buf += line + '\n';
-  }
-  if (buf.trim()) chunks.push(buf);
+  let allDelivered = true;
 
-  for (const chunk of chunks) {
-    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: chunk,
-        parse_mode: 'Markdown',
-        disable_web_page_preview: true,
-      }),
-    });
-    if (!r.ok) {
-      const errText = await r.text();
-      console.error('Telegram send failed:', r.status, errText);
+  for (const chunk of chunkForTelegram(text)) {
+    let delivered = false;
+
+    const attempts: { parseMode?: string; label: string }[] = [
+      { parseMode: 'Markdown', label: 'markdown' },
+      { parseMode: undefined, label: 'plain' },
+      { parseMode: undefined, label: 'plain-retry' },
+    ];
+
+    for (const attempt of attempts) {
+      let res = await tgPost(token, chatId, chunk, attempt.parseMode);
+      if (!res.ok && res.status === 429) {
+        const wait = Math.min((res.retryAfter ?? 1) * 1000, 5000);
+        console.warn(`[telegram] 429 for ${chatId}, waiting ${wait}ms`);
+        await sleep(wait);
+        res = await tgPost(token, chatId, chunk, attempt.parseMode);
+      }
+      if (res.ok) {
+        delivered = true;
+        if (attempt.label !== 'markdown') {
+          console.warn(`[telegram] delivered to ${chatId} as ${attempt.label} after a formatting failure`);
+        }
+        break;
+      }
+      console.error(`[telegram] send to ${chatId} failed (${attempt.label}) ${res.status}: ${res.body}`);
+      if (attempt.label !== 'markdown') await sleep(400);
     }
+
+    if (!delivered) allDelivered = false;
   }
+
+  return allDelivered;
 }
 
 async function fetchQuoTranscript(callId: string): Promise<string> {
@@ -219,9 +335,12 @@ async function fetchQuoTranscript(callId: string): Promise<string> {
   if (!key) throw new Error('QUO_API_KEY missing');
 
   // Try transcript first, fall back to summary if transcript not ready.
-  const tr = await fetch(`https://api.openphone.com/v1/call-transcripts/${callId}`, {
-    headers: { Authorization: key },
-  });
+  const tr = await fetchWithTimeout(
+    `https://api.openphone.com/v1/call-transcripts/${callId}`,
+    { headers: { Authorization: key } },
+    QUO_TIMEOUT_MS,
+    'Quo transcript fetch',
+  );
   if (tr.ok) {
     const body = (await tr.json()) as {
       data?: {
@@ -245,9 +364,12 @@ async function fetchQuoTranscript(callId: string): Promise<string> {
   }
 
   // Transcript missing or 404 — fall back to AI summary.
-  const sm = await fetch(`https://api.openphone.com/v1/call-summaries/${callId}`, {
-    headers: { Authorization: key },
-  });
+  const sm = await fetchWithTimeout(
+    `https://api.openphone.com/v1/call-summaries/${callId}`,
+    { headers: { Authorization: key } },
+    QUO_TIMEOUT_MS,
+    'Quo summary fetch',
+  );
   if (sm.ok) {
     const body = (await sm.json()) as {
       data?: { summary?: string[] | string; nextSteps?: string[] };
@@ -266,6 +388,154 @@ async function fetchQuoTranscript(callId: string): Promise<string> {
   return '(no transcript or summary available yet — Quo may still be processing)';
 }
 
+// ---------------------------------------------------------------------------
+// Health report: GET /api/quo-webhook?health=1
+//
+// This exists because the pipeline has failed twice in a way that produced NO
+// signal anywhere: a webhook registered against a hostname that redirects, so
+// Quo's POST died before it ever reached this code. Nothing here logged, and
+// Quo's own delivery log looked fine. The report below answers, without
+// sending anyone a message, the four questions worth asking:
+//   is the config present, can the bot reach its chats, what URL does Quo
+//   actually have on file, and is that URL alive or does it redirect.
+// It returns no secrets: booleans, a bot handle, and masked chat ids.
+// ---------------------------------------------------------------------------
+
+type ProbeResult = { url: string; status: number | string; redirectsTo?: string; verdict: string };
+
+async function probeUrl(target: string): Promise<ProbeResult> {
+  try {
+    const r = await fetchWithTimeout(target, { method: 'GET', redirect: 'manual' }, 6_000, 'probe');
+    const redirectsTo = r.headers.get('location') || undefined;
+    let verdict: string;
+    if (r.status >= 300 && r.status < 400) {
+      verdict = 'BROKEN - this URL redirects, and webhook senders do not follow redirects. Register the redirect target instead.';
+    } else if (r.status === 405) {
+      // Our own handler answers GET with 405, so this is the healthy signal.
+      verdict = 'reachable';
+    } else {
+      verdict = `unexpected status ${r.status} - expected 405 from this handler`;
+    }
+    return { url: target, status: r.status, redirectsTo, verdict };
+  } catch (err) {
+    return { url: target, status: 'error', verdict: err instanceof Error ? err.message : 'probe failed' };
+  }
+}
+
+function maskChat(id: string): string {
+  return id.length <= 4 ? '****' : `...${id.slice(-4)}`;
+}
+
+async function telegramHealth(): Promise<Record<string, unknown>> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  if (!token) return { configured: false, verdict: 'TELEGRAM_BOT_TOKEN missing' };
+
+  const out: Record<string, unknown> = { configured: true };
+
+  try {
+    const r = await fetchWithTimeout(`https://api.telegram.org/bot${token}/getMe`, {}, TELEGRAM_TIMEOUT_MS, 'Telegram getMe');
+    const j = (await r.json()) as any;
+    out.bot = j?.ok ? `@${j.result?.username}` : `getMe failed: ${String(j?.description).slice(0, 120)}`;
+  } catch (err) {
+    out.bot = err instanceof Error ? err.message : 'getMe failed';
+  }
+
+  const targets = [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].filter(Boolean))] as string[];
+  out.chats = await Promise.all(
+    targets.map(async (chatId) => {
+      try {
+        const r = await fetchWithTimeout(
+          `https://api.telegram.org/bot${token}/getChat`,
+          { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ chat_id: chatId }) },
+          TELEGRAM_TIMEOUT_MS,
+          'Telegram getChat',
+        );
+        const j = (await r.json()) as any;
+        return j?.ok
+          ? { chat: maskChat(chatId), reachable: true, name: j.result?.username || j.result?.first_name || j.result?.title }
+          : { chat: maskChat(chatId), reachable: false, error: String(j?.description || r.status).slice(0, 160) };
+      } catch (err) {
+        return { chat: maskChat(chatId), reachable: false, error: err instanceof Error ? err.message : 'getChat failed' };
+      }
+    }),
+  );
+
+  const chats = out.chats as { reachable: boolean }[];
+  out.verdict = !chats.length
+    ? 'no chat ids configured - packets have nowhere to go'
+    : chats.every((c) => c.reachable)
+      ? 'ok'
+      : 'a configured chat is unreachable - the bot was blocked or the id is wrong';
+  return out;
+}
+
+async function quoWebhookHealth(canonical: string): Promise<Record<string, unknown>> {
+  const key = process.env.QUO_API_KEY;
+  if (!key) return { configured: false, verdict: 'QUO_API_KEY missing - cannot check what Quo has registered' };
+
+  try {
+    const r = await fetchWithTimeout(
+      'https://api.openphone.com/v1/webhooks',
+      { headers: { Authorization: key } },
+      QUO_TIMEOUT_MS,
+      'Quo webhook list',
+    );
+    if (!r.ok) {
+      return { configured: true, verdict: `could not list webhooks: ${r.status} ${(await r.text()).slice(0, 160)}` };
+    }
+
+    const body = (await r.json()) as any;
+    const all: any[] = Array.isArray(body?.data) ? body.data : [];
+    const ours = all.filter((h) => typeof h?.url === 'string' && h.url.includes('quo-webhook'));
+
+    const registered = await Promise.all(
+      ours.map(async (h) => ({
+        url: h.url,
+        events: h.events,
+        status: h.status,
+        matchesCanonical: h.url === canonical,
+        probe: await probeUrl(h.url),
+      })),
+    );
+
+    let verdict: string;
+    if (!registered.length) {
+      verdict = 'NO WEBHOOK REGISTERED pointing at quo-webhook - Quo will never call us. Add one in the Quo dashboard.';
+    } else if (registered.every((h) => h.probe.verdict === 'reachable')) {
+      verdict = 'ok';
+    } else {
+      verdict = 'BROKEN - a registered webhook URL does not answer. See probe.verdict on each entry.';
+    }
+    return { configured: true, canonical, registered, verdict };
+  } catch (err) {
+    return { configured: true, verdict: err instanceof Error ? err.message : 'webhook list failed' };
+  }
+}
+
+async function healthReport(url: URL): Promise<Record<string, unknown>> {
+  const canonical = `${url.origin}${url.pathname}`;
+  const [telegram, quo, self] = await Promise.all([
+    telegramHealth(),
+    quoWebhookHealth(canonical),
+    probeUrl(canonical),
+  ]);
+
+  return {
+    version: VERSION,
+    canonical,
+    env: {
+      MINIMAX_API_KEY: !!process.env.MINIMAX_API_KEY,
+      TELEGRAM_BOT_TOKEN: !!process.env.TELEGRAM_BOT_TOKEN,
+      QUO_API_KEY: !!process.env.QUO_API_KEY,
+      BRENDA_CHAT_ID: !!process.env.BRENDA_CHAT_ID,
+      DH_CHAT_ID: !!process.env.DH_CHAT_ID,
+    },
+    self,
+    telegram,
+    quo,
+  };
+}
+
 export default async function handler(req: Request): Promise<Response> {
   // Log every hit so we can see in Vercel logs whether Quo is reaching us.
   console.log('[quo-webhook] called, method:', req.method);
@@ -277,8 +547,19 @@ export default async function handler(req: Request): Promise<Response> {
     hasDhChat: !!process.env.DH_CHAT_ID,
   });
 
+  if (req.method === 'GET') {
+    const url = new URL(req.url);
+    if (url.searchParams.get('health') === '1') {
+      const report = await healthReport(url);
+      return new Response(JSON.stringify(report, null, 2), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+  }
+
   if (req.method !== 'POST') {
-    return new Response('Method not allowed (quo-webhook v3)', { status: 405 });
+    return new Response(`Method not allowed (${VERSION}) - try ?health=1`, { status: 405 });
   }
 
   let body: any;
@@ -301,8 +582,22 @@ export default async function handler(req: Request): Promise<Response> {
     console.error('[quo-webhook] TELEGRAM_BOT_TOKEN missing');
     return new Response('TELEGRAM_BOT_TOKEN missing', { status: 500 });
   }
-  // Fan one message out to every configured chat.
-  const broadcast = (text: string) => Promise.all(targets.map((t) => sendTelegram(t, text)));
+  // Fan one message out to every configured chat, and remember whether any of
+  // it landed. A packet Telegram rejected is a lost lead, so the response has
+  // to tell the truth instead of reporting a cheerful 200 either way.
+  let anyDelivered = false;
+  const broadcast = async (text: string): Promise<boolean> => {
+    const results = await Promise.all(
+      targets.map((t) =>
+        sendTelegram(t, text).catch((err) => {
+          console.error('[quo-webhook] send threw for', t, err instanceof Error ? err.message : err);
+          return false;
+        }),
+      ),
+    );
+    if (results.some(Boolean)) anyDelivered = true;
+    return results.every(Boolean);
+  };
 
   // Quo v3 webhook payload shape:
   //   {
@@ -395,7 +690,8 @@ export default async function handler(req: Request): Promise<Response> {
       });
       await broadcast(message);
     } else {
-      const raw = fullText.length > 3200 ? fullText.slice(0, 3200) + '\n…(truncated)' : fullText;
+      const trimmed = fullText.length > 3000 ? fullText.slice(0, 3000) + '\n…(truncated)' : fullText;
+      const raw = trimmed.replace(/`/g, 'ˋ');
       await broadcast(
         [
           '🎈 *NEW LEAD — RAW* (auto-extraction is down, this is the unprocessed call content)',
@@ -403,9 +699,11 @@ export default async function handler(req: Request): Promise<Response> {
           durationStr ? `📞 ${durationStr}` : '',
           deepLink || mediaUrl ? `🎵 ${deepLink || mediaUrl}` : '',
           '',
+          '```',
           raw,
+          '```',
           '',
-          `_extractor error: ${llmError.slice(0, 300)}_`,
+          `_extractor error: ${mdEscape(llmError.slice(0, 300))}_`,
         ]
           .filter(Boolean)
           .join('\n'),
@@ -413,9 +711,18 @@ export default async function handler(req: Request): Promise<Response> {
     }
 
     return new Response(
-      JSON.stringify({ ok: true, callId, eventType, degraded: !lead, llmError: llmError || undefined }),
+      JSON.stringify({
+        ok: anyDelivered,
+        callId,
+        eventType,
+        degraded: !lead,
+        delivered: anyDelivered,
+        llmError: llmError || undefined,
+      }),
       {
-        status: 200,
+        // Nothing reached Telegram. Answer 500 so Quo retries us — a retry is
+        // another shot at the lead, a 200 here would bury it.
+        status: anyDelivered ? 200 : 500,
         headers: { 'content-type': 'application/json' },
       },
     );
@@ -425,9 +732,10 @@ export default async function handler(req: Request): Promise<Response> {
     await broadcast(
       `⚠️ Discovery pipeline error for call ${callId} (${eventType}): ${msg}\n\nManually review: ${deepLink || '(no deep link)'}`,
     );
-    // Return 200 so Quo doesn't retry endlessly on an error we already handled.
-    return new Response(JSON.stringify({ error: msg }), {
-      status: 200,
+    // If the alert made it to Telegram a human already knows, so return 200 and
+    // spare Quo the retries. If it did not, 500 buys us another delivery.
+    return new Response(JSON.stringify({ error: msg, delivered: anyDelivered }), {
+      status: anyDelivered ? 200 : 500,
       headers: { 'content-type': 'application/json' },
     });
   }
