@@ -290,7 +290,7 @@ async function tgPost(
 // Returns whether every chunk landed. A dropped packet is a lost lead, so this
 // never gives up after one try: bad formatting falls back to plain text, rate
 // limits wait out their retry_after, and network blips get one more shot.
-async function sendTelegram(chatId: string, text: string): Promise<boolean> {
+export async function sendTelegram(chatId: string, text: string): Promise<boolean> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   if (!token) throw new Error('TELEGRAM_BOT_TOKEN missing');
 
@@ -523,7 +523,7 @@ async function quoWebhookHealth(canonical: string): Promise<Record<string, unkno
   }
 }
 
-async function healthReport(url: URL): Promise<Record<string, unknown>> {
+export async function healthReport(url: URL): Promise<Record<string, unknown>> {
   const canonical = `${url.origin}${url.pathname}`;
   const [telegram, quo, self] = await Promise.all([
     telegramHealth(),
