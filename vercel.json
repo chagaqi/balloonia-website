@@ -3,8 +3,33 @@
     {
       "source": "/downloads/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/products/luxury-valentines-day-balloons",
+      "destination": "/collections/all",
+      "permanent": true
+    },
+    {
+      "source": "/products/valentines-day-balloon-installation",
+      "destination": "/collections/all",
+      "permanent": true
+    },
+    {
+      "source": "/products/corporative-christmas-decor-setup",
+      "destination": "/collections/all",
+      "permanent": true
+    },
+    {
+      "source": "/products/modern-organic-balloon-arch-display",
+      "destination": "/collections/all",
+      "permanent": true
     }
   ]
 }

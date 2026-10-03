@@ -1,5 +1,5 @@
-// Shopify collection metadata for the /shop "Order Online" hub.
-// Slugs match the live Storefront collections (verified via API probe).
+// Collection metadata for the /shop "Order Online" hub.
+// Handles match the collections table in Supabase (same handles Shopify used).
 // Corporate intentionally omitted — corporate work is custom-quote, not stock.
 
 export type ShopCollection = {
@@ -10,7 +10,7 @@ export type ShopCollection = {
   thumb?: string;
 };
 
-const SHOP_BASE = 'https://shop.balloonia.events/collections';
+const SHOP_BASE = '/collections';
 
 export const shopCollections: ShopCollection[] = [
   {
@@ -105,5 +105,5 @@ export function shopCollectionUrl(handle: string): string {
 }
 
 export function shopAllUrl(): string {
-  return SHOP_BASE;
+  return `${SHOP_BASE}/all`;
 }

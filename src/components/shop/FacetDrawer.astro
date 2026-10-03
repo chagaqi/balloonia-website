@@ -1,0 +1,45 @@
+---
+// Mobile "Filter and sort" drawer (Sense mobile facets). listing.ts opens and closes it.
+import Facets from './Facets.astro';
+import { icons } from './icons';
+
+type Props = {
+  inStock: number;
+  outOfStock: number;
+  maxPrice: number;
+  countText: string;
+  options: { value: string; label: string }[];
+  defaultSort: string;
+};
+
+const { inStock, outOfStock, maxPrice, countText, options, defaultSort } = Astro.props;
+---
+
+<div class="s-drawer" id="FacetDrawer" data-drawer aria-hidden="true" role="dialog" aria-modal="true" aria-label="Filter and sort">
+  <div class="s-drawer__backdrop" data-drawer-close></div>
+  <div class="s-drawer__panel">
+    <div class="s-drawer__head">
+      <h2>Filter and sort</h2>
+      <p data-count>{countText}</p>
+      <button type="button" class="s-drawer__close" data-drawer-close aria-label="Close">
+        <Fragment set:html={icons.close} />
+      </button>
+    </div>
+    <div class="s-drawer__body">
+      <Facets scope="drawer" inStock={inStock} outOfStock={outOfStock} maxPrice={maxPrice} />
+      <div class="s-drawer__sort">
+        <label for="SortByMobile">Sort by:</label>
+        <div class="s-select">
+          <select id="SortByMobile" data-sort>
+            {options.map((o) => <option value={o.value} selected={o.value === defaultSort}>{o.label}</option>)}
+          </select>
+          <Fragment set:html={icons.caret} />
+        </div>
+      </div>
+    </div>
+    <div class="s-drawer__foot">
+      <button type="button" class="s-button s-button--secondary" data-reset>Remove all</button>
+      <button type="button" class="s-button" data-drawer-close>Apply</button>
+    </div>
+  </div>
+</div>

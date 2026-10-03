@@ -7,7 +7,7 @@ import CTAButton from '../../components/CTAButton.astro';
 import ProductGrid from '../../components/ProductGrid.astro';
 import { faqPageSchema } from '../../lib/schema/faqPage';
 import { serviceSchema } from '../../lib/schema/service';
-import { getAllProducts } from '../../data/catalog/shopify';
+import { getAllProducts } from '../../data/catalog';
 
 const entry = await getEntry('icp', 'showers');
 if (!entry) throw new Error('Missing icp/showers');
@@ -55,7 +55,7 @@ const schemas = [
     secondaryCta={{ href: '/portfolio', label: 'See shower work' }}
     image={products[0]?.image.src ?? entry.data.heroImage}
     imageAlt={products[0]?.image.alt ?? entry.data.heroAlt}
-    imageHref="https://shop.balloonia.events/collections/showers"
+    imageHref="/collections/showers"
     imageOverlay="Click to order online"
     variant="page"
   />
@@ -92,7 +92,7 @@ const schemas = [
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
-          <a class="section-link" href="https://shop.balloonia.events/collections/showers">View all shower products →</a>
+          <a class="section-link" href="/collections/showers">View all shower products →</a>
         </p>
       </div>
     </section>

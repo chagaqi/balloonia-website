@@ -44,6 +44,7 @@ allSchemas.push(...schemas);
     <SEOHead topic={topic} description={description} ogImage={ogImage} noindex={noindex} />
     <script is:inline set:html={utmCaptureScript} />
     <JsonLd schema={allSchemas} />
+    <slot name="head" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

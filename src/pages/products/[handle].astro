@@ -1,0 +1,244 @@
+---
+// /products/<handle>. Same URL as the Shopify store.
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import ShopCard from '../../components/shop/ShopCard.astro';
+import ProductForm, { type FormProduct } from '../../components/shop/ProductForm';
+import { icons } from '../../components/shop/icons';
+import { getCatalog, plainText, related, type ShopProduct } from '../../lib/shop/catalog';
+import { responsive, MEDIA_WIDTHS, MEDIA_SIZES, THUMB_WIDTHS, THUMB_SIZES } from '../../lib/shop/images';
+
+export async function getStaticPaths() {
+  const catalog = await getCatalog();
+  return catalog.products.map((p) => ({ params: { handle: p.handle }, props: { handle: p.handle } }));
+}
+
+const { handle } = Astro.props as { handle: string };
+const catalog = await getCatalog();
+const product = catalog.byHandle.get(handle) as ShopProduct;
+const recs = related(catalog, product, 4);
+
+const media = await Promise.all(
+  product.images.map((img, i) =>
+    i === 0 ? responsive(img, MEDIA_WIDTHS, MEDIA_SIZES) : responsive(img, THUMB_WIDTHS, THUMB_SIZES),
+  ),
+);
+// Full-size versions for the zoom view.
+const zoom = await Promise.all(product.images.map((img) => responsive(img, [1100, 1500], '(min-width: 1100px) 1100px, 100vw')));
+const thumbs: Record<string, string> = {};
+for (const img of product.images) {
+  thumbs[String(img.id)] = (await responsive(img, [360], '180px')).src;
+}
+
+const formProduct: FormProduct = {
+  id: product.id,
+  handle: product.handle,
+  title: product.title,
+  options: product.options,
+  variants: product.variants,
+  thumbs,
+  firstImageId: product.images[0]?.id ?? null,
+};
+
+const description = product.seoDescription || plainText(product.bodyHtml).slice(0, 300);
+const url = `https://balloonia.events/products/${product.handle}`;
+const offers = product.variants.map((v) => ({
+  '@type': 'Offer',
+  sku: String(v.id),
+  name: v.title === 'Default Title' ? product.title : `${product.title} - ${v.title}`,
+  price: v.price.toFixed(2),
+  priceCurrency: 'CAD',
+  availability: v.available ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+  url: product.variants.length > 1 ? `${url}?variant=${v.id}` : url,
+  seller: { '@type': 'Organization', name: 'Balloonia Events' },
+}));
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.title,
+  url,
+  description: plainText(product.bodyHtml),
+  image: product.images.map((i) => i.src),
+  brand: { '@type': 'Brand', name: product.vendor || 'Balloonia Events' },
+  category: product.type || undefined,
+  offers: offers.length === 1 ? offers[0] : offers,
+};
+const topic = product.seoTitle || product.title;
+const ogImage = media[0]?.src;
+---
+
+<ShopLayout
+  topic={topic}
+  description={description}
+  ogImage={ogImage}
+  schemas={[productSchema]}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Order Online', url: '/shop' },
+    { name: product.title, url: `/products/${product.handle}` },
+  ]}
+>
+  <section class="s-width">
+    <div class="s-product">
+      <div class="s-product__media" data-gallery>
+        <a class="s-visually-hidden" href="#ProductInfo">Skip to product information</a>
+        <ul class:list={['s-gallery', { 'is-single': media.length < 2 }]} data-gallery-list>
+          {media.map((m, i) => (
+            <li data-image-id={product.images[i].id} data-index={i}>
+              <button type="button" class="s-media" style={`--ratio: ${m.width} / ${m.height}`} data-zoom={i} aria-label={`Open media ${i + 1} in modal`}>
+                <span class="s-media__icon" aria-hidden="true"><Fragment set:html={icons.zoom} /></span>
+                <img
+                  src={m.src}
+                  srcset={m.srcset}
+                  sizes={m.sizes}
+                  alt={m.alt}
+                  width={m.width}
+                  height={m.height}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : undefined}
+                  decoding="async"
+                />
+              </button>
+            </li>
+          ))}
+        </ul>
+        {media.length > 1 && (
+          <div class="s-slider-buttons">
+            <button type="button" data-slide="-1" aria-label="Slide left" disabled><Fragment set:html={icons.chevronLeft} /></button>
+            <span class="s-slider-counter"><span data-slide-current>1</span>/<span>{media.length}</span></span>
+            <button type="button" data-slide="1" aria-label="Slide right"><Fragment set:html={icons.chevronRight} /></button>
+          </div>
+        )}
+      </div>
+
+      <div class="s-product__info" id="ProductInfo">
+        <div class="s-product__info-inner">
+          <p class="s-product__eyebrow">{product.vendor || 'Balloonia Events'}</p>
+          <h1 class="s-h1 s-product__title">{product.title}</h1>
+          <ProductForm client:load product={formProduct} optionSet={product.optionSet} />
+          {product.bodyHtml && <div class="s-product__desc" set:html={product.bodyHtml} />}
+          <button type="button" class="s-share" data-share={url}>
+            <Fragment set:html={icons.share} />
+            <span data-share-label>Share</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {recs.length > 0 && (
+    <section class="s-width s-related" aria-labelledby="related-heading">
+      <h2 class="s-h2" id="related-heading">You may also like</h2>
+      <ul class="s-grid s-grid--4">
+        {recs.map((p) => (
+          <li><ShopCard product={p} adapt /></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <div class="s-lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="Media gallery">
+    <button type="button" class="s-lightbox__close" data-lightbox-close aria-label="Close"><Fragment set:html={icons.close} /></button>
+    <ul class="s-lightbox__list">
+      {zoom.map((z, i) => (
+        <li data-lightbox-item={i}>
+          <img src={z.src} srcset={z.srcset} sizes={z.sizes} alt={z.alt} width={z.width} height={z.height} loading="lazy" decoding="async" />
+        </li>
+      ))}
+    </ul>
+  </div>
+</ShopLayout>
+
+<script>
+  // Gallery: mobile slider counter, zoom view, variant image swap; Share button.
+  const gallery = document.querySelector<HTMLElement>('[data-gallery]');
+  const list = gallery?.querySelector<HTMLElement>('[data-gallery-list]');
+  const current = gallery?.querySelector<HTMLElement>('[data-slide-current]');
+  const prev = gallery?.querySelector<HTMLButtonElement>('[data-slide="-1"]');
+  const next = gallery?.querySelector<HTMLButtonElement>('[data-slide="1"]');
+
+  function slideIndex(): number {
+    if (!list) return 0;
+    const items = Array.from(list.children) as HTMLElement[];
+    const left = list.scrollLeft;
+    let best = 0;
+    let dist = Infinity;
+    items.forEach((it, i) => {
+      const d = Math.abs(it.offsetLeft - list.offsetLeft - 15 - left);
+      if (d < dist) {
+        dist = d;
+        best = i;
+      }
+    });
+    return best;
+  }
+  function updateCounter() {
+    if (!list || !current) return;
+    const i = slideIndex();
+    current.textContent = String(i + 1);
+    if (prev) prev.disabled = i === 0;
+    if (next) next.disabled = i === list.children.length - 1;
+  }
+  list?.addEventListener('scroll', () => window.requestAnimationFrame(updateCounter), { passive: true });
+  gallery?.querySelectorAll<HTMLButtonElement>('[data-slide]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (!list) return;
+      const items = Array.from(list.children) as HTMLElement[];
+      const i = Math.min(items.length - 1, Math.max(0, slideIndex() + Number(b.dataset.slide)));
+      list.scrollTo({ left: items[i].offsetLeft - list.offsetLeft - 15, behavior: 'smooth' });
+    }),
+  );
+
+  window.addEventListener('variant:image', (e) => {
+    const id = String((e as CustomEvent<{ imageId: number }>).detail.imageId);
+    const li = list?.querySelector<HTMLElement>(`[data-image-id="${id}"]`);
+    if (!list || !li) return;
+    list.prepend(li);
+    list.scrollTo({ left: 0 });
+    updateCounter();
+  });
+
+  const lightbox = document.querySelector<HTMLElement>('[data-lightbox]');
+  function closeLightbox() {
+    lightbox?.classList.remove('is-open');
+    document.documentElement.style.overflow = '';
+  }
+  document.querySelectorAll<HTMLElement>('[data-zoom]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (!lightbox) return;
+      lightbox.classList.add('is-open');
+      document.documentElement.style.overflow = 'hidden';
+      const item = lightbox.querySelector<HTMLElement>(`[data-lightbox-item="${b.dataset.zoom}"]`);
+      lightbox.querySelector<HTMLElement>('[data-lightbox-close]')?.focus();
+      if (item) lightbox.scrollTo({ top: item.offsetTop - 70 });
+    }),
+  );
+  lightbox?.querySelector('[data-lightbox-close]')?.addEventListener('click', closeLightbox);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightbox?.classList.contains('is-open')) closeLightbox();
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-share]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      const url = b.dataset.share || location.href;
+      const label = b.querySelector<HTMLElement>('[data-share-label]');
+      const nav = navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
+      if (nav.share && window.matchMedia('(hover: none)').matches) {
+        try {
+          await nav.share({ url, title: document.title });
+        } catch {
+          /* dismissed */
+        }
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+        if (label) {
+          label.textContent = 'Link copied to clipboard';
+          window.setTimeout(() => (label.textContent = 'Share'), 2500);
+        }
+      } catch {
+        window.prompt('Copy this link', url);
+      }
+    }),
+  );
+</script>

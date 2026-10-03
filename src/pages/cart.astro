@@ -1,0 +1,10 @@
+---
+import ShopLayout from '../layouts/ShopLayout.astro';
+import CartPage from '../components/shop/CartPage';
+---
+
+<ShopLayout topic="Your cart" description="Your Balloonia Events cart." noindex>
+  <div style="min-height: 60vh">
+    <CartPage client:only="preact" />
+  </div>
+</ShopLayout>

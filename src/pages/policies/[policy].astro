@@ -1,0 +1,42 @@
+---
+// /policies/refund-policy | privacy-policy | terms-of-service | shipping-policy.
+// Bodies are the store's own policy HTML (src/data/policies), with the
+// Shopify-specific passages replaced by the processors this site uses.
+import ShopLayout from '../../layouts/ShopLayout.astro';
+
+const files = import.meta.glob('../../data/policies/*.html', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const TITLES: Record<string, string> = {
+  'refund-policy': 'Refund policy',
+  'privacy-policy': 'Privacy policy',
+  'terms-of-service': 'Terms of service',
+  'shipping-policy': 'Shipping policy',
+};
+
+export function getStaticPaths() {
+  return ['refund-policy', 'privacy-policy', 'terms-of-service', 'shipping-policy'].map((policy) => ({ params: { policy } }));
+}
+
+const { policy } = Astro.params as { policy: string };
+const title = TITLES[policy];
+const html = files[`../../data/policies/${policy}.html`] ?? '';
+const description =
+  html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 155) || title;
+---
+
+<ShopLayout
+  topic={title}
+  description={description}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: title, url: `/policies/${policy}` },
+  ]}
+>
+  <div class="s-policy">
+    <h1 class="s-h1">{title}</h1>
+    <div class="s-policy__body" set:html={html} />
+  </div>
+</ShopLayout>

@@ -1,0 +1,44 @@
+---
+// Product card, shop style (Sense "card" layout: 4:5 image, centred EB Garamond title,
+// "$849.00 CAD" or "From $160.00 CAD").
+import type { ShopProduct } from '../../lib/shop/catalog';
+import { money } from '../../lib/shop/price';
+import { responsive, CARD_WIDTHS, CARD_SIZES } from '../../lib/shop/images';
+
+type Props = {
+  product: ShopProduct;
+  adapt?: boolean;
+  eager?: boolean;
+};
+
+const { product, adapt = false, eager = false } = Astro.props;
+const img = product.images[0];
+const pic = img ? await responsive(img, CARD_WIDTHS, CARD_SIZES) : null;
+const ratio = img ? `${img.width} / ${img.height}` : '1';
+const priceText = `${product.priceVaries ? 'From ' : ''}${money(product.minPrice)} CAD`;
+---
+
+<a class:list={['s-card', { 's-card--adapt': adapt }]} href={`/products/${product.handle}`} style={adapt ? `--ratio: ${ratio}` : undefined}>
+  <div class="s-card__media">
+    {pic && (
+      <img
+        src={pic.src}
+        srcset={pic.srcset}
+        sizes={pic.sizes}
+        alt={pic.alt}
+        width={pic.width}
+        height={pic.height}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    )}
+  </div>
+  <div class="s-card__info">
+    <h3 class="s-card__heading">{product.title}</h3>
+    <div class="s-price">
+      <span class="s-visually-hidden">{product.compareAtMin ? 'Sale price' : 'Regular price'}</span>
+      {product.compareAtMin && <s>{money(product.compareAtMin)} CAD</s>}
+      <span>{priceText}</span>
+    </div>
+  </div>
+</a>

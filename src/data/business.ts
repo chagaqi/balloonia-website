@@ -7,7 +7,7 @@ export const business = {
   email: 'contact@balloonia.events',
   phone: import.meta.env.PUBLIC_PHONE,
   url: 'https://balloonia.events',
-  shopUrl: 'https://shop.balloonia.events',
+  shopUrl: 'https://balloonia.events/collections/all',
   description:
     "Custom balloon installations in London Ontario. Wedding arches, shower walls, corporate activations, kids birthdays, grad backdrops. Delivered and set up.",
   founded: '2024',

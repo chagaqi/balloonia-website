@@ -1,0 +1,181 @@
+---
+// /collections/<handle> and /collections/all. Same URLs as the Shopify store.
+import ShopLayout from '../../layouts/ShopLayout.astro';
+import ShopCard from '../../components/shop/ShopCard.astro';
+import Facets from '../../components/shop/Facets.astro';
+import FacetDrawer from '../../components/shop/FacetDrawer.astro';
+import { icons } from '../../components/shop/icons';
+import { getCatalog, plainText, type ShopProduct } from '../../lib/shop/catalog';
+import { sidebarCategories, sortOptions } from '../../data/shopSidebar';
+
+export async function getStaticPaths() {
+  const catalog = await getCatalog();
+  const paths = catalog.collections.map((c) => ({
+    params: { handle: c.handle },
+    props: { handle: c.handle, title: c.title, bodyHtml: c.bodyHtml, productIds: c.productIds },
+  }));
+  paths.push({
+    params: { handle: 'all' },
+    props: { handle: 'all', title: 'Products', bodyHtml: '', productIds: catalog.products.map((p) => p.id) },
+  });
+  return paths;
+}
+
+type Props = { handle: string; title: string; bodyHtml: string; productIds: number[] };
+const { handle, title, bodyHtml, productIds } = Astro.props;
+const catalog = await getCatalog();
+const products = productIds.map((id) => catalog.byId.get(id)).filter((p): p is ShopProduct => !!p);
+const inStock = products.filter((p) => p.available).length;
+const maxPrice = products.reduce((m, p) => Math.max(m, p.maxPrice), 0);
+const PER_PAGE = 20;
+const countText = `${products.length} product${products.length === 1 ? '' : 's'}`;
+const description =
+  plainText(bodyHtml) ||
+  `Shop ${title.replace('&', 'and')} from Balloonia Events. Balloon decor built fresh and delivered in London, Ontario.`;
+const desktopSort = { id: 'SortBy', defaultSort: 'most-relevant' };
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: title,
+  itemListElement: products.slice(0, PER_PAGE).map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    url: `https://balloonia.events/products/${p.handle}`,
+    name: p.title,
+  })),
+};
+---
+
+<ShopLayout
+  topic={handle === 'all' ? 'Shop all balloon decor' : title.replace('&', 'and')}
+  description={description}
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Order Online', url: '/shop' },
+    { name: title, url: `/collections/${handle}` },
+  ]}
+  schemas={[itemList]}
+>
+  <div class="s-coll" data-listing>
+    <div class="s-width s-coll-hero">
+      <h1 class="s-h1"><span class="s-visually-hidden">Collection: </span>{title}</h1>
+    </div>
+
+    <div class="s-csearch">
+      <form action="/search" method="get" role="search">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+          <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        </svg>
+        <input type="search" name="q" placeholder="Search arches, garlands, columns, backdrops..." aria-label="Search products" />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <div class="s-width">
+      <div class="s-sortbar">
+        <div class="s-sort">
+          <label for={desktopSort.id}>Sort by:</label>
+          <div class="s-select-bare">
+            <select id={desktopSort.id} data-sort>
+              {sortOptions.map((o) => <option value={o.value} selected={o.value === desktopSort.defaultSort}>{o.label}</option>)}
+            </select>
+            <Fragment set:html={icons.caret} />
+          </div>
+        </div>
+        <p class="s-count" data-count role="status">{countText}</p>
+      </div>
+
+      <div class="s-coll-body">
+        <aside class="s-sidebar" aria-label="Shop by category and filters">
+          <nav aria-label="Shop by category">
+            <h2 class="s-catsb-heading">Shop by category</h2>
+            <ul class="s-catsb-list">
+              {sidebarCategories.map((c) => (
+                <li>
+                  <a class="s-catsb-link" href={`/collections/${c.handle}`} aria-current={c.handle === handle ? 'page' : undefined}>
+                    {c.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div class="s-desktop-facets">
+            <Facets scope="desktop" inStock={inStock} outOfStock={products.length - inStock} maxPrice={maxPrice} />
+          </div>
+        </aside>
+
+        <div class="s-results">
+          <div class="s-mfacets">
+            <button type="button" class="s-mfacets__open" data-drawer-open aria-controls="FacetDrawer">
+              <Fragment set:html={icons.filter} />
+              <span>Filter and sort</span>
+            </button>
+            <p class="s-count" data-count role="status">{countText}</p>
+          </div>
+
+          {products.length === 0 ? (
+            <div class="s-empty">
+              <h2 class="s-h2">No products found</h2>
+              <p>Use fewer filters or <a href="/collections/all">browse the full shop</a>.</p>
+            </div>
+          ) : (
+            <ul class="s-grid s-grid--3" id="product-grid" data-grid>
+              {products.map((p, i) => (
+                <li
+                  data-item
+                  data-title={p.title}
+                  data-price={p.minPrice}
+                  data-created={p.createdAt}
+                  data-pos={i}
+                  data-avail={p.available ? '1' : '0'}
+                  hidden={i >= PER_PAGE}
+                >
+                  <ShopCard product={p} eager={i < 3} />
+                </li>
+              ))}
+            </ul>
+          )}
+          <div class="s-empty" data-empty hidden>
+            <h2 class="s-h2">No products found</h2>
+            <p>Use fewer filters or <button type="button" class="s-facets__reset" data-reset>remove all</button></p>
+          </div>
+
+          <nav aria-label="Pagination">
+            <ul class="s-pagination" data-pagination hidden={products.length <= PER_PAGE}>
+              {Array.from({ length: Math.ceil(products.length / PER_PAGE) }, (_, i) => i + 1).map((p) =>
+                p === 1 ? (
+                  <li><span aria-current="page" aria-label="Page 1">1</span></li>
+                ) : (
+                  <li><a href={`?page=${p}`} data-page={p} aria-label={`Page ${p}`}>{p}</a></li>
+                ),
+              )}
+              {products.length > PER_PAGE && (
+                <li><a href="?page=2" data-page="2"><span class="s-visually-hidden">Next page</span><Fragment set:html={icons.chevronRight} /></a></li>
+              )}
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+
+    <FacetDrawer inStock={inStock} outOfStock={products.length - inStock} maxPrice={maxPrice} countText={countText} options={sortOptions} defaultSort="most-relevant" />
+  </div>
+</ShopLayout>
+
+<style>
+  .s-desktop-facets {
+    display: none;
+  }
+  @media (min-width: 750px) {
+    .s-desktop-facets {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  import { initListing } from '../../lib/shop/listing';
+  const root = document.querySelector<HTMLElement>('[data-listing]');
+  if (root) initListing({ root, perPage: 20, defaultSort: 'most-relevant', noun: 'products' });
+</script>

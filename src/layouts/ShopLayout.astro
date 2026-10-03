@@ -1,0 +1,31 @@
+---
+// Shop pages sit inside the main site chrome (header with search + cart, footer)
+// and add the store's own type (EB Garamond headings, Inter body) and CSS.
+import BaseLayout from './BaseLayout.astro';
+import '../styles/shop.css';
+import type { Crumb } from '../lib/schema/breadcrumbs';
+
+type Props = {
+  topic: string;
+  description: string;
+  ogImage?: string;
+  noindex?: boolean;
+  schemas?: Record<string, unknown>[];
+  breadcrumbs?: Crumb[];
+};
+
+const props = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <Fragment slot="head">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400&display=swap"
+    />
+    <slot name="head" />
+  </Fragment>
+  <div class="shop">
+    <slot />
+  </div>
+</BaseLayout>

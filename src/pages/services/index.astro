@@ -6,7 +6,7 @@ import FAQAccordion from '../../components/FAQAccordion.astro';
 import CTAButton from '../../components/CTAButton.astro';
 import { faqPageSchema } from '../../lib/schema/faqPage';
 import { serviceSchema } from '../../lib/schema/service';
-import { getAllProducts } from '../../data/catalog/shopify';
+import { getAllProducts } from '../../data/catalog';
 import type { Product } from '../../data/catalog/types';
 
 type Section = {
@@ -155,7 +155,7 @@ const schemas = [
 ];
 
 function collectionUrl(handle: string): string {
-  return `https://shop.balloonia.events/collections/${handle}`;
+  return `/collections/${handle}`;
 }
 ---
 

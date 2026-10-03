@@ -102,10 +102,31 @@ const mapEmbedSrc = 'https://www.google.com/maps/embed?origin=mfe&pb=!1m3!3m2!1m
 
   <div class="container footer-meta">
     <p>© {year} Balloonia Events. London, Ontario.</p>
+    <ul class="footer-policies" aria-label="Policies">
+      <li><a href="/policies/privacy-policy">Privacy policy</a></li>
+      <li><a href="/policies/refund-policy">Refund policy</a></li>
+      <li><a href="/policies/shipping-policy">Shipping policy</a></li>
+      <li><a href="/policies/terms-of-service">Terms of service</a></li>
+    </ul>
   </div>
 </footer>
 
 <style>
+  .footer-policies {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    font-size: var(--font-size-xs);
+  }
+  .footer-policies a {
+    color: var(--color-ink-muted);
+  }
+  .footer-policies a:hover {
+    color: var(--color-ink);
+  }
   .site-footer {
     margin-top: var(--space-9);
     background: var(--color-paper-soft);

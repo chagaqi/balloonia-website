@@ -1,0 +1,53 @@
+---
+// Availability + Price filters (Sense vertical facets). Rendered twice per page:
+// once in the desktop sidebar, once in the mobile drawer. listing.ts keeps both in sync.
+import { icons } from './icons';
+import { money } from '../../lib/shop/price';
+
+type Props = {
+  scope: 'desktop' | 'drawer' | 'bar';
+  inStock: number;
+  outOfStock: number;
+  maxPrice: number;
+};
+
+const { scope, inStock, outOfStock, maxPrice } = Astro.props;
+const id = (s: string) => `${scope}-${s}`;
+---
+
+<div class:list={['s-facets', { 's-facets--h': scope === 'bar' }]} data-facets={scope}>
+  <h2 class="s-facets__heading">Filter:</h2>
+  <details class="s-facet" open={scope === 'desktop'}>
+    <summary>
+      <span>Availability</span>
+      <Fragment set:html={icons.caret} />
+    </summary>
+    <div class="s-facet__body">
+      <label class:list={['s-check', { 'is-disabled': inStock === 0 }]} for={id('avail-1')}>
+        <input type="checkbox" id={id('avail-1')} data-filter="avail" value="1" disabled={inStock === 0} />
+        <span data-avail-label="1">In stock ({inStock})</span>
+      </label>
+      <label class:list={['s-check', { 'is-disabled': outOfStock === 0 }]} for={id('avail-0')}>
+        <input type="checkbox" id={id('avail-0')} data-filter="avail" value="0" disabled={outOfStock === 0} />
+        <span data-avail-label="0">Out of stock ({outOfStock})</span>
+      </label>
+    </div>
+  </details>
+  <details class="s-facet">
+    <summary>
+      <span>Price</span>
+      <Fragment set:html={icons.caret} />
+    </summary>
+    <div class="s-facet__body s-price-range">
+      <p data-max-label>The highest price is {money(maxPrice)}</p>
+      <div class="s-price-range__fields">
+        <span>$</span>
+        <label class="s-visually-hidden" for={id('price-min')}>From</label>
+        <input type="number" inputmode="decimal" min="0" max={Math.ceil(maxPrice)} step="1" placeholder="From" id={id('price-min')} data-filter="min" />
+        <label class="s-visually-hidden" for={id('price-max')}>To</label>
+        <input type="number" inputmode="decimal" min="0" max={Math.ceil(maxPrice)} step="1" placeholder="To" id={id('price-max')} data-filter="max" />
+      </div>
+    </div>
+  </details>
+  <button type="button" class="s-facets__reset" data-reset hidden>Remove all</button>
+</div>

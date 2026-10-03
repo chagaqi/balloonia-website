@@ -12,6 +12,8 @@ export default defineConfig({
   // carried the majority of the traffic.
   redirects: {
     '/services/arches-garlands': '/services/balloon-arches',
+    // Shopify's collection index; the /shop hub plays that role here.
+    '/collections': '/shop',
   },
   integrations: [
     preact(),
@@ -21,12 +23,17 @@ export default defineConfig({
         !page.includes('/404') &&
         // Gated magnet deliverable + its thank-you page stay out of the sitemap.
         !page.includes('/guide/') &&
-        !page.includes('/side-hustle-guide/thanks'),
+        !page.includes('/side-hustle-guide/thanks') &&
+        !page.includes('/cart') &&
+        !page.includes('/checkout/') &&
+        !page.includes('/search'),
     }),
     mdx(),
   ],
   image: {
     service: { entrypoint: 'astro/assets/services/sharp' },
+    // Product photos live in Supabase Storage; the build resizes them (src/lib/shop/images.ts).
+    remotePatterns: [{ protocol: 'https', hostname: '**.supabase.co' }],
   },
   build: {
     inlineStylesheets: 'auto',

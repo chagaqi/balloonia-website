@@ -7,7 +7,7 @@ import FAQAccordion from '../../components/FAQAccordion.astro';
 import QuoteForm from '../../components/quote/QuoteForm.tsx';
 import { serviceSchema } from '../../lib/schema/service';
 import { faqPageSchema } from '../../lib/schema/faqPage';
-import { getAllProducts } from '../../data/catalog/shopify';
+import { getAllProducts } from '../../data/catalog';
 import '../../styles/quote-form.css';
 
 const allProducts = await getAllProducts();
@@ -119,7 +119,7 @@ if (faqs.length > 0) {
         </header>
         <ProductGrid products={products} columns={3} />
         <p class="section-link-wrap">
-          <a class="section-link" href="https://shop.balloonia.events/collections/arches-garlands">View all arches →</a>
+          <a class="section-link" href="/collections/arches-garlands">View all arches →</a>
         </p>
       </div>
     </section>

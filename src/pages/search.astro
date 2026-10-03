@@ -1,0 +1,168 @@
+---
+// /search?q=... Results come from /search-index.json in the browser (MiniSearch),
+// rendered in the shop card grid with the same filter/sort/pagination as collections.
+import ShopLayout from '../layouts/ShopLayout.astro';
+import Facets from '../components/shop/Facets.astro';
+import FacetDrawer from '../components/shop/FacetDrawer.astro';
+import { icons } from '../components/shop/icons';
+import { getCatalog } from '../lib/shop/catalog';
+
+const catalog = await getCatalog();
+const maxPrice = catalog.products.reduce((m, p) => Math.max(m, p.maxPrice), 0);
+const sortOptions = [
+  { value: 'relevance', label: 'Relevance' },
+  { value: 'price-ascending', label: 'Price, low to high' },
+  { value: 'price-descending', label: 'Price, high to low' },
+  { value: 'created-ascending', label: 'Date, old to new' },
+  { value: 'created-descending', label: 'Date, new to old' },
+];
+---
+
+<ShopLayout topic="Search" description="Search the Balloonia Events shop." noindex>
+  <div class="s-width s-search-head">
+    <h1 class="s-h1">Search results</h1>
+    <form class="s-field" action="/search" method="get" role="search" data-search-form>
+      <input type="search" id="SearchPageInput" name="q" placeholder="Search" autocomplete="off" data-search-input />
+      <label for="SearchPageInput">Search</label>
+      <div class="s-field__buttons">
+        <button type="reset" class="s-field__reset" aria-label="Clear search term" data-search-reset hidden>
+          <Fragment set:html={icons.close} />
+        </button>
+        <button type="submit" aria-label="Search"><Fragment set:html={icons.search} /></button>
+      </div>
+    </form>
+  </div>
+
+  <div class="s-width" data-listing data-search-page>
+    <div class="s-search-bar" data-search-bar hidden>
+      <div class="s-search-bar__filters">
+        <Facets scope="bar" inStock={0} outOfStock={0} maxPrice={maxPrice} />
+      </div>
+      <div class="s-search-bar__right">
+        <div class="s-sort s-desktop-only">
+          <label for="SortBy">Sort by:</label>
+          <div class="s-select-bare">
+            <select id="SortBy" data-sort>
+              {sortOptions.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+            <Fragment set:html={icons.caret} />
+          </div>
+        </div>
+        <p class="s-count s-desktop-only" data-count role="status"></p>
+      </div>
+    </div>
+    <div class="s-mfacets" data-search-mbar hidden>
+      <button type="button" class="s-mfacets__open" data-drawer-open aria-controls="FacetDrawer">
+        <Fragment set:html={icons.filter} />
+        <span>Filter and sort</span>
+      </button>
+      <p class="s-count" data-count role="status"></p>
+    </div>
+
+    <p class="s-empty" data-noresults hidden></p>
+    <ul class="s-grid s-grid--4" id="product-grid" data-grid></ul>
+    <div class="s-empty" data-empty hidden>
+      <h2 class="s-h2">No products found</h2>
+      <p>Use fewer filters or <button type="button" class="s-facets__reset" data-reset>remove all</button></p>
+    </div>
+    <nav aria-label="Pagination"><ul class="s-pagination" data-pagination hidden></ul></nav>
+    <div style="height: 48px"></div>
+
+    <FacetDrawer inStock={0} outOfStock={0} maxPrice={maxPrice} countText="" options={sortOptions} defaultSort="relevance" />
+  </div>
+</ShopLayout>
+
+<style>
+  .s-desktop-only {
+    display: none;
+  }
+  @media (min-width: 750px) {
+    .s-desktop-only {
+      display: flex;
+    }
+  }
+  [data-search-bar][hidden],
+  [data-search-mbar][hidden] {
+    display: none;
+  }
+  @media (max-width: 749px) {
+    [data-search-bar] {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { search, moneyCad, escapeHtml } from '../lib/shop/search';
+  import { initListing } from '../lib/shop/listing';
+
+  const params = new URLSearchParams(location.search);
+  const q = (params.get('q') || '').trim();
+  const input = document.querySelector<HTMLInputElement>('[data-search-input]');
+  const reset = document.querySelector<HTMLButtonElement>('[data-search-reset]');
+  const root = document.querySelector<HTMLElement>('[data-search-page]')!;
+  const grid = root.querySelector<HTMLElement>('[data-grid]')!;
+  const none = root.querySelector<HTMLElement>('[data-noresults]')!;
+
+  if (input) {
+    input.value = q;
+    if (reset) reset.hidden = !q;
+    input.addEventListener('input', () => {
+      if (reset) reset.hidden = !input.value;
+    });
+    reset?.addEventListener('click', () => {
+      window.setTimeout(() => {
+        reset.hidden = true;
+        input.focus();
+      });
+    });
+  }
+  if (q) document.title = `Search: ${q} | Balloonia Events`;
+
+  async function run() {
+    if (!q) return;
+    let results: Awaited<ReturnType<typeof search>> = [];
+    try {
+      results = await search(q);
+    } catch {
+      none.hidden = false;
+      none.textContent = 'Search is unavailable right now. Please try again.';
+      return;
+    }
+    if (!results.length) {
+      none.hidden = false;
+      none.innerHTML = `No results found for “${escapeHtml(q)}”. Check the spelling or use a different word or phrase.`;
+      return;
+    }
+    grid.innerHTML = results
+      .map(
+        (d, i) => `<li data-item data-title="${escapeHtml(d.t)}" data-price="${d.p}" data-created="${escapeHtml(d.c)}" data-pos="${i}" data-avail="${d.a ? '1' : '0'}">
+  <a class="s-card s-card--adapt" href="/products/${encodeURIComponent(d.h)}" style="--ratio: ${d.w} / ${d.ht}">
+    <div class="s-card__media">${
+      d.img
+        ? `<img src="${d.img}" srcset="${escapeHtml(d.srcset || '')}" sizes="(min-width: 1200px) 267px, (min-width: 990px) calc((100vw - 130px) / 4), calc((100vw - 35px) / 2)" alt="${escapeHtml(d.t)}" width="${d.w}" height="${d.ht}" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async">`
+        : ''
+    }</div>
+    <div class="s-card__info">
+      <h3 class="s-card__heading">${escapeHtml(d.t)}</h3>
+      <div class="s-price"><span class="s-visually-hidden">Regular price</span><span>${moneyCad(d)}</span></div>
+    </div>
+  </a>
+</li>`,
+      )
+      .join('');
+    const inStock = results.filter((d) => d.a).length;
+    const max = results.reduce((m, d) => Math.max(m, d.p), 0);
+    root.querySelectorAll<HTMLElement>('[data-avail-label="1"]').forEach((el) => (el.textContent = `In stock (${inStock})`));
+    root.querySelectorAll<HTMLElement>('[data-avail-label="0"]').forEach((el) => (el.textContent = `Out of stock (${results.length - inStock})`));
+    root.querySelectorAll<HTMLInputElement>('input[data-filter="avail"][value="1"]').forEach((i) => (i.disabled = inStock === 0));
+    root.querySelectorAll<HTMLInputElement>('input[data-filter="avail"][value="0"]').forEach((i) => (i.disabled = results.length - inStock === 0));
+    root.querySelectorAll<HTMLElement>('[data-max-label]').forEach(
+      (el) => (el.textContent = `The highest price is $${new Intl.NumberFormat('en-CA', { minimumFractionDigits: 2 }).format(max)}`),
+    );
+    root.querySelector<HTMLElement>('[data-search-bar]')!.hidden = false;
+    root.querySelector<HTMLElement>('[data-search-mbar]')!.hidden = false;
+    initListing({ root, perPage: 24, defaultSort: 'relevance', noun: 'results' });
+  }
+  run();
+</script>
