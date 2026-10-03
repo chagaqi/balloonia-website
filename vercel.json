@@ -31,5 +31,11 @@
       "destination": "/collections/all",
       "permanent": true
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/shop-keepalive",
+      "schedule": "0 13 * * *"
+    }
   ]
 }

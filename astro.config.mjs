@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
+import devApi from './scripts/dev-api.mjs';
 
 export default defineConfig({
   site: 'https://balloonia.events',
@@ -16,6 +17,7 @@ export default defineConfig({
     '/collections': '/shop',
   },
   integrations: [
+    devApi(),
     preact(),
     sitemap({
       filter: (page) =>
