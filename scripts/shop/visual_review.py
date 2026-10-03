@@ -71,8 +71,8 @@ def run(chunk):
                 sheet = Image.new('RGB', (a.width + c.width + 24, h), 'white')
                 sheet.paste(a.crop((0, 0, a.width, min(h, a.height))), (0, 0))
                 sheet.paste(c.crop((0, 0, c.width, min(h, c.height))), (a.width + 24, 0))
-                name = f'{slug}_{label}.png'
-                sheet.save(os.path.join(OUT, name), optimize=True)
+                name = f'{slug}_{label}.jpg'
+                sheet.save(os.path.join(OUT, name), 'JPEG', quality=80, optimize=True)
                 rows.append((path, label, name, f'new {a.height}px / live {c.height}px tall'))
         b.close()
     return rows
