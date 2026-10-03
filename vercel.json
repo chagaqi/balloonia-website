@@ -12,6 +12,17 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "shop.balloonia.events"
+        }
+      ],
+      "destination": "https://balloonia.events/",
+      "statusCode": 301
+    },
+    {
       "source": "/:path*",
       "has": [
         {

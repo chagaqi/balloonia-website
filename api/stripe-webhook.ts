@@ -89,6 +89,14 @@ async function recordOrder(sessionId: string) {
   const shipping = s.shipping_details || s.collected_information?.shipping_details || null;
   const pi = typeof s.payment_intent === 'string' ? s.payment_intent : (s.payment_intent?.id ?? null);
 
+  // Stripe's manual tax rates do not tax shipping, so a delivery rate marked hst_rate in
+  // its metadata already includes HST in its price ($75 + 13% = $84.75). Record it the
+  // way the books need it: $75 delivery, and its HST added to the order's tax total.
+  const shipGrossCents = s.total_details?.amount_shipping ?? 0;
+  const shipHstRate = Number(rate?.metadata?.hst_rate || 0);
+  const shipNetCents = shipHstRate > 0 ? Math.round(shipGrossCents / (1 + shipHstRate)) : shipGrossCents;
+  const shipHstCents = shipGrossCents - shipNetCents;
+
   let order = existing[0];
   if (!order) {
     try {
@@ -101,8 +109,8 @@ async function recordOrder(sessionId: string) {
         shipping,
         delivery_method: deliveryId,
         subtotal: s.amount_subtotal / 100,
-        shipping_total: (s.total_details?.amount_shipping ?? 0) / 100,
-        tax_total: (s.total_details?.amount_tax ?? 0) / 100,
+        shipping_total: shipNetCents / 100,
+        tax_total: ((s.total_details?.amount_tax ?? 0) + shipHstCents) / 100,
         discount_total: (s.total_details?.amount_discount ?? 0) / 100,
         total: s.amount_total / 100,
         promo_code: typeof promo === 'string' ? promo : null,

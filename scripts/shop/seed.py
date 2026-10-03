@@ -167,7 +167,7 @@ def main():
                 'options': [
                     {'id': 'london', 'label': 'Free delivery: London and towns within 30 km', 'amount': 0, 'max_km': 30},
                     {'id': 'pickup', 'label': 'Pickup: 412 Newbold St, Unit 4, London', 'amount': 0},
-                    {'id': 'extended', 'label': 'Delivery 30 to 250 km from London', 'amount': 75, 'min_km': 30, 'max_km': 250},
+                    {'id': 'extended', 'label': 'Delivery 30 to 250 km from London ($75 + HST)', 'amount': 75, 'hst': True, 'min_km': 30, 'max_km': 250},
                 ]},
             'order_number_seed': 1658,  # continues after Shopify order #1657
             'pickup_address': '412 Newbold St, Unit 4, London, ON N6E 1K1',

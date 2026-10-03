@@ -20,7 +20,10 @@ import {
 
 export const config = { runtime: 'edge' };
 
-type DeliveryOption = { id: string; label: string; amount: number | null };
+// `hst: true` charges HST on top of the delivery price. Stripe's manual tax rates do not
+// tax shipping, so the HST is folded into the rate's amount and the webhook splits it
+// back out using metadata.hst_rate.
+type DeliveryOption = { id: string; label: string; amount: number | null; hst?: boolean };
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
@@ -81,8 +84,11 @@ export default async function handler(req: Request): Promise<Response> {
           shipping_rate_data: {
             type: 'fixed_amount',
             display_name: o.label,
-            fixed_amount: { amount: Math.round((o.amount ?? 0) * 100), currency: 'cad' },
-            metadata: { delivery_id: o.id },
+            fixed_amount: {
+              amount: Math.round((o.amount ?? 0) * 100 * (o.hst ? 1 + (tax?.rate ?? 0.13) : 1)),
+              currency: 'cad',
+            },
+            metadata: o.hst ? { delivery_id: o.id, hst_rate: String(tax?.rate ?? 0.13) } : { delivery_id: o.id },
           },
         })),
         shipping_address_collection: { allowed_countries: ['CA'] },
