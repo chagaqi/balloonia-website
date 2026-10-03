@@ -278,6 +278,7 @@ function isActive(item: PrimaryNavItem): boolean {
 
   .primary-nav a,
   .mega-trigger {
+    white-space: nowrap;
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -812,7 +813,7 @@ function isActive(item: PrimaryNavItem): boolean {
     border: 0 !important;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 960px) {
     .header-inner {
       grid-template-columns: auto 1fr auto auto;
     }
@@ -914,9 +915,9 @@ function isActive(item: PrimaryNavItem): boolean {
       a.addEventListener('focus', () => openPanel(wrap));
     });
 
-    // Click on the trigger toggles instead of navigating, on viewport >=768.
+    // Click on the trigger toggles instead of navigating, on viewport >=960.
     trigger.addEventListener('click', (e) => {
-      if (window.matchMedia('(min-width: 768px)').matches) {
+      if (window.matchMedia('(min-width: 960px)').matches) {
         const expanded = trigger.getAttribute('aria-expanded') === 'true';
         if (!expanded) {
           e.preventDefault();

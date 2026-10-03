@@ -415,6 +415,7 @@
   }
 }
 .s-catsb-heading {
+  font-family: var(--s-body-font);
   font-size: 12px;
   font-weight: 600;
   line-height: 21.6px;
@@ -473,6 +474,8 @@
 }
 .s-facets__heading {
   display: none;
+  font-family: var(--s-body-font);
+  font-weight: 400;
 }
 @media (min-width: 750px) {
   .s-facets__heading {
