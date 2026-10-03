@@ -93,7 +93,7 @@ json.dump(results, open(store, 'w', encoding='utf-8'))
 html = ['<!doctype html><meta charset="utf-8"><title>Shop rebuild review</title>',
         '<style>body{font:14px system-ui;margin:24px;background:#fbf9f5}img{max-width:100%;border:1px solid #ddd}'
         'section{margin:0 0 40px}h2{font-size:15px;margin:0 0 6px}</style>',
-        f'<h1>Shop rebuild: new (left) vs live Shopify (right)</h1><p>{len(results)} sheets. The main-site footer is taller than Shopify's on every page, and products that gained an option set are taller by the widget.</p>']
+        f'<h1>Shop rebuild: new (left) vs live Shopify (right)</h1><p>{len(results)} sheets. The main-site footer is taller than the Shopify one on every page, and products that gained an option set are taller by the widget.</p>']
 for path, label, name, note in results:
     html.append(f'<section><h2>{path} · {label}</h2><p>{note}</p>' + (f'<a href="{name}"><img loading="lazy" src="{name}"></a>' if name else '') + '</section>')
 open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write('\n'.join(html))
