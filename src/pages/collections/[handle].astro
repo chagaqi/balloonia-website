@@ -100,9 +100,11 @@ const itemList = {
               ))}
             </ul>
           </nav>
-          <div class="s-desktop-facets">
-            <Facets scope="desktop" inStock={inStock} outOfStock={products.length - inStock} maxPrice={maxPrice} />
-          </div>
+          {products.length > 0 && (
+            <div class="s-desktop-facets">
+              <Facets scope="desktop" inStock={inStock} outOfStock={products.length - inStock} maxPrice={maxPrice} />
+            </div>
+          )}
         </aside>
 
         <div class="s-results">
@@ -115,9 +117,9 @@ const itemList = {
           </div>
 
           {products.length === 0 ? (
-            <div class="s-empty">
+            <div class="s-empty s-empty--collection">
               <h2 class="s-h2">No products found</h2>
-              <p>Use fewer filters or <a href="/collections/all">browse the full shop</a>.</p>
+              <h2 class="s-h2">Use fewer filters or <a href="/collections/all">remove all</a></h2>
             </div>
           ) : (
             <ul class="s-grid s-grid--3" id="product-grid" data-grid>

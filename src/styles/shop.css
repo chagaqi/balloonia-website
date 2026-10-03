@@ -605,6 +605,7 @@
 .s-mfacets .s-count {
   font-size: 14px;
   line-height: 21px;
+  color: var(--s-text);
 }
 @media (min-width: 750px) {
   .s-mfacets {
@@ -715,6 +716,14 @@
 .s-empty {
   padding: 40px 0;
   text-align: center;
+}
+.s-empty--collection {
+  padding-top: 50px;
+}
+.s-empty--collection a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* pagination (component-pagination.css) */

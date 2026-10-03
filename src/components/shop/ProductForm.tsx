@@ -449,8 +449,8 @@ export default function ProductForm({ product, optionSet }: Props) {
     <div ref={rootRef}>
       <div class="s-product__price" id="price">
         <span class="s-visually-hidden">{comparePrice ? 'Sale price' : 'Regular price'}</span>
-        {comparePrice && <s>{money(comparePrice + fromCents(addCents))}</s>}
-        <span data-price>{money(fromCents(unitCents))}</span>
+        {comparePrice && <s>{money(comparePrice + fromCents(addCents))} CAD</s>}
+        <span data-price>{money(fromCents(unitCents))}</span> CAD
       </div>
       <p class="s-product__tax">
         <a href="/policies/shipping-policy">Shipping</a> calculated at checkout.
