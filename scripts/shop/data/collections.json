@@ -1,0 +1,162 @@
+[
+ {
+  "id": 322227732676,
+  "title": "Add-Ons & Rentals",
+  "handle": "add-ons-rentals",
+  "description": "<p>Day rentals and accessories to elevate your event.</p>",
+  "published_at": "2026-05-02T19:02:24-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 2
+ },
+ {
+  "id": 322227470532,
+  "title": "Arches & Garlands",
+  "handle": "arches-garlands",
+  "description": "",
+  "published_at": "2026-05-02T19:00:38-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 24
+ },
+ {
+  "id": 322227306692,
+  "title": "Birthdays",
+  "handle": "birthdays",
+  "description": "<p>Birthday installations from kids' parties to milestone celebrations.</p>",
+  "published_at": "2026-05-02T18:58:06-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 45
+ },
+ {
+  "id": 322227601604,
+  "title": "Bouquets",
+  "handle": "bouquets",
+  "description": "<p>Hand-tied balloon bouquets for birthdays, milestones, and gifts.</p>",
+  "published_at": "2026-05-02T19:01:33-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 22
+ },
+ {
+  "id": 322227536068,
+  "title": "Ceiling Installations",
+  "handle": "ceiling-installations",
+  "description": "",
+  "published_at": "2026-05-02T19:00:57-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 5
+ },
+ {
+  "id": 322227568836,
+  "title": "Centerpieces & Columns",
+  "handle": "centerpieces-columns",
+  "description": "",
+  "published_at": "2026-05-02T19:01:09-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 14
+ },
+ {
+  "id": 322227372228,
+  "title": "Corporate",
+  "handle": "corporate",
+  "description": "<p>Office events, brand activations, grand openings, and holiday parties.</p>",
+  "published_at": "2026-05-02T18:58:31-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 48
+ },
+ {
+  "id": 322227404996,
+  "title": "Custom",
+  "handle": "custom",
+  "description": "<p>Themed installations and one-of-a-kind designs. Quote-driven.</p>",
+  "published_at": "2026-05-02T18:58:45-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 19
+ },
+ {
+  "id": 322227208388,
+  "title": "Featured",
+  "handle": "featured",
+  "description": "",
+  "published_at": "2026-05-02T18:57:13-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 0
+ },
+ {
+  "id": 322227339460,
+  "title": "Graduations",
+  "handle": "graduations",
+  "description": "<p>Grad and prom decor, sized for school halls and home parties.</p>",
+  "published_at": "2026-05-02T18:58:19-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 9
+ },
+ {
+  "id": 322227667140,
+  "title": "Holiday & Seasonal",
+  "handle": "holiday-seasonal",
+  "description": "<p>Limited-time installations for holidays and seasonal events.</p>",
+  "published_at": "2026-05-02T19:02:02-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 14
+ },
+ {
+  "id": 322227273924,
+  "title": "Showers",
+  "handle": "showers",
+  "description": "<p>Baby and bridal shower setups, custom-styled to your theme.</p>",
+  "published_at": "2026-05-02T18:57:55-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 20
+ },
+ {
+  "id": 322227699908,
+  "title": "Specialty",
+  "handle": "specialty",
+  "description": "<p>One-off balloon designs and custom novelty pieces.</p>",
+  "published_at": "2026-05-02T19:02:12-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 26
+ },
+ {
+  "id": 322227634372,
+  "title": "Themed Setups",
+  "handle": "themed-setups",
+  "description": "<p>Full event packages styled around a theme. Kids' parties, milestones, special moments.</p>",
+  "published_at": "2026-05-02T19:01:49-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 18
+ },
+ {
+  "id": 322227503300,
+  "title": "Walls & Backdrops",
+  "handle": "walls-backdrops",
+  "description": "",
+  "published_at": "2026-05-02T19:00:47-04:00",
+  "updated_at": "2026-07-30T20:48:41-04:00",
+  "image": null,
+  "products_count": 11
+ },
+ {
+  "id": 322227241156,
+  "title": "Weddings",
+  "handle": "weddings",
+  "description": "<p>Balloon decor for ceremonies, receptions, and everything in between.</p>",
+  "published_at": "2026-05-02T18:57:38-04:00",
+  "updated_at": "2026-07-30T20:48:40-04:00",
+  "image": null,
+  "products_count": 23
+ }
+]

@@ -1,0 +1,2110 @@
+[
+ {
+  "key": "bouquets",
+  "name": "Pattern C — Bouquets",
+  "fields": [
+   {
+    "id": "radio-1",
+    "type": "radio",
+    "label": "Color Palette",
+    "cartKey": "color_palette",
+    "required": true,
+    "default": "Same as picture",
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Same as picture",
+      "price": 0.0,
+      "help": "We'll style this in the same color palette shown in the photo"
+     },
+     {
+      "value": "Choose my own colors",
+      "price": 0.0,
+      "help": "Pick up to 3 colors from our palette below"
+     }
+    ]
+   },
+   {
+    "id": "image-swatches-1",
+    "type": "swatches",
+    "label": "Pick Your Colors (up to 3)",
+    "cartKey": "custom_colors",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "multiple": true,
+    "min": 1,
+    "max": 3,
+    "showWhen": {
+     "field": "radio-1",
+     "equals": "Choose my own colors"
+    },
+    "options": [
+     {
+      "value": "Clear",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052743104.png"
+     },
+     {
+      "value": "White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781076477190.png"
+     },
+     {
+      "value": "Pearl White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052796509.png"
+     },
+     {
+      "value": "Gray",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052834113.png"
+     },
+     {
+      "value": "Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083028194.png"
+     },
+     {
+      "value": "Chrome Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052984644.png"
+     },
+     {
+      "value": "Pastel Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053096835.png"
+     },
+     {
+      "value": "Lemon Chiffon",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053133997.png"
+     },
+     {
+      "value": "Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053173658.png"
+     },
+     {
+      "value": "Goldenrod",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053202904.png"
+     },
+     {
+      "value": "Orange",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053253192.png"
+     },
+     {
+      "value": "Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781082877105.png"
+     },
+     {
+      "value": "Chrome Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053385822.png"
+     },
+     {
+      "value": "Mocha",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053435937.png"
+     },
+     {
+      "value": "Chocolate Brown",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053507052.png"
+     },
+     {
+      "value": "Red",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084530026.png"
+     },
+     {
+      "value": "Burgundy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053606441.png"
+     },
+     {
+      "value": "Wild Berry",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053647039.png"
+     },
+     {
+      "value": "Pearl Magenta",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084515494.png"
+     },
+     {
+      "value": "Rose",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085007651.png"
+     },
+     {
+      "value": "Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085092627.png"
+     },
+     {
+      "value": "Pale Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083904357.png"
+     },
+     {
+      "value": "Pastel Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054172369.png"
+     },
+     {
+      "value": "Blush",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054100135.png"
+     },
+     {
+      "value": "Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054074297.png"
+     },
+     {
+      "value": "Coral",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054031074.png"
+     },
+     {
+      "value": "Chrome Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054283590.png"
+     },
+     {
+      "value": "Chrome Mauve",
+      "price": 0.0,
+      "image": "swatches/swatch-17781092914548.png"
+     },
+     {
+      "value": "Chrome Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054405193.png"
+     },
+     {
+      "value": "Quartz Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054449447.png"
+     },
+     {
+      "value": "Pearl Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054500725.png"
+     },
+     {
+      "value": "Purple Violet",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101274596.png"
+     },
+     {
+      "value": "Spring Lilac",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055952152.png"
+     },
+     {
+      "value": "Pastel Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101481671.png"
+     },
+     {
+      "value": "Pastel Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056134206.png"
+     },
+     {
+      "value": "Pearl Light Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056190168.png"
+     },
+     {
+      "value": "Pale Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056239361.png"
+     },
+     {
+      "value": "Caribbean Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054725407.png"
+     },
+     {
+      "value": "Robins Egg Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054784533.png"
+     },
+     {
+      "value": "Tropical Teal",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054826440.png"
+     },
+     {
+      "value": "Sapphire Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054854886.png"
+     },
+     {
+      "value": "Chrome Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109229896.png"
+     },
+     {
+      "value": "Navy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109405202.png"
+     },
+     {
+      "value": "Chrome Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112185725.png"
+     },
+     {
+      "value": "Pastel Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055614724.png"
+     },
+     {
+      "value": "Winter Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055561464.png"
+     },
+     {
+      "value": "Spring Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055529076.png"
+     },
+     {
+      "value": "Lime Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055430023.png"
+     },
+     {
+      "value": "Dark Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055407526.png"
+     },
+     {
+      "value": "Emerald Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055366256.png"
+     },
+     {
+      "value": "Sage Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055155669.png"
+     },
+     {
+      "value": "Willow Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055113484.png"
+     },
+     {
+      "value": "Black",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112502363.png"
+     }
+    ]
+   },
+   {
+    "id": "radio-2",
+    "type": "radio",
+    "label": "Custom Text on Main Balloon?",
+    "cartKey": "custom-text",
+    "required": false,
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Yes",
+      "price": 10.0
+     },
+     {
+      "value": "No",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "textarea-1",
+    "type": "textarea",
+    "label": "Text",
+    "cartKey": "Text",
+    "required": false,
+    "maxLength": 25,
+    "showWhen": {
+     "field": "radio-2",
+     "equals": "Yes"
+    }
+   },
+   {
+    "id": "file-1",
+    "type": "file",
+    "label": "Or upload your logo to include in the Balloon",
+    "cartKey": "logo",
+    "required": false,
+    "accept": [
+     "jpeg",
+     "jpg",
+     "png"
+    ],
+    "showWhen": {
+     "field": "radio-2",
+     "equals": "Yes"
+    }
+   },
+   {
+    "id": "radio-3",
+    "type": "radio",
+    "label": "Add note card?",
+    "cartKey": "noteyes",
+    "required": false,
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Yes",
+      "price": 4.99
+     },
+     {
+      "value": "No",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "text-1",
+    "type": "text",
+    "label": "Write your note card (150 character max)",
+    "cartKey": "text-1",
+    "required": false,
+    "maxLength": 150,
+    "showWhen": {
+     "field": "radio-3",
+     "equals": "Yes"
+    }
+   },
+   {
+    "id": "datetime-1",
+    "type": "date",
+    "label": "Delivery Date",
+    "cartKey": "date",
+    "required": false,
+    "withTime": false
+   }
+  ],
+  "products": [
+   "valentines-balloons-jumbo-heart-bouquet",
+   "balloon-bouquet-with-message-or-logo",
+   "fathers-day-balloon-gift",
+   "love-balloon-bouquet",
+   "luxe-balloon-bouquet",
+   "graduation-balloon-bouquet",
+   "engagement-balloon-bouquet",
+   "unicorn-balloon-bouquet",
+   "magical-unicorn-balloon-bouquet",
+   "mothers-day-hearts-bouquet",
+   "mothers-day-balloon-bouquet",
+   "mothers-day-balloon-cluster",
+   "to-the-queen-of-the-house",
+   "mom-balloon-bouquet",
+   "cute-balloon-bouquet",
+   "air-filled-heart-balloons",
+   "personalized-heart-balloons",
+   "red-heart-balloons",
+   "flower-balloon-bouquet",
+   "10-balloon-bouquet"
+  ]
+ },
+ {
+  "key": "numbers",
+  "name": "Pattern B — Number Balloons",
+  "fields": [
+   {
+    "id": "palette-1",
+    "type": "radio",
+    "label": "Color Palette",
+    "cartKey": "color_palette",
+    "required": true,
+    "default": "Same as picture",
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Same as picture",
+      "price": 0.0,
+      "help": "We'll style this in the same color palette shown in the photo"
+     },
+     {
+      "value": "Choose my own colors",
+      "price": 0.0,
+      "help": "Pick up to 3 colors from our palette below"
+     }
+    ]
+   },
+   {
+    "id": "image-swatches-1",
+    "type": "swatches",
+    "label": "Pick Your Colors (up to 3)",
+    "cartKey": "custom_colors",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "showWhen": {
+     "field": "palette-1",
+     "equals": "Choose my own colors"
+    },
+    "options": [
+     {
+      "value": "Clear",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052743104.png"
+     },
+     {
+      "value": "White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781076477190.png"
+     },
+     {
+      "value": "Pearl White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052796509.png"
+     },
+     {
+      "value": "Gray",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052834113.png"
+     },
+     {
+      "value": "Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083028194.png"
+     },
+     {
+      "value": "Chrome Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052984644.png"
+     },
+     {
+      "value": "Pastel Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053096835.png"
+     },
+     {
+      "value": "Lemon Chiffon",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053133997.png"
+     },
+     {
+      "value": "Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053173658.png"
+     },
+     {
+      "value": "Goldenrod",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053202904.png"
+     },
+     {
+      "value": "Orange",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053253192.png"
+     },
+     {
+      "value": "Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781082877105.png"
+     },
+     {
+      "value": "Chrome Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053385822.png"
+     },
+     {
+      "value": "Mocha",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053435937.png"
+     },
+     {
+      "value": "Chocolate Brown",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053507052.png"
+     },
+     {
+      "value": "Red",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084530026.png"
+     },
+     {
+      "value": "Burgundy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053606441.png"
+     },
+     {
+      "value": "Wild Berry",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053647039.png"
+     },
+     {
+      "value": "Pearl Magenta",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084515494.png"
+     },
+     {
+      "value": "Rose",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085007651.png"
+     },
+     {
+      "value": "Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085092627.png"
+     },
+     {
+      "value": "Pale Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083904357.png"
+     },
+     {
+      "value": "Pastel Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054172369.png"
+     },
+     {
+      "value": "Blush",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054100135.png"
+     },
+     {
+      "value": "Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054074297.png"
+     },
+     {
+      "value": "Coral",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054031074.png"
+     },
+     {
+      "value": "Chrome Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054283590.png"
+     },
+     {
+      "value": "Chrome Mauve",
+      "price": 0.0,
+      "image": "swatches/swatch-17781092914548.png"
+     },
+     {
+      "value": "Chrome Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054405193.png"
+     },
+     {
+      "value": "Quartz Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054449447.png"
+     },
+     {
+      "value": "Pearl Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054500725.png"
+     },
+     {
+      "value": "Purple Violet",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101274596.png"
+     },
+     {
+      "value": "Spring Lilac",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055952152.png"
+     },
+     {
+      "value": "Pastel Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101481671.png"
+     },
+     {
+      "value": "Pastel Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056134206.png"
+     },
+     {
+      "value": "Pearl Light Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056190168.png"
+     },
+     {
+      "value": "Pale Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056239361.png"
+     },
+     {
+      "value": "Caribbean Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054725407.png"
+     },
+     {
+      "value": "Robins Egg Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054784533.png"
+     },
+     {
+      "value": "Tropical Teal",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054826440.png"
+     },
+     {
+      "value": "Sapphire Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054854886.png"
+     },
+     {
+      "value": "Chrome Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109229896.png"
+     },
+     {
+      "value": "Navy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109405202.png"
+     },
+     {
+      "value": "Chrome Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112185725.png"
+     },
+     {
+      "value": "Pastel Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055614724.png"
+     },
+     {
+      "value": "Winter Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055561464.png"
+     },
+     {
+      "value": "Spring Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055529076.png"
+     },
+     {
+      "value": "Lime Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055430023.png"
+     },
+     {
+      "value": "Dark Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055407526.png"
+     },
+     {
+      "value": "Emerald Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055366256.png"
+     },
+     {
+      "value": "Sage Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055155669.png"
+     },
+     {
+      "value": "Willow Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055113484.png"
+     },
+     {
+      "value": "Black",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112502363.png"
+     }
+    ],
+    "multiple": true,
+    "min": 1,
+    "max": 3
+   },
+   {
+    "id": "image-swatches-2",
+    "type": "swatches",
+    "label": "Number Color",
+    "cartKey": "number_color",
+    "required": true,
+    "layout": "horizontal",
+    "perRow": 3,
+    "options": [
+     {
+      "value": "Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17786041208825.png"
+     },
+     {
+      "value": "Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17786038122415.webp"
+     },
+     {
+      "value": "Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17786038191960.webp"
+     },
+     {
+      "value": "Cream",
+      "price": 5.0,
+      "image": "swatches/swatch-17786038245128.webp"
+     }
+    ]
+   },
+   {
+    "id": "buttons-2",
+    "type": "buttons",
+    "label": "Number",
+    "cartKey": "first_digit",
+    "required": true,
+    "layout": "horizontal",
+    "perRow": 3,
+    "options": [
+     {
+      "value": "0",
+      "price": 0.0
+     },
+     {
+      "value": "1",
+      "price": 0.0
+     },
+     {
+      "value": "2",
+      "price": 0.0
+     },
+     {
+      "value": "3",
+      "price": 0.0
+     },
+     {
+      "value": "4",
+      "price": 0.0
+     },
+     {
+      "value": "5",
+      "price": 0.0
+     },
+     {
+      "value": "6",
+      "price": 0.0
+     },
+     {
+      "value": "7",
+      "price": 0.0
+     },
+     {
+      "value": "8",
+      "price": 0.0
+     },
+     {
+      "value": "9",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "radio-1",
+    "type": "radio",
+    "label": "Add another number",
+    "cartKey": "add_second_number",
+    "required": false,
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Yes",
+      "price": 0.0
+     },
+     {
+      "value": "No",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "buttons-3",
+    "type": "buttons",
+    "label": "Second Number",
+    "cartKey": "second_digit",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "showWhen": {
+     "field": "radio-1",
+     "equals": "Yes"
+    },
+    "options": [
+     {
+      "value": "0",
+      "price": 0.0
+     },
+     {
+      "value": "1",
+      "price": 0.0
+     },
+     {
+      "value": "2",
+      "price": 0.0
+     },
+     {
+      "value": "3",
+      "price": 0.0
+     },
+     {
+      "value": "4",
+      "price": 0.0
+     },
+     {
+      "value": "5",
+      "price": 0.0
+     },
+     {
+      "value": "6",
+      "price": 0.0
+     },
+     {
+      "value": "7",
+      "price": 0.0
+     },
+     {
+      "value": "8",
+      "price": 0.0
+     },
+     {
+      "value": "9",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "image-swatches-3",
+    "type": "swatches",
+    "label": "Weight and Accent Style",
+    "cartKey": "accent_style",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "options": [
+     {
+      "value": "Tassel weight",
+      "price": 0.0,
+      "image": "swatches/swatch-17786202672278.png"
+     },
+     {
+      "value": "Pearl balloon weight",
+      "price": 5.0,
+      "image": "swatches/swatch-17786202738150.png"
+     },
+     {
+      "value": "Pastel tassel garland",
+      "price": 2.0,
+      "image": "swatches/swatch-17786202974125.png"
+     }
+    ]
+   },
+   {
+    "id": "radio-2",
+    "type": "radio",
+    "label": "Add name on balloon",
+    "cartKey": "add_name",
+    "required": false,
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Yes",
+      "price": 0.0
+     },
+     {
+      "value": "No",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "text-1",
+    "type": "text",
+    "label": "Name",
+    "cartKey": "name_text",
+    "required": false,
+    "placeholder": "First name only, up to 15 characters",
+    "maxLength": 15,
+    "showWhen": {
+     "field": "radio-2",
+     "equals": "Yes"
+    }
+   },
+   {
+    "id": "datetime-1",
+    "type": "date",
+    "label": "Delivery date",
+    "cartKey": "delivery_date",
+    "required": false,
+    "withTime": true
+   }
+  ],
+  "products": [
+   "balloon-numbers",
+   "wooow-balloon-numbers",
+   "elegant-number-balloon-arrangement",
+   "birthday-number-balloon-arrangement",
+   "60th-birthday-balloons",
+   "70th-birthday-balloons",
+   "jungle-snake-balloon-number",
+   "graduation-balloon-numbers",
+   "balloon-stand-with-helium-filled-balloons"
+  ]
+ },
+ {
+  "key": "rentals",
+  "name": "Pattern E — Day Rentals",
+  "fields": [
+   {
+    "id": "datetime-1",
+    "type": "date",
+    "label": "Rental Start Date",
+    "cartKey": "Rentaldate",
+    "required": true,
+    "withTime": false
+   },
+   {
+    "id": "dropdown-1",
+    "type": "select",
+    "label": "Rental duration",
+    "cartKey": "duration",
+    "required": true,
+    "placeholder": "-- Please select --",
+    "options": [
+     {
+      "value": "1 Day",
+      "price": 0.0
+     },
+     {
+      "value": "2 Day",
+      "price": 0.0
+     },
+     {
+      "value": "3 Day",
+      "price": 0.0
+     },
+     {
+      "value": "4 Day",
+      "price": 0.0
+     },
+     {
+      "value": "5 Day",
+      "price": 0.0
+     },
+     {
+      "value": "6 Day",
+      "price": 0.0
+     },
+     {
+      "value": "1 Week",
+      "price": 0.0
+     },
+     {
+      "value": "1 Weekend",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "radio-1",
+    "type": "radio",
+    "label": "Choose",
+    "cartKey": "pickupdelivery",
+    "required": true,
+    "default": "Pickup",
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Pickup",
+      "price": 0.0
+     },
+     {
+      "value": "Delivery",
+      "price": 20.0
+     }
+    ]
+   }
+  ],
+  "products": [
+   "material-backdrop-rental",
+   "marquee-letter-day-rental",
+   "marquee-number-day-rental",
+   "ceremonial-grand-opening-scissors",
+   "red-carpet-rental"
+  ]
+ },
+ {
+  "key": "pick-color-palette",
+  "name": "Pick Color Palette",
+  "fields": [
+   {
+    "id": "radio-1",
+    "type": "radio",
+    "label": "Color Palette",
+    "cartKey": "color_palette",
+    "required": true,
+    "default": "Same as picture",
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Same as picture",
+      "price": 0.0,
+      "help": "We'll style this in the same color palette shown in the photo"
+     },
+     {
+      "value": "Choose my own colors",
+      "price": 0.0,
+      "help": "Pick up to 3 colors from our palette below"
+     }
+    ]
+   },
+   {
+    "id": "image-swatches-1",
+    "type": "swatches",
+    "label": "Pick Your Colors (up to 3)",
+    "cartKey": "custom_colors",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "multiple": true,
+    "min": 1,
+    "max": 3,
+    "showWhen": {
+     "field": "radio-1",
+     "equals": "Choose my own colors"
+    },
+    "options": [
+     {
+      "value": "Clear",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052743104.png"
+     },
+     {
+      "value": "White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781076477190.png"
+     },
+     {
+      "value": "Pearl White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052796509.png"
+     },
+     {
+      "value": "Gray",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052834113.png"
+     },
+     {
+      "value": "Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083028194.png"
+     },
+     {
+      "value": "Chrome Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052984644.png"
+     },
+     {
+      "value": "Pastel Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053096835.png"
+     },
+     {
+      "value": "Lemon Chiffon",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053133997.png"
+     },
+     {
+      "value": "Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053173658.png"
+     },
+     {
+      "value": "Goldenrod",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053202904.png"
+     },
+     {
+      "value": "Orange",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053253192.png"
+     },
+     {
+      "value": "Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781082877105.png"
+     },
+     {
+      "value": "Chrome Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053385822.png"
+     },
+     {
+      "value": "Mocha",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053435937.png"
+     },
+     {
+      "value": "Chocolate Brown",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053507052.png"
+     },
+     {
+      "value": "Red",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084530026.png"
+     },
+     {
+      "value": "Burgundy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053606441.png"
+     },
+     {
+      "value": "Wild Berry",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053647039.png"
+     },
+     {
+      "value": "Pearl Magenta",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084515494.png"
+     },
+     {
+      "value": "Rose",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085007651.png"
+     },
+     {
+      "value": "Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085092627.png"
+     },
+     {
+      "value": "Pale Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083904357.png"
+     },
+     {
+      "value": "Pastel Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054172369.png"
+     },
+     {
+      "value": "Blush",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054100135.png"
+     },
+     {
+      "value": "Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054074297.png"
+     },
+     {
+      "value": "Coral",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054031074.png"
+     },
+     {
+      "value": "Chrome Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054283590.png"
+     },
+     {
+      "value": "Chrome Mauve",
+      "price": 0.0,
+      "image": "swatches/swatch-17781092914548.png"
+     },
+     {
+      "value": "Chrome Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054405193.png"
+     },
+     {
+      "value": "Quartz Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054449447.png"
+     },
+     {
+      "value": "Pearl Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054500725.png"
+     },
+     {
+      "value": "Purple Violet",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101274596.png"
+     },
+     {
+      "value": "Spring Lilac",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055952152.png"
+     },
+     {
+      "value": "Pastel Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101481671.png"
+     },
+     {
+      "value": "Pastel Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056134206.png"
+     },
+     {
+      "value": "Pearl Light Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056190168.png"
+     },
+     {
+      "value": "Pale Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056239361.png"
+     },
+     {
+      "value": "Caribbean Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054725407.png"
+     },
+     {
+      "value": "Robins Egg Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054784533.png"
+     },
+     {
+      "value": "Tropical Teal",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054826440.png"
+     },
+     {
+      "value": "Sapphire Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054854886.png"
+     },
+     {
+      "value": "Chrome Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109229896.png"
+     },
+     {
+      "value": "Navy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109405202.png"
+     },
+     {
+      "value": "Chrome Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112185725.png"
+     },
+     {
+      "value": "Pastel Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055614724.png"
+     },
+     {
+      "value": "Winter Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055561464.png"
+     },
+     {
+      "value": "Spring Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055529076.png"
+     },
+     {
+      "value": "Lime Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055430023.png"
+     },
+     {
+      "value": "Dark Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055407526.png"
+     },
+     {
+      "value": "Emerald Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055366256.png"
+     },
+     {
+      "value": "Sage Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055155669.png"
+     },
+     {
+      "value": "Willow Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055113484.png"
+     },
+     {
+      "value": "Black",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112502363.png"
+     }
+    ]
+   }
+  ],
+  "products": [
+   "custom-logo-topper",
+   "logo-pedestal-centerpiece",
+   "branded-bubble-centerpiece",
+   "classic-frame-balloon-display",
+   "branded-letter-arch",
+   "organic-square-arch",
+   "classic-corporate-arch-10x15",
+   "classic-corporate-arch-10x10",
+   "classic-corporate-arch-8x8",
+   "organic-logo-column",
+   "funfetti-logo-column",
+   "logo-floater-column",
+   "bobo-latex-centerpiece-17",
+   "themed-sport-column",
+   "mini-branded-wall-3x5",
+   "christmas-candy-cane-ceiling-balloons",
+   "grand-opening-package",
+   "corporate-balloon-columns",
+   "elegant-graduation-balloon-decor",
+   "graduation-balloon-garland",
+   "bride-wow-decor",
+   "bride-decor",
+   "ceiling-balloons-loose-balloons",
+   "congrats-grad-balloon-stand",
+   "animal-theme-balloon-stand",
+   "dinosaur-balloon-stand",
+   "dinosaur-balloon-centrepiece",
+   "luxury-soccer-balloon-backdrop",
+   "balloon-heart-wall",
+   "baby-girl-balloon-garland",
+   "balloon-arch-bouquet-bundle",
+   "carnival-balloon-arch-bubble-house",
+   "disco-balloon-garland",
+   "spring-floral-balloon-garland",
+   "boho-balloon-garland",
+   "luxury-balloon-garland",
+   "elegant-organic-balloon-garland",
+   "metal-round-arch-with-balloons",
+   "organic-balloon-arch",
+   "full-balloon-arch",
+   "balloon-arch-grand"
+  ]
+ },
+ {
+  "key": "msg-bouquet-20",
+  "name": "Custom Msg Balloon Bouqet 20inch",
+  "fields": [
+   {
+    "id": "buttons-1",
+    "type": "buttons",
+    "label": "Weight Style",
+    "cartKey": "Weight-Style",
+    "required": true,
+    "default": "Without Bubble Weight",
+    "layout": "horizontal",
+    "perRow": 3,
+    "options": [
+     {
+      "value": "With Bubble Weight +12.00",
+      "price": 12.0
+     },
+     {
+      "value": "Without Bubble Weight",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "radio-2",
+    "type": "radio",
+    "label": "Bouquet Style",
+    "cartKey": "Bouquet-Style",
+    "required": true,
+    "default": "with 6 balloons underneath",
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "with 6 balloons underneath",
+      "price": 0.0
+     },
+     {
+      "value": "with 9 balloons underneath",
+      "price": 10.0
+     }
+    ]
+   },
+   {
+    "id": "radio-1",
+    "type": "radio",
+    "label": "Color Palette",
+    "cartKey": "color_palette",
+    "required": true,
+    "default": "Same as picture",
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Same as picture",
+      "price": 0.0,
+      "help": "We'll style this in the same color palette shown in the photo"
+     },
+     {
+      "value": "Choose my own colors",
+      "price": 0.0,
+      "help": "Pick up to 3 colors from our palette below"
+     }
+    ]
+   },
+   {
+    "id": "image-swatches-1",
+    "type": "swatches",
+    "label": "Pick Your Colors (up to 3)",
+    "cartKey": "custom_colors",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "multiple": true,
+    "min": 1,
+    "max": 3,
+    "showWhen": {
+     "field": "radio-1",
+     "equals": "Choose my own colors"
+    },
+    "options": [
+     {
+      "value": "Clear",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052743104.png"
+     },
+     {
+      "value": "White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781076477190.png"
+     },
+     {
+      "value": "Pearl White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052796509.png"
+     },
+     {
+      "value": "Gray",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052834113.png"
+     },
+     {
+      "value": "Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083028194.png"
+     },
+     {
+      "value": "Chrome Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052984644.png"
+     },
+     {
+      "value": "Pastel Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053096835.png"
+     },
+     {
+      "value": "Lemon Chiffon",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053133997.png"
+     },
+     {
+      "value": "Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053173658.png"
+     },
+     {
+      "value": "Goldenrod",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053202904.png"
+     },
+     {
+      "value": "Orange",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053253192.png"
+     },
+     {
+      "value": "Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781082877105.png"
+     },
+     {
+      "value": "Chrome Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053385822.png"
+     },
+     {
+      "value": "Mocha",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053435937.png"
+     },
+     {
+      "value": "Chocolate Brown",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053507052.png"
+     },
+     {
+      "value": "Red",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084530026.png"
+     },
+     {
+      "value": "Burgundy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053606441.png"
+     },
+     {
+      "value": "Wild Berry",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053647039.png"
+     },
+     {
+      "value": "Pearl Magenta",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084515494.png"
+     },
+     {
+      "value": "Rose",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085007651.png"
+     },
+     {
+      "value": "Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085092627.png"
+     },
+     {
+      "value": "Pale Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083904357.png"
+     },
+     {
+      "value": "Pastel Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054172369.png"
+     },
+     {
+      "value": "Blush",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054100135.png"
+     },
+     {
+      "value": "Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054074297.png"
+     },
+     {
+      "value": "Coral",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054031074.png"
+     },
+     {
+      "value": "Chrome Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054283590.png"
+     },
+     {
+      "value": "Chrome Mauve",
+      "price": 0.0,
+      "image": "swatches/swatch-17781092914548.png"
+     },
+     {
+      "value": "Chrome Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054405193.png"
+     },
+     {
+      "value": "Quartz Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054449447.png"
+     },
+     {
+      "value": "Pearl Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054500725.png"
+     },
+     {
+      "value": "Purple Violet",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101274596.png"
+     },
+     {
+      "value": "Spring Lilac",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055952152.png"
+     },
+     {
+      "value": "Pastel Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101481671.png"
+     },
+     {
+      "value": "Pastel Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056134206.png"
+     },
+     {
+      "value": "Pearl Light Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056190168.png"
+     },
+     {
+      "value": "Pale Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056239361.png"
+     },
+     {
+      "value": "Caribbean Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054725407.png"
+     },
+     {
+      "value": "Robins Egg Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054784533.png"
+     },
+     {
+      "value": "Tropical Teal",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054826440.png"
+     },
+     {
+      "value": "Sapphire Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054854886.png"
+     },
+     {
+      "value": "Chrome Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109229896.png"
+     },
+     {
+      "value": "Navy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109405202.png"
+     },
+     {
+      "value": "Chrome Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112185725.png"
+     },
+     {
+      "value": "Pastel Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055614724.png"
+     },
+     {
+      "value": "Winter Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055561464.png"
+     },
+     {
+      "value": "Spring Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055529076.png"
+     },
+     {
+      "value": "Lime Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055430023.png"
+     },
+     {
+      "value": "Dark Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055407526.png"
+     },
+     {
+      "value": "Emerald Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055366256.png"
+     },
+     {
+      "value": "Sage Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055155669.png"
+     },
+     {
+      "value": "Willow Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055113484.png"
+     },
+     {
+      "value": "Black",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112502363.png"
+     }
+    ]
+   },
+   {
+    "id": "file-1",
+    "type": "file",
+    "label": "Upload Your Design",
+    "cartKey": "file-1",
+    "required": false,
+    "accept": [
+     "jpeg",
+     "jpg",
+     "png"
+    ]
+   },
+   {
+    "id": "text-1",
+    "type": "text",
+    "label": "YOUR CUSTOM MESSAGE",
+    "cartKey": "text-1",
+    "required": false,
+    "maxLength": 150
+   }
+  ],
+  "products": [
+   "custom-message-bouquet-20"
+  ]
+ },
+ {
+  "key": "msg-bouquet-3ft",
+  "name": "Custom Message Bouqet 3ft",
+  "fields": [
+   {
+    "id": "radio-1",
+    "type": "radio",
+    "label": "Color Palette",
+    "cartKey": "color_palette",
+    "required": true,
+    "default": "Same as picture",
+    "layout": "vertical",
+    "options": [
+     {
+      "value": "Blue+Silver",
+      "price": 0.0,
+      "help": "We'll style this in the same color palette shown in the photo"
+     },
+     {
+      "value": "Choose my own colors",
+      "price": 0.0,
+      "help": "Pick up to 3 colors from our palette below"
+     },
+     {
+      "value": "Pink+Gold",
+      "price": 0.0
+     },
+     {
+      "value": "Gold+Silver",
+      "price": 0.0
+     }
+    ]
+   },
+   {
+    "id": "image-swatches-1",
+    "type": "swatches",
+    "label": "Pick Your Colors (up to 3)",
+    "cartKey": "custom_colors",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "multiple": true,
+    "min": 1,
+    "max": 3,
+    "showWhen": {
+     "field": "radio-1",
+     "equals": "Choose my own colors"
+    },
+    "options": [
+     {
+      "value": "Clear",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052743104.png"
+     },
+     {
+      "value": "White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781076477190.png"
+     },
+     {
+      "value": "Pearl White",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052796509.png"
+     },
+     {
+      "value": "Gray",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052834113.png"
+     },
+     {
+      "value": "Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083028194.png"
+     },
+     {
+      "value": "Chrome Silver",
+      "price": 0.0,
+      "image": "swatches/swatch-17781052984644.png"
+     },
+     {
+      "value": "Pastel Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053096835.png"
+     },
+     {
+      "value": "Lemon Chiffon",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053133997.png"
+     },
+     {
+      "value": "Yellow",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053173658.png"
+     },
+     {
+      "value": "Goldenrod",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053202904.png"
+     },
+     {
+      "value": "Orange",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053253192.png"
+     },
+     {
+      "value": "Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781082877105.png"
+     },
+     {
+      "value": "Chrome Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053385822.png"
+     },
+     {
+      "value": "Mocha",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053435937.png"
+     },
+     {
+      "value": "Chocolate Brown",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053507052.png"
+     },
+     {
+      "value": "Red",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084530026.png"
+     },
+     {
+      "value": "Burgundy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053606441.png"
+     },
+     {
+      "value": "Wild Berry",
+      "price": 0.0,
+      "image": "swatches/swatch-17781053647039.png"
+     },
+     {
+      "value": "Pearl Magenta",
+      "price": 0.0,
+      "image": "swatches/swatch-17781084515494.png"
+     },
+     {
+      "value": "Rose",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085007651.png"
+     },
+     {
+      "value": "Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781085092627.png"
+     },
+     {
+      "value": "Pale Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781083904357.png"
+     },
+     {
+      "value": "Pastel Pink",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054172369.png"
+     },
+     {
+      "value": "Blush",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054100135.png"
+     },
+     {
+      "value": "Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054074297.png"
+     },
+     {
+      "value": "Coral",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054031074.png"
+     },
+     {
+      "value": "Chrome Rose Gold",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054283590.png"
+     },
+     {
+      "value": "Chrome Mauve",
+      "price": 0.0,
+      "image": "swatches/swatch-17781092914548.png"
+     },
+     {
+      "value": "Chrome Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054405193.png"
+     },
+     {
+      "value": "Quartz Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054449447.png"
+     },
+     {
+      "value": "Pearl Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054500725.png"
+     },
+     {
+      "value": "Purple Violet",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101274596.png"
+     },
+     {
+      "value": "Spring Lilac",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055952152.png"
+     },
+     {
+      "value": "Pastel Purple",
+      "price": 0.0,
+      "image": "swatches/swatch-17781101481671.png"
+     },
+     {
+      "value": "Pastel Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056134206.png"
+     },
+     {
+      "value": "Pearl Light Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056190168.png"
+     },
+     {
+      "value": "Pale Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781056239361.png"
+     },
+     {
+      "value": "Caribbean Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054725407.png"
+     },
+     {
+      "value": "Robins Egg Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054784533.png"
+     },
+     {
+      "value": "Tropical Teal",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054826440.png"
+     },
+     {
+      "value": "Sapphire Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781054854886.png"
+     },
+     {
+      "value": "Chrome Blue",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109229896.png"
+     },
+     {
+      "value": "Navy",
+      "price": 0.0,
+      "image": "swatches/swatch-17781109405202.png"
+     },
+     {
+      "value": "Chrome Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112185725.png"
+     },
+     {
+      "value": "Pastel Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055614724.png"
+     },
+     {
+      "value": "Winter Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055561464.png"
+     },
+     {
+      "value": "Spring Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055529076.png"
+     },
+     {
+      "value": "Lime Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055430023.png"
+     },
+     {
+      "value": "Dark Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055407526.png"
+     },
+     {
+      "value": "Emerald Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055366256.png"
+     },
+     {
+      "value": "Sage Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055155669.png"
+     },
+     {
+      "value": "Willow Green",
+      "price": 0.0,
+      "image": "swatches/swatch-17781055113484.png"
+     },
+     {
+      "value": "Black",
+      "price": 0.0,
+      "image": "swatches/swatch-17781112502363.png"
+     }
+    ]
+   },
+   {
+    "id": "buttons-1",
+    "type": "buttons",
+    "label": "Accent Foil Shape",
+    "cartKey": "AccentFoilShape",
+    "required": false,
+    "layout": "horizontal",
+    "perRow": 3,
+    "options": [
+     {
+      "value": "Heart",
+      "price": 0.0
+     },
+     {
+      "value": "Star",
+      "price": 0.0
+     },
+     {
+      "value": "Round",
+      "price": 0.0
+     }
+    ]
+   }
+  ],
+  "products": [
+   "custom-message-bouquet-3ft"
+  ]
+ }
+]
