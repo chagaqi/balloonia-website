@@ -291,3 +291,74 @@ export function escapeHtml(s: string): string {
 export function cad(n: number): string {
   return '$' + new Intl.NumberFormat('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
 }
+
+// ---------- delivery zone check ----------
+export type ShippingAddress = {
+  line1?: string | null;
+  line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  postal_code?: string | null;
+  country?: string | null;
+};
+
+function haversineKm(a: { lat: number; lon: number }, b: { lat: number; lon: number }): number {
+  const R = 6371;
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(b.lat - a.lat);
+  const dLon = toRad(b.lon - a.lon);
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+async function geocode(params: Record<string, string>): Promise<{ lat: number; lon: number } | null> {
+  const qs = new URLSearchParams({ format: 'json', limit: '1', countrycodes: 'ca', ...params });
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 5000);
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?${qs}`, {
+      headers: { 'User-Agent': 'BallooniaShop/1.0 (contact@balloonia.events)', Accept: 'application/json' },
+      signal: ctrl.signal,
+    });
+    if (!res.ok) return null;
+    const rows = (await res.json()) as { lat: string; lon: string }[];
+    return rows[0] ? { lat: Number(rows[0].lat), lon: Number(rows[0].lon) } : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// Straight-line km from the shop to a delivery address (street first, then the town).
+// Null when the address cannot be found; the order still goes through.
+export async function distanceFromShopKm(addr: ShippingAddress | null | undefined, origin: { lat: number; lon: number }): Promise<number | null> {
+  if (!addr) return null;
+  const street = [addr.line1].filter(Boolean).join(' ');
+  const point =
+    (street && addr.city ? await geocode({ street, city: addr.city, state: addr.state || 'ON' }) : null) ||
+    (addr.city ? await geocode({ city: addr.city, state: addr.state || 'ON' }) : null);
+  if (!point) return null;
+  return Math.round(haversineKm(origin, point) * 10) / 10;
+}
+
+// Plain-language warning for the ops email when the chosen delivery band and the
+// address do not agree. Straight-line distance runs a little under road distance,
+// so the free zone gets a small allowance before it flags.
+export function deliveryZoneWarning(
+  deliveryId: string | null,
+  km: number | null,
+  options: { id: string; min_km?: number; max_km?: number; amount: number | null }[],
+): string | null {
+  if (km == null || !deliveryId || deliveryId === 'pickup') return null;
+  const free = options.find((o) => o.id === 'london');
+  const far = options.find((o) => o.id === 'extended');
+  const freeMax = free?.max_km ?? 30;
+  const farMax = far?.max_km ?? 250;
+  if (km > farMax) return `The address is about ${km} km from the shop, past the ${farMax} km delivery area. Call the customer before planning this one.`;
+  if (deliveryId === 'london' && km > freeMax + 3)
+    return `The address is about ${km} km from the shop, outside the free zone. Delivery there is $${far?.amount ?? 75}. Collect it or confirm with the customer.`;
+  if (deliveryId === 'extended' && km < freeMax - 3)
+    return `The address is about ${km} km from the shop, inside the free zone, but the customer paid $${far?.amount ?? 75} for delivery. Refund the delivery charge.`;
+  return null;
+}

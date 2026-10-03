@@ -43,13 +43,11 @@ export default async function handler(req: Request): Promise<Response> {
     ]);
     const taxRateId = await hstTaxRateId(tax?.rate ?? 0.13, tax?.label ?? 'HST');
 
-    // Delivery choices. An option with no amount yet (rates not entered) is never offered.
-    // Decision 4: a cart of rentals only already carries Pickup/Delivery (+$20) on each
-    // line, so it gets Pickup only and delivery is never charged twice.
-    const rentalsOnly = lines.every((l) => l.setKey === 'rentals');
-    const options = (delivery?.options ?? [{ id: 'pickup', label: 'Pickup', amount: 0 }]).filter(
-      (o) => o.amount != null && (!rentalsOnly || o.id === 'pickup'),
-    );
+    // Delivery choices from settings.delivery, in the order Stripe shows them (the first
+    // is preselected). Free delivery covers London and towns within 30 km of the shop;
+    // the webhook checks the address afterwards and flags orders that picked the wrong zone.
+    // An option without an amount is never offered.
+    const options = (delivery?.options ?? [{ id: 'pickup', label: 'Pickup', amount: 0 }]).filter((o) => o.amount != null);
 
     const [cart] = await sbInsert('carts', {
       items: lines,
@@ -97,7 +95,7 @@ export default async function handler(req: Request): Promise<Response> {
           description: `Balloonia Events order (cart ${cart.id.slice(0, 8)})`,
         },
         custom_text: {
-          submit: { message: 'We will text you within 24 hours to confirm your delivery or pickup window.' },
+          submit: { message: 'After you pay, we will email you to set up your delivery or pickup time.' },
         },
         success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cart`,

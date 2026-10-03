@@ -8,6 +8,9 @@ export type OrderForEmail = {
   name: string | null;
   phone: string | null;
   deliveryLabel: string | null;
+  deliveryId?: string | null; // pickup | london | extended
+  deliveryKm?: number | null;
+  deliveryWarning?: string | null;
   shipping: { name?: string; address?: Record<string, string | null> } | null;
   subtotal: number;
   shippingTotal: number;
@@ -28,6 +31,13 @@ export type OrderForEmail = {
     selections: { label: string; value: string; price: number; upload?: { path: string; name: string } }[];
   }[];
 };
+
+const PICKUP_ADDRESS = '412 Newbold St, Unit 4, London, ON N6E 1K1';
+const HOURS = 'Monday to Friday 9 to 6, and Saturday 11 to 6';
+
+function isPickup(o: OrderForEmail): boolean {
+  return o.deliveryId === 'pickup' || (!o.deliveryId && !!o.deliveryLabel && /pickup/i.test(o.deliveryLabel));
+}
 
 const INK = '#1a1a1a';
 const MUTED = '#6b6b6b';
@@ -86,19 +96,30 @@ ${inner}
 }
 
 export function customerEmail(o: OrderForEmail): { subject: string; html: string; text: string } {
+  const pickup = isPickup(o);
+  const first = o.name ? escapeHtml(o.name.split(' ')[0]) : '';
+  const intro = pickup
+    ? `Thanks${first ? `, ${first}` : ''}. Your order is in. Please <strong>reply to this email with a day and time that works for you to pick it up</strong>, and we will confirm.`
+    : `Thanks${first ? `, ${first}` : ''}. Your order is in. We will text you within 24 hours to confirm your delivery window.`;
   const html = shell(`
 <h1 style="font-family:Georgia,serif;font-weight:400;font-size:28px;margin:0 0 8px">Order #${o.number} confirmed</h1>
-<p style="font-size:15px;line-height:24px;margin:0 0 20px">Thanks${o.name ? `, ${escapeHtml(o.name.split(' ')[0])}` : ''}. We have your order and will text you within 24 hours to confirm your ${o.deliveryLabel && /pickup/i.test(o.deliveryLabel) ? 'pickup' : 'delivery'} window.</p>
+<p style="font-size:15px;line-height:24px;margin:0 0 20px">${intro}</p>
+${
+  pickup
+    ? `<p style="font-size:14px;line-height:22px;margin:0 0 20px;padding:12px 14px;background:#fff;border:1px solid ${LINE};border-radius:8px"><strong>Pickup</strong><br>${PICKUP_ADDRESS}<br>Open ${HOURS}.</p>`
+    : ''
+}
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size:14px">${itemsTable(o)}</table>
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size:14px;margin-top:12px">${totals(o)}</table>
-${address(o) ? `<p style="font-size:14px;line-height:21px;margin:24px 0 0"><strong>${o.deliveryLabel && /pickup/i.test(o.deliveryLabel) ? 'Contact address' : 'Delivery address'}</strong><br>${address(o)}</p>` : ''}
-${o.deliveryLabel && /pickup/i.test(o.deliveryLabel) ? `<p style="font-size:14px;line-height:21px;margin:16px 0 0"><strong>Pickup</strong><br>412 Newbold St, Unit 4, London, ON N6E 1K1</p>` : ''}
+${!pickup && address(o) ? `<p style="font-size:14px;line-height:21px;margin:24px 0 0"><strong>Delivery address</strong><br>${address(o)}</p>` : ''}
 ${o.note ? `<p style="font-size:14px;line-height:21px;margin:16px 0 0"><strong>Your note</strong><br>${escapeHtml(o.note)}</p>` : ''}
 <p style="font-size:14px;line-height:21px;margin:24px 0 0">Questions or changes? Reply to this email or text 226-242-2244.</p>`);
   const text = [
     `Order #${o.number} confirmed`,
     '',
-    'We have your order and will text you within 24 hours to confirm the window.',
+    pickup
+      ? `Your order is in. Please reply to this email with a day and time that works for you to pick it up, and we will confirm.\nPickup: ${PICKUP_ADDRESS}. Open ${HOURS}.`
+      : 'Your order is in. We will text you within 24 hours to confirm your delivery window.',
     '',
     ...o.items.map(
       (it) =>
@@ -116,7 +137,11 @@ ${o.note ? `<p style="font-size:14px;line-height:21px;margin:16px 0 0"><strong>Y
   ]
     .filter((l) => l !== '')
     .join('\n');
-  return { subject: `Order #${o.number} confirmed`, html, text };
+  return {
+    subject: pickup ? `Order #${o.number} confirmed: when would you like to pick it up?` : `Order #${o.number} confirmed`,
+    html,
+    text,
+  };
 }
 
 export function opsEmail(o: OrderForEmail, uploadLinks: Record<string, string>): { subject: string; html: string; text: string } {
@@ -127,8 +152,10 @@ export function opsEmail(o: OrderForEmail, uploadLinks: Record<string, string>):
 <strong>${escapeHtml(o.name || 'No name')}</strong><br>
 ${o.email ? `<a href="mailto:${escapeHtml(o.email)}" style="color:${INK}">${escapeHtml(o.email)}</a><br>` : ''}
 ${o.phone ? `<a href="tel:${escapeHtml(o.phone)}" style="color:${INK}">${escapeHtml(o.phone)}</a><br>` : ''}
-${escapeHtml(o.deliveryLabel || 'Delivery method not recorded')}
+${escapeHtml(o.deliveryLabel || 'Delivery method not recorded')}${o.deliveryKm != null ? ` (about ${o.deliveryKm} km from the shop)` : ''}
 </p>
+${o.deliveryWarning ? `<p style="font-size:14px;line-height:21px;margin:0 0 16px;padding:10px 12px;background:#fff4e5;border:1px solid #f0c48a;border-radius:8px"><strong>Check delivery:</strong> ${escapeHtml(o.deliveryWarning)}</p>` : ''}
+${isPickup(o) ? `<p style="font-size:14px;line-height:21px;margin:0 0 16px">Pickup order: the customer was asked to reply with a pickup day and time.</p>` : ''}
 ${address(o) ? `<p style="font-size:14px;line-height:21px;margin:0 0 16px">${address(o)}</p>` : ''}
 ${o.note ? `<p style="font-size:14px;line-height:21px;margin:0 0 16px;padding:10px 12px;background:#fff;border:1px solid ${LINE};border-radius:8px"><strong>Order note:</strong> ${escapeHtml(o.note)}</p>` : ''}
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size:14px">${itemsTable(o, uploadLinks)}</table>

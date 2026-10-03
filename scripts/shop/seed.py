@@ -160,13 +160,16 @@ def main():
                 cur.execute('insert into product_option_sets values (%s,%s) on conflict do nothing', (by_handle[h]['id'], sid))
         settings = {
             'tax': {'rate': 0.13, 'label': 'HST', 'inclusive': False},
-            # Rates come from Shopify admin (Settings > Shipping). Until DH sends them, only
-            # pickup is offered at checkout; an option with amount null is never shown.
-            'delivery': {'options': [
-                {'id': 'pickup', 'label': 'Pickup at 412 Newbold St, London', 'amount': 0},
-                {'id': 'london', 'label': 'Delivery in London + 50 km', 'amount': None},
-                {'id': 'extended', 'label': 'Delivery up to 250 km from London', 'amount': None}]},
-            'order_number_seed': 1001,
+            # DH 2026-10-03: free delivery in London and towns within ~30 km, $75 from 30 to
+            # 250 km, free pickup. Stripe shows the options in this order (first = preselected).
+            'delivery': {
+                'origin': {'lat': 42.9336681, 'lon': -81.2150211, 'address': '412 Newbold St, Unit 4, London, ON N6E 1K1'},
+                'options': [
+                    {'id': 'london', 'label': 'Free delivery: London and towns within 30 km', 'amount': 0, 'max_km': 30},
+                    {'id': 'pickup', 'label': 'Pickup: 412 Newbold St, Unit 4, London', 'amount': 0},
+                    {'id': 'extended', 'label': 'Delivery 30 to 250 km from London', 'amount': 75, 'min_km': 30, 'max_km': 250},
+                ]},
+            'order_number_seed': 1658,  # continues after Shopify order #1657
             'pickup_address': '412 Newbold St, Unit 4, London, ON N6E 1K1',
             'archived_handles': archived,
             'money_format': '${{amount}}',

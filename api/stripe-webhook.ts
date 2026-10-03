@@ -19,6 +19,9 @@ import {
   stripe,
   verifyStripeSignature,
   cad,
+  deliveryZoneWarning,
+  distanceFromShopKm,
+  getSetting,
   type PricedLine,
 } from '../src/lib/shop/server';
 import { customerEmail, opsEmail, sendEmail, type OrderForEmail } from '../src/lib/shop/emails';
@@ -137,7 +140,24 @@ async function recordOrder(sessionId: string) {
       'return=minimal',
     );
   }
-  const [full] = await sbSelect(`orders?id=eq.${order.id}&select=*`);
+  let [full] = await sbSelect(`orders?id=eq.${order.id}&select=*`);
+
+  // Check the delivery band against the address (free zone vs $75 band).
+  if (full.delivery_km == null && deliveryId && deliveryId !== 'pickup') {
+    try {
+      const delivery = await getSetting<{ origin: { lat: number; lon: number }; options: any[] }>('delivery');
+      if (delivery?.origin) {
+        const km = await distanceFromShopKm(shipping?.address, delivery.origin);
+        const warning = deliveryZoneWarning(deliveryId, km, delivery.options);
+        if (km != null) {
+          await sbUpdate('orders', `id=eq.${full.id}`, { delivery_km: km, delivery_warning: warning });
+          full = { ...full, delivery_km: km, delivery_warning: warning };
+        }
+      }
+    } catch (err) {
+      console.error('delivery check failed', err instanceof Error ? err.message : err);
+    }
+  }
 
   // Seven-day links to customer uploads for the ops email.
   const uploadLinks: Record<string, string> = {};
@@ -156,6 +176,9 @@ async function recordOrder(sessionId: string) {
     name: full.name,
     phone: full.phone,
     deliveryLabel,
+    deliveryId,
+    deliveryKm: full.delivery_km != null ? Number(full.delivery_km) : null,
+    deliveryWarning: full.delivery_warning ?? null,
     shipping,
     subtotal: Number(full.subtotal),
     shippingTotal: Number(full.shipping_total),
@@ -199,7 +222,8 @@ async function telegram(o: OrderForEmail): Promise<void> {
   const text = [
     `🛍️ New shop order #${o.number} · ${cad(o.total)}`,
     `${o.name || ''}${o.phone ? ` · ${o.phone}` : ''}`,
-    o.deliveryLabel || '',
+    o.deliveryLabel ? `${o.deliveryLabel}${o.deliveryKm != null ? ` (about ${o.deliveryKm} km)` : ''}` : '',
+    o.deliveryWarning ? `⚠️ ${o.deliveryWarning}` : '',
     ...o.items.map(
       (it) => `• ${it.title} × ${it.quantity}${it.selections.length ? ` (${it.selections.map((s) => s.value).join(', ')})` : ''}`,
     ),

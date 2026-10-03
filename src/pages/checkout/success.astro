@@ -41,7 +41,10 @@ import ShopLayout from '../../layouts/ShopLayout.astro';
   function render(o: Status) {
     title.textContent = `Order #${o.number} confirmed`;
     const pickup = o.deliveryMethod === 'pickup';
-    lede.innerHTML = `Thanks${o.firstName ? `, ${esc(o.firstName)}` : ''}. We will text you within 24 hours to confirm your ${pickup ? 'pickup' : 'delivery'} window.${o.email ? ` A confirmation is on its way to <strong>${esc(o.email)}</strong>.` : ''}`;
+    const sentTo = o.email ? ` A confirmation is on its way to <strong>${esc(o.email)}</strong>.` : '';
+    lede.innerHTML = pickup
+      ? `Thanks${o.firstName ? `, ${esc(o.firstName)}` : ''}.${sentTo} Please reply to that email with a day and time that works for you to pick up your order at 412 Newbold St, Unit 4, London. We are open Monday to Friday 9 to 6, and Saturday 11 to 6.`
+      : `Thanks${o.firstName ? `, ${esc(o.firstName)}` : ''}. We will text you within 24 hours to confirm your delivery window.${sentTo}`;
     const t = o.totals!;
     panel.innerHTML =
       (o.items || [])
