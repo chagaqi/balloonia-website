@@ -17,12 +17,8 @@ type Props = {
 const props = Astro.props;
 ---
 
-<BaseLayout {...props}>
+<BaseLayout {...props} fontFamilies={['EB+Garamond:wght@400']}>
   <Fragment slot="head">
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400&display=swap"
-    />
     <slot name="head" />
   </Fragment>
   <div class="shop">

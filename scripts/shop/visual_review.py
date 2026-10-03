@@ -81,12 +81,20 @@ def run(chunk):
 chunks = [paths[i::4] for i in range(4)]
 with ThreadPoolExecutor(4) as ex:
     results = [r for part in ex.map(run, chunks) for r in part]
-results.sort(key=lambda r: (r[0], r[1]))
+# Partial runs update their pages and keep the rest of the previous run in the index.
+store = os.path.join(OUT, 'results.json')
+prev = {}
+if os.path.exists(store):
+    prev = {(r[0], r[1]): r for r in json.load(open(store, encoding='utf-8'))}
+for r in results:
+    prev[(r[0], r[1])] = list(r)
+results = sorted(prev.values(), key=lambda r: (r[0], r[1]))
+json.dump(results, open(store, 'w', encoding='utf-8'))
 html = ['<!doctype html><meta charset="utf-8"><title>Shop rebuild review</title>',
         '<style>body{font:14px system-ui;margin:24px;background:#fbf9f5}img{max-width:100%;border:1px solid #ddd}'
         'section{margin:0 0 40px}h2{font-size:15px;margin:0 0 6px}</style>',
-        f'<h1>Shop rebuild: new (left) vs live Shopify (right)</h1><p>{len(paths)} pages, generated from {NEW}</p>']
+        f'<h1>Shop rebuild: new (left) vs live Shopify (right)</h1><p>{len(results)} sheets. The main-site footer is taller than Shopify's on every page, and products that gained an option set are taller by the widget.</p>']
 for path, label, name, note in results:
     html.append(f'<section><h2>{path} · {label}</h2><p>{note}</p>' + (f'<a href="{name}"><img loading="lazy" src="{name}"></a>' if name else '') + '</section>')
 open(os.path.join(OUT, 'index.html'), 'w', encoding='utf-8').write('\n'.join(html))
-print(f'{len(results)} sheets, {sum(1 for r in results if not r[2])} failed -> {OUT}/index.html')
+print(f'{len(results)} sheets in index, {sum(1 for r in results if not r[2])} failed -> {OUT}/index.html')

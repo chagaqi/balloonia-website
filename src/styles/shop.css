@@ -2059,7 +2059,7 @@ textarea.gpo__input {
 
 /* ---------- policy pages (Shopify's .shopify-policy__container) ---------- */
 .s-policy {
-  max-width: calc(65ch + 30px);
+  max-width: 646px;
   margin: 0 auto;
   padding: 30px 15px 60px;
 }

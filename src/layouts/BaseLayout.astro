@@ -16,9 +16,16 @@ type Props = {
   schemas?: Record<string, unknown>[];
   breadcrumbs?: Crumb[];
   preconnect?: string[];
+  // Extra Google Fonts families, e.g. 'EB+Garamond:wght@400' (shop pages), loaded in
+  // the same stylesheet request so there is only one render-blocking font CSS.
+  fontFamilies?: string[];
 };
 
-const { topic, description, ogImage, noindex, schemas = [], breadcrumbs, preconnect = [] } = Astro.props;
+const { topic, description, ogImage, noindex, schemas = [], breadcrumbs, preconnect = [], fontFamilies = [] } = Astro.props;
+const fontsHref =
+  'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700' +
+  fontFamilies.map((f) => `&family=${f}`).join('') +
+  '&display=swap';
 
 const allSchemas: Record<string, unknown>[] = [localBusinessSchema()];
 if (breadcrumbs && breadcrumbs.length > 1) {
@@ -37,10 +44,7 @@ allSchemas.push(...schemas);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     {preconnect.map((href) => <link rel="preconnect" href={href} />)}
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap"
-    />
+    <link rel="stylesheet" href={fontsHref} />
     <SEOHead topic={topic} description={description} ogImage={ogImage} noindex={noindex} />
     <script is:inline set:html={utmCaptureScript} />
     <JsonLd schema={allSchemas} />
