@@ -12,6 +12,17 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "shop.balloonia.events"
+        }
+      ],
+      "destination": "https://balloonia.events/:path*",
+      "statusCode": 301
+    },
+    {
       "source": "/products/luxury-valentines-day-balloons",
       "destination": "/collections/all",
       "permanent": true

@@ -26,3 +26,6 @@ pnpm-debug.log*
 # context (workspace-only, not part of repo)
 .context/
 .vercel
+
+# python
+__pycache__/
