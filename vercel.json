@@ -34,6 +34,74 @@
       "statusCode": 301
     },
     {
+      "source": "/corp",
+      "destination": "/corp-offer",
+      "permanent": false
+    },
+    {
+      "source": "/corp/",
+      "destination": "/corp-offer",
+      "permanent": false
+    },
+    {
+      "source": "/call",
+      "has": [
+        {
+          "type": "query",
+          "key": "ref",
+          "value": "auto"
+        }
+      ],
+      "destination": "/vroom",
+      "permanent": false
+    },
+    {
+      "source": "/call",
+      "has": [
+        {
+          "type": "query",
+          "key": "ref",
+          "value": "broker"
+        }
+      ],
+      "destination": "/house",
+      "permanent": false
+    },
+    {
+      "source": "/call",
+      "destination": "/corp-offer",
+      "permanent": false
+    },
+    {
+      "source": "/call/",
+      "has": [
+        {
+          "type": "query",
+          "key": "ref",
+          "value": "auto"
+        }
+      ],
+      "destination": "/vroom",
+      "permanent": false
+    },
+    {
+      "source": "/call/",
+      "has": [
+        {
+          "type": "query",
+          "key": "ref",
+          "value": "broker"
+        }
+      ],
+      "destination": "/house",
+      "permanent": false
+    },
+    {
+      "source": "/call/",
+      "destination": "/corp-offer",
+      "permanent": false
+    },
+    {
       "source": "/products/luxury-valentines-day-balloons",
       "destination": "/collections/all",
       "permanent": true
