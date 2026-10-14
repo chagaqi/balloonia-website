@@ -31,7 +31,7 @@
 
 export const config = { runtime: 'edge' };
 
-const VERSION = 'quo-webhook v4';
+const VERSION = 'quo-webhook v5';
 
 type ExtractedLead = {
   event_type: string;
@@ -569,7 +569,10 @@ export async function healthReport(url: URL): Promise<Record<string, unknown>> {
   };
 }
 
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(
+  req: Request,
+  ctx?: { waitUntil?: (p: Promise<unknown>) => void },
+): Promise<Response> {
   // Log every hit so we can see in Vercel logs whether Quo is reaching us.
   console.log('[quo-webhook] called, method:', req.method);
   console.log('[quo-webhook] env check:', {
@@ -655,121 +658,141 @@ export default async function handler(req: Request): Promise<Response> {
     return new Response('No callId', { status: 200 });
   }
 
-  try {
-    // Collect every signal available from this payload + the previous event for the same call.
-    let transcript = '';
-    let summaryText = '';
-    let nextStepsText = '';
-
-    // call.transcript.completed: full dialogue inline at data.object.callTranscript.dialogue
-    const dialogue = eventObj?.callTranscript?.dialogue;
-    if (Array.isArray(dialogue)) {
-      transcript = dialogue
-        .map((d: any) => {
-          const who = d.speaker === 1 || d.userId ? 'Blake' : 'Prospect';
-          return `${who}: ${d.content || ''}`;
-        })
-        .join('\n');
-    } else if (typeof eventObj?.transcript === 'string') {
-      transcript = eventObj.transcript;
-    }
-
-    // call.summary.completed: summary array + nextSteps array
-    if (Array.isArray(eventObj?.summary)) {
-      summaryText = eventObj.summary.join('\n');
-    } else if (typeof eventObj?.summary === 'string') {
-      summaryText = eventObj.summary;
-    }
-    if (Array.isArray(eventObj?.nextSteps)) {
-      nextStepsText = eventObj.nextSteps.join('\n');
-    }
-
-    // If neither came inline (or both arrived but were empty), pull transcript from API.
-    if (!transcript && !summaryText) {
-      transcript = await fetchQuoTranscript(callId);
-    }
-
-    const fullText = [
-      summaryText && `SUMMARY:\n${summaryText}`,
-      nextStepsText && `NEXT STEPS:\n${nextStepsText}`,
-      transcript && `TRANSCRIPT:\n${transcript}`,
-    ].filter(Boolean).join('\n\n');
-
-    if (!fullText.trim()) {
-      throw new Error('No transcript or summary content available');
-    }
-
-    const mediaUrl = eventObj?.media?.[0]?.url;
-    const duration = eventObj?.media?.[0]?.duration ?? eventObj?.duration;
-    const durationStr = duration ? `${Math.round(duration / 60)} min` : undefined;
-
-    // Extraction failing (dead key, provider outage, bad JSON) must NEVER cost
-    // us the lead. Fall back to shipping the raw call content so Brenda can
-    // still quote from it.
-    let lead: ExtractedLead | null = null;
-    let llmError = '';
+  const processCall = async (): Promise<Response> => {
     try {
-      lead = await extractFields(fullText);
-    } catch (err) {
-      llmError = err instanceof Error ? err.message : 'unknown LLM error';
-      console.error('[quo-webhook] extraction failed, sending raw packet:', llmError);
-    }
+      // Collect every signal available from this payload + the previous event for the same call.
+      let transcript = '';
+      let summaryText = '';
+      let nextStepsText = '';
 
-    if (lead) {
-      const message = buildTelegramMessage(lead, {
-        id: callId,
-        duration: durationStr,
-        recordingUrl: deepLink || mediaUrl,
-      });
-      await broadcast(message);
-    } else {
-      const trimmed = fullText.length > 3000 ? fullText.slice(0, 3000) + '\n…(truncated)' : fullText;
-      const raw = trimmed.replace(/`/g, 'ˋ');
-      await broadcast(
-        [
-          '🎈 *NEW LEAD — RAW* (auto-extraction is down, this is the unprocessed call content)',
-          '━━━━━━━━━━━━━━━━━━',
-          durationStr ? `📞 ${durationStr}` : '',
-          deepLink || mediaUrl ? `🎵 ${deepLink || mediaUrl}` : '',
-          '',
-          '```',
-          raw,
-          '```',
-          '',
-          `_extractor error: ${mdEscape(llmError.slice(0, 300))}_`,
-        ]
-          .filter(Boolean)
-          .join('\n'),
+      // call.transcript.completed: full dialogue inline at data.object.callTranscript.dialogue
+      const dialogue = eventObj?.callTranscript?.dialogue;
+      if (Array.isArray(dialogue)) {
+        transcript = dialogue
+          .map((d: any) => {
+            const who = d.speaker === 1 || d.userId ? 'Blake' : 'Prospect';
+            return `${who}: ${d.content || ''}`;
+          })
+          .join('\n');
+      } else if (typeof eventObj?.transcript === 'string') {
+        transcript = eventObj.transcript;
+      }
+
+      // call.summary.completed: summary array + nextSteps array
+      if (Array.isArray(eventObj?.summary)) {
+        summaryText = eventObj.summary.join('\n');
+      } else if (typeof eventObj?.summary === 'string') {
+        summaryText = eventObj.summary;
+      }
+      if (Array.isArray(eventObj?.nextSteps)) {
+        nextStepsText = eventObj.nextSteps.join('\n');
+      }
+
+      // If neither came inline (or both arrived but were empty), pull transcript from API.
+      if (!transcript && !summaryText) {
+        transcript = await fetchQuoTranscript(callId);
+      }
+
+      const fullText = [
+        summaryText && `SUMMARY:\n${summaryText}`,
+        nextStepsText && `NEXT STEPS:\n${nextStepsText}`,
+        transcript && `TRANSCRIPT:\n${transcript}`,
+      ].filter(Boolean).join('\n\n');
+
+      if (!fullText.trim()) {
+        throw new Error('No transcript or summary content available');
+      }
+
+      const mediaUrl = eventObj?.media?.[0]?.url;
+      const duration = eventObj?.media?.[0]?.duration ?? eventObj?.duration;
+      const durationStr = duration ? `${Math.round(duration / 60)} min` : undefined;
+
+      // Extraction failing (dead key, provider outage, bad JSON) must NEVER cost
+      // us the lead. Fall back to shipping the raw call content so Brenda can
+      // still quote from it.
+      let lead: ExtractedLead | null = null;
+      let llmError = '';
+      try {
+        // A very long call is the slow case. The first 15k characters carry the who, when
+        // and what, and the raw fallback below still ships the call content either way.
+        const llmInput = fullText.length > 15000 ? fullText.slice(0, 15000) + ' ...(truncated)' : fullText;
+        lead = await extractFields(llmInput);
+      } catch (err) {
+        llmError = err instanceof Error ? err.message : 'unknown LLM error';
+        console.error('[quo-webhook] extraction failed, sending raw packet:', llmError);
+      }
+
+      if (lead) {
+        const message = buildTelegramMessage(lead, {
+          id: callId,
+          duration: durationStr,
+          recordingUrl: deepLink || mediaUrl,
+        });
+        await broadcast(message);
+      } else {
+        const trimmed = fullText.length > 3000 ? fullText.slice(0, 3000) + '\n…(truncated)' : fullText;
+        const raw = trimmed.replace(/`/g, 'ˋ');
+        await broadcast(
+          [
+            '🎈 *NEW LEAD — RAW* (auto-extraction is down, this is the unprocessed call content)',
+            '━━━━━━━━━━━━━━━━━━',
+            durationStr ? `📞 ${durationStr}` : '',
+            deepLink || mediaUrl ? `🎵 ${deepLink || mediaUrl}` : '',
+            '',
+            '```',
+            raw,
+            '```',
+            '',
+            `_extractor error: ${mdEscape(llmError.slice(0, 300))}_`,
+          ]
+            .filter(Boolean)
+            .join('\n'),
+        );
+      }
+
+      return new Response(
+        JSON.stringify({
+          ok: anyDelivered,
+          callId,
+          eventType,
+          degraded: !lead,
+          delivered: anyDelivered,
+          llmError: llmError || undefined,
+        }),
+        {
+          // Nothing reached Telegram. Answer 500 so Quo retries us — a retry is
+          // another shot at the lead, a 200 here would bury it.
+          status: anyDelivered ? 200 : 500,
+          headers: { 'content-type': 'application/json' },
+        },
       );
-    }
-
-    return new Response(
-      JSON.stringify({
-        ok: anyDelivered,
-        callId,
-        eventType,
-        degraded: !lead,
-        delivered: anyDelivered,
-        llmError: llmError || undefined,
-      }),
-      {
-        // Nothing reached Telegram. Answer 500 so Quo retries us — a retry is
-        // another shot at the lead, a 200 here would bury it.
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'unknown error';
+      console.error('[quo-webhook] pipeline error:', msg);
+      await broadcast(
+        `⚠️ Discovery pipeline error for call ${callId} (${eventType}): ${msg}\n\nManually review: ${deepLink || '(no deep link)'}`,
+      );
+      // If the alert made it to Telegram a human already knows, so return 200 and
+      // spare Quo the retries. If it did not, 500 buys us another delivery.
+      return new Response(JSON.stringify({ error: msg, delivered: anyDelivered }), {
         status: anyDelivered ? 200 : 500,
         headers: { 'content-type': 'application/json' },
-      },
-    );
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : 'unknown error';
-    console.error('[quo-webhook] pipeline error:', msg);
-    await broadcast(
-      `⚠️ Discovery pipeline error for call ${callId} (${eventType}): ${msg}\n\nManually review: ${deepLink || '(no deep link)'}`,
-    );
-    // If the alert made it to Telegram a human already knows, so return 200 and
-    // spare Quo the retries. If it did not, 500 buys us another delivery.
-    return new Response(JSON.stringify({ error: msg, delivered: anyDelivered }), {
-      status: anyDelivered ? 200 : 500,
+      });
+    }
+  };
+
+  // Quo stops waiting for an answer after a few seconds. A long call used to spend that
+  // time on the LLM and Telegram before replying, so Quo logged a timeout, retried the same
+  // long call for ten days and then disabled the webhook (2026-10-03 to 2026-10-13). So
+  // answer at once and do the work after the response. With no waitUntil (local runs),
+  // fall back to the old synchronous path.
+  const work = processCall();
+  if (ctx?.waitUntil) {
+    ctx.waitUntil(work.catch((err) => console.error('[quo-webhook] background work failed:', err)));
+    return new Response(JSON.stringify({ accepted: true, callId, eventType, version: VERSION }), {
+      status: 200,
       headers: { 'content-type': 'application/json' },
     });
   }
+  return work;
 }
