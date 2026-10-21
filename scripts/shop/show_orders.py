@@ -24,7 +24,8 @@ with psycopg.connect(env['POSTGRES_URL'], connect_timeout=30) as c:
         o = dict(zip(cols, r))
         ship = o['shipping'] or {}
         addr = ship.get('address') if isinstance(ship, dict) else None
-        print(f"\nORDER #{o['number']}  ·  {o['created_at']:%a %b %d, %Y %I:%M %p}  ·  {o['status']}")
+        print(f"\nORDER #{o['number']}  ·  {o['created_at'].astimezone(TZ):%a %b %d, %Y %I:%M %p} Toronto  ·  {o['status']}")
+        print('Emails:   ' + (f"sent {o['emails_sent_at'].astimezone(TZ):%b %d %I:%M %p}" if o['emails_sent_at'] else 'NOT SENT'))
         print(f"Customer: {o['name'] or ''} · {o['email'] or ''} · {o['phone'] or ''}")
         method = {'pickup': 'Pickup (free)', 'london': 'Delivery, London (free)', 'extended': 'Delivery, 30-250 km'}.get(o['delivery_method'], o['delivery_method'])
         print(f"Delivery: {method}" + (f" · {o['delivery_km']} km from the studio" if o['delivery_km'] is not None else ''))
