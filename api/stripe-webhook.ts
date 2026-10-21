@@ -25,6 +25,7 @@ import {
   type PricedLine,
 } from '../src/lib/shop/server';
 import { customerEmail, opsEmail, sendEmail, type OrderForEmail } from '../src/lib/shop/emails';
+import { SWATCH_CARDS } from '../src/lib/shop/swatch-cards';
 
 export const config = { runtime: 'edge' };
 
@@ -223,29 +224,64 @@ async function recordOrder(sessionId: string) {
   return { number: full.number };
 }
 
-async function telegram(o: OrderForEmail): Promise<void> {
-  const token = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
-  const chats = [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].map((v) => v?.trim()).filter(Boolean))] as string[];
-  if (!token || !chats.length) return;
+// The ping: the order text (one line per option), then the picked colours as
+// photo cards (public/swatches, built by scripts/shop/build_swatch_cards.py).
+export function telegramOrder(o: OrderForEmail): { text: string; cards: string[] } {
   const text = [
     `🛍️ New shop order #${o.number} · ${cad(o.total)}`,
     `${o.name || ''}${o.phone ? ` · ${o.phone}` : ''}`,
     o.deliveryLabel ? `${o.deliveryLabel}${o.deliveryKm != null ? ` (about ${o.deliveryKm} km)` : ''}` : '',
     o.deliveryWarning ? `⚠️ ${o.deliveryWarning}` : '',
-    ...o.items.map(
-      (it) => `• ${it.title} × ${it.quantity}${it.selections.length ? ` (${it.selections.map((s) => s.value).join(', ')})` : ''}`,
-    ),
+    ...o.items.flatMap((it) => [
+      `• ${it.title} × ${it.quantity}${it.variantTitle ? ` (${it.variantTitle})` : ''}`,
+      ...it.selections.map((s) => `    ${s.label.replace(/\s*\(.*\)$/, '')}: ${s.value}`),
+    ]),
     o.note ? `Note: ${o.note}` : '',
   ]
     .filter(Boolean)
     .join('\n');
+  const cards: string[] = [];
+  for (const it of o.items) {
+    for (const s of it.selections) {
+      if (!s.key) continue;
+      const values = Array.isArray(s.raw) ? s.raw : s.raw != null ? [s.raw] : s.value.split(', ');
+      for (const v of values) {
+        const file = SWATCH_CARDS[`${s.key}|${v}`];
+        const url = file && `https://balloonia.events/swatches/${file}`;
+        if (url && !cards.includes(url)) cards.push(url);
+      }
+    }
+  }
+  return { text, cards };
+}
+
+async function telegram(o: OrderForEmail): Promise<void> {
+  const token = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
+  const chats = [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].map((v) => v?.trim()).filter(Boolean))] as string[];
+  if (!token || !chats.length) return;
+  const { text, cards } = telegramOrder(o);
+  const caption = `Order #${o.number} colors`;
+  const send = (method: string, body: Record<string, unknown>) =>
+    fetch(`https://api.telegram.org/bot${token}/${method}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
   await Promise.all(
-    chats.map((chat_id) =>
-      fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id, text, disable_web_page_preview: true }),
-      }),
-    ),
+    chats.map(async (chat_id) => {
+      await send('sendMessage', { chat_id, text, disable_web_page_preview: true });
+      // An album holds 10 photos; a missing card must not fail the order notify.
+      for (let i = 0; i < cards.length; i += 10) {
+        const chunk = cards.slice(i, i + 10);
+        const r =
+          chunk.length === 1
+            ? await send('sendPhoto', { chat_id, photo: chunk[0], caption })
+            : await send('sendMediaGroup', {
+                chat_id,
+                media: chunk.map((media, j) => ({ type: 'photo', media, ...(i + j === 0 ? { caption } : {}) })),
+              });
+        if (!r.ok) console.error('telegram colours failed', r.status, await r.text());
+      }
+    }),
   );
 }

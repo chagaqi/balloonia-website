@@ -28,7 +28,14 @@ export type OrderForEmail = {
     quantity: number;
     unitPrice: number;
     lineTotal: number;
-    selections: { label: string; value: string; price: number; upload?: { path: string; name: string } }[];
+    selections: {
+      label: string;
+      value: string;
+      price: number;
+      key?: string;
+      raw?: string | string[];
+      upload?: { path: string; name: string };
+    }[];
   }[];
 };
 
