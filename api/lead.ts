@@ -9,6 +9,8 @@
 // Native Vercel function (not an Astro route). Deploys automatically as
 // /api/lead.
 
+import { sendToJobs, shortHash } from '../src/lib/jobs-intake';
+
 export const config = { runtime: 'edge' };
 
 interface LeadPayload {
@@ -50,6 +52,11 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ error: 'Invalid email' }, 400);
   }
 
+  // The request also opens a job in the dashboard (same person + page = same job).
+  const jobP = shortHash(`${email.toLowerCase()}|${source}`).then((h) =>
+    sendToJobs({ source: 'Website', external_id: `lp-${h}`, client: name, email, phone, notes: `From the landing page ${source || '(unknown page)'}: asked for the free render / blueprint call.` }),
+  );
+
   // Read env vars defensively. Vercel sometimes wraps user-entered values in quotes.
   const cleanEnv = (v: string | undefined): string => (v || '').trim().replace(/^['"](.+)['"]$/, '$1').trim();
   const apiKey = cleanEnv(process.env.RESEND_API_KEY);
@@ -65,6 +72,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   if (!apiKey) {
     console.error('RESEND_API_KEY not configured');
+    await jobP;
     return json({ error: 'Server misconfigured' }, 500);
   }
 
@@ -126,9 +134,11 @@ export default async function handler(req: Request): Promise<Response> {
   if (!resendRes.ok) {
     const errText = await resendRes.text();
     console.error('Resend send failed:', resendRes.status, errText);
+    await jobP;
     return json({ error: 'Email send failed' }, 502);
   }
 
+  await jobP;
   return json({ ok: true });
 }
 

@@ -3,6 +3,7 @@
 // Recipient: contact@balloonia.events
 
 import { Resend } from 'resend';
+import { sendToJobs, shortHash } from '../src/lib/jobs-intake';
 
 type ContactPayload = {
   name?: string;
@@ -32,8 +33,14 @@ export default async function handler(req: Request): Promise<Response> {
     return json({ error: 'Missing required fields' }, 400);
   }
 
+  // The message also opens a job in the dashboard (same message twice = same job).
+  const jobP = shortHash(`${email.toLowerCase()}|${message}`).then((h) =>
+    sendToJobs({ source: 'Website', external_id: `web-${h}`, client: name, email, notes: `From the contact form:\n${message}` }),
+  );
+
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
+    await jobP;
     return json({ error: 'Email service not configured' }, 500);
   }
 
@@ -54,9 +61,11 @@ export default async function handler(req: Request): Promise<Response> {
         </table>
       `,
     });
+    await jobP;
     return json({ success: true });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Send failed';
+    await jobP;
     return json({ error: msg }, 502);
   }
 }

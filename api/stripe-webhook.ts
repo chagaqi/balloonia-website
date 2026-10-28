@@ -26,6 +26,7 @@ import {
 } from '../src/lib/shop/server';
 import { customerEmail, opsEmail, sendEmail, type OrderForEmail } from '../src/lib/shop/emails';
 import { SWATCH_CARDS } from '../src/lib/shop/swatch-cards';
+import { sendToJobs, type JobIntake } from '../src/lib/jobs-intake';
 
 export const config = { runtime: 'edge' };
 
@@ -209,13 +210,16 @@ async function recordOrder(sessionId: string) {
     })),
   };
 
+  // Live orders open a job in the dashboard first, so the Telegram ping can link to it.
+  const job = data.livemode ? await sendToJobs(shopJob(data, uploadLinks)) : null;
+
   const tasks: Promise<unknown>[] = [];
   if (data.email) tasks.push(sendEmail(data.email, customerEmail(data)));
   const ops = data.livemode
     ? (process.env.SHOP_OPS_EMAIL || 'contact@balloonia.events').trim()
     : (process.env.SHOP_TEST_OPS_EMAIL || '').trim();
   if (ops) tasks.push(sendEmail(ops, opsEmail(data, uploadLinks), data.email || undefined));
-  if (data.livemode) tasks.push(telegram(data));
+  if (data.livemode) tasks.push(telegram(data, job?.url));
   const settled = await Promise.allSettled(tasks);
   settled.forEach((r) => r.status === 'rejected' && console.error('notify failed', String(r.reason)));
   if (settled.every((r) => r.status === 'fulfilled')) {
@@ -255,11 +259,61 @@ export function telegramOrder(o: OrderForEmail): { text: string; cards: string[]
   return { text, cards };
 }
 
-async function telegram(o: OrderForEmail): Promise<void> {
+// The order as a job for the dashboard's Jobs hub: paid in full, so it lands at
+// "Balloons ordered" with the delivery date, address, items and colours filled in.
+export function shopJob(o: OrderForEmail, uploadLinks: Record<string, string> = {}): JobIntake {
+  let eventDate = '';
+  let startTime = '';
+  const colours: string[] = [];
+  const details: string[] = [];
+  for (const it of o.items) {
+    const lines: string[] = [];
+    for (const s of it.selections) {
+      const m = String(s.value || '').match(/^(\d{4}-\d{2}-\d{2})(?:\s+(.+))?$/);
+      if (m && !eventDate) { eventDate = m[1]; startTime = m[2] || ''; continue; }
+      if (s.key) {
+        const values = Array.isArray(s.raw) ? s.raw : s.raw != null ? [s.raw] : s.value.split(', ');
+        for (const v of values) if (SWATCH_CARDS[`${s.key}|${v}`] && !colours.includes(v)) colours.push(v);
+      }
+      lines.push(`${s.label.replace(/\s*\(.*\)$/, '')}: ${s.value}`);
+    }
+    details.push(`${it.title} × ${it.quantity}${lines.length ? '\n  ' + lines.join('\n  ') : ''}`);
+  }
+  const a = (o.shipping as { address?: Record<string, string> } | null)?.address;
+  const address = a ? [a.line1, a.line2, a.city, a.state, a.postal_code].filter(Boolean).join(', ') : '';
+  return {
+    source: 'Shop',
+    external_id: `shop-${o.number}`,
+    number: `#${o.number}`,
+    client: o.name || '',
+    email: o.email,
+    phone: o.phone,
+    event_date: eventDate,
+    start_time: startTime,
+    address,
+    delivery_type: o.deliveryId === 'pickup' ? 'Pickup' : 'Delivery',
+    pieces: o.items.map((it) => `${it.title}${it.variantTitle ? ` (${it.variantTitle})` : ''}${it.quantity > 1 ? ` × ${it.quantity}` : ''}`).join('\n'),
+    colours: colours.join(', '),
+    notes: [
+      details.join('\n'),
+      o.note ? `Customer note: ${o.note}` : '',
+      o.deliveryLabel ? `${o.deliveryLabel}${o.deliveryKm != null ? `, about ${o.deliveryKm} km` : ''}` : '',
+      o.deliveryWarning ? `Check: ${o.deliveryWarning}` : '',
+    ].filter(Boolean).join('\n\n'),
+    uploads: Object.values(uploadLinks).join('\n'),
+    quote_total: o.total,
+    paid_in_full: true,
+    notify: false, // this webhook pings Telegram itself, with the job link
+  };
+}
+
+async function telegram(o: OrderForEmail, jobUrl?: string): Promise<void> {
   const token = (process.env.TELEGRAM_BOT_TOKEN || '').trim();
   const chats = [...new Set([process.env.BRENDA_CHAT_ID, process.env.DH_CHAT_ID].map((v) => v?.trim()).filter(Boolean))] as string[];
   if (!token || !chats.length) return;
-  const { text, cards } = telegramOrder(o);
+  const built = telegramOrder(o);
+  const text = jobUrl ? `${built.text}\nJob: ${jobUrl}` : built.text;
+  const cards = built.cards;
   const caption = `Order #${o.number} colors`;
   const send = (method: string, body: Record<string, unknown>) =>
     fetch(`https://api.telegram.org/bot${token}/${method}`, {

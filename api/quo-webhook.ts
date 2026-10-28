@@ -29,6 +29,7 @@
 //   and flags any that redirect. Whatever it reports as `reachable` is the URL
 //   that belongs in the Quo dashboard.
 
+import { sendToJobs, type JobIntake } from '../src/lib/jobs-intake';
 export const config = { runtime: 'edge' };
 
 const VERSION = 'quo-webhook v5';
@@ -152,7 +153,7 @@ async function extractFields(transcript: string): Promise<ExtractedLead> {
   return JSON.parse(json) as ExtractedLead;
 }
 
-function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; duration?: string; recordingUrl?: string }): string {
+function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; duration?: string; recordingUrl?: string; jobUrl?: string }): string {
   const lines: string[] = [];
   const code = (v: string) => '`' + (v || '(empty)').replace(/`/g, 'ˋ') + '`';
 
@@ -162,6 +163,7 @@ function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; durat
   // Quo deep links are full of underscores, which is exactly what the legacy
   // Markdown parser chokes on.
   if (callMeta.recordingUrl) lines.push(`🎵 Recording: ${mdEscape(callMeta.recordingUrl)}`);
+  if (callMeta.jobUrl) lines.push(`🗂 Job: ${mdEscape(callMeta.jobUrl)}`);
   lines.push('');
 
   lines.push('*CONTACT*');
@@ -217,6 +219,33 @@ function buildTelegramMessage(lead: ExtractedLead, callMeta: { id: string; durat
   });
 
   return lines.join('\n');
+}
+
+// The call as a job for the dashboard's Jobs hub. The call summary goes in the notes.
+function callJob(lead: ExtractedLead, callId: string, fullText: string): JobIntake {
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(lead.event_date || '') ? lead.event_date : '';
+  return {
+    source: 'Call',
+    external_id: `quo-${callId}`,
+    client: lead.contact_name || '',
+    email: lead.contact_email || null,
+    phone: lead.contact_phone || null,
+    event_date: date,
+    venue: lead.venue || '',
+    address: lead.city || '',
+    pieces: (lead.wants || []).join('\n'),
+    colours: lead.palette || '',
+    notes: [
+      [lead.event_type, lead.headcount ? `${lead.headcount} guests` : '', lead.budget ? `budget ${lead.budget}` : ''].filter(Boolean).join(' · '),
+      !date && lead.event_date ? `Date said on the call: ${lead.event_date}` : '',
+      lead.style ? `Style: ${lead.style}` : '',
+      lead.must_avoid?.length ? `Avoid: ${lead.must_avoid.join('; ')}` : '',
+      lead.decision_timeline ? `Timeline: ${lead.decision_timeline}` : '',
+      lead.red_flags && lead.red_flags !== 'None' ? `Red flags: ${lead.red_flags}` : '',
+      `Call notes:\n${fullText.slice(0, 3000)}`,
+    ].filter(Boolean).join('\n'),
+    notify: false, // this webhook pings Telegram itself, with the job link
+  };
 }
 
 // Telegram's legacy Markdown parser rejects the ENTIRE message with a 400 if
@@ -723,10 +752,13 @@ export default async function handler(
       }
 
       if (lead) {
+        // Open the job in the dashboard (5s cap, never blocks the ping), then link it.
+        const job = await sendToJobs(callJob(lead, callId, fullText), 5000);
         const message = buildTelegramMessage(lead, {
           id: callId,
           duration: durationStr,
           recordingUrl: deepLink || mediaUrl,
+          jobUrl: job?.url,
         });
         await broadcast(message);
       } else {
