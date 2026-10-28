@@ -57,6 +57,32 @@ export async function sendToJobs(body: JobIntake, timeoutMs = 6000): Promise<{ u
   }
 }
 
+// Moves an existing job: a card payment on a job invoice (Stripe Payment Link). `ref` (the
+// Checkout Session id) makes Stripe's retries harmless. True only when the dashboard took it.
+export async function jobsAction(body: {
+  recordId: string; action: 'deposit_in' | 'paid'; payload: { method: string; amount: number }; who: 'Stripe'; ref: string;
+}): Promise<boolean> {
+  const url = (process.env.JOBS_INTAKE_URL || '').trim();
+  const secret = (process.env.JOBS_INTAKE_SECRET || '').trim();
+  if (!url || !secret) return false;
+  try {
+    const r = await fetch(url.replace(/\/$/, '') + '/action', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${secret}`,
+        'User-Agent': 'Mozilla/5.0 (compatible; BallooniaWebsite/1.0; +https://balloonia.events)',
+      },
+      body: JSON.stringify(body),
+    });
+    if (!r.ok) console.error('jobs action', r.status, (await r.text()).slice(0, 300));
+    return r.ok;
+  } catch (err) {
+    console.error('jobs action failed', err instanceof Error ? err.message : err);
+    return false;
+  }
+}
+
 // Short stable id from text, so a double-submitted form opens one job, not two.
 export async function shortHash(text: string): Promise<string> {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));

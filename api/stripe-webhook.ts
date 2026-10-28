@@ -26,7 +26,7 @@ import {
 } from '../src/lib/shop/server';
 import { customerEmail, opsEmail, sendEmail, type OrderForEmail } from '../src/lib/shop/emails';
 import { SWATCH_CARDS } from '../src/lib/shop/swatch-cards';
-import { sendToJobs, type JobIntake } from '../src/lib/jobs-intake';
+import { sendToJobs, jobsAction, type JobIntake } from '../src/lib/jobs-intake';
 
 export const config = { runtime: 'edge' };
 
@@ -49,6 +49,9 @@ export default async function handler(req: Request): Promise<Response> {
       if (s.payment_status !== 'paid' && s.payment_status !== 'no_payment_required') {
         return json({ received: true, skipped: 'not paid yet' });
       }
+      // A card payment on a job invoice (dashboard Payment Link), not a shop cart.
+      const jobPaid = await recordJobPayment(s);
+      if (jobPaid) return jobPaid;
       const result = await recordOrder(s.id);
       return json({ received: true, ...result });
     }
@@ -68,6 +71,26 @@ export default async function handler(req: Request): Promise<Response> {
     // 500 makes Stripe retry (it backs off for up to 3 days).
     return json({ error: 'processing failed' }, 500);
   }
+}
+
+// Payment Links made by the dashboard (api/_job-pay.js) carry balloonia_job + which in their
+// metadata. Mark that job's deposit or balance paid. If the dashboard cannot take it, answer
+// 500 so Stripe retries for up to 3 days; the ref makes each retry harmless.
+async function recordJobPayment(s: any): Promise<Response | null> {
+  let meta = s.metadata?.balloonia_job ? s.metadata : null;
+  if (!meta && s.payment_link) {
+    const link = await stripe<any>('GET', `payment_links/${encodeURIComponent(s.payment_link)}`);
+    if (link?.metadata?.balloonia_job) meta = link.metadata;
+  }
+  if (!meta) return null;
+  const ok = await jobsAction({
+    recordId: String(meta.balloonia_job),
+    action: meta.which === 'balance' ? 'paid' : 'deposit_in',
+    payload: { method: 'Card', amount: (s.amount_total ?? 0) / 100 },
+    who: 'Stripe',
+    ref: String(s.id),
+  });
+  return ok ? json({ received: true, job: meta.balloonia_job }) : json({ error: 'job payment not recorded' }, 500);
 }
 
 async function recordOrder(sessionId: string) {
