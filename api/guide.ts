@@ -132,7 +132,14 @@ export default async function handler(req: Request): Promise<Response> {
     '',
     `Read the Balloon Side Hustle Starter Guide: ${GUIDE_URL}`,
     '',
-    'It covers the full starter kit list, your first three builds in the right order, how to price from day one, your first 10 customers in the first 4 weeks, and three paths to scale past a side hustle. The studio prices in it are the ones we publish and charge.',
+    'Inside the guide:',
+    '- The full starter kit list',
+    '- Your first three builds, in the right order',
+    '- How to price from day one',
+    '- Your first 10 customers in the first 4 weeks',
+    '- Three paths to scale past a side hustle',
+    '',
+    'The studio prices in it are the ones we publish and charge.',
     '',
     `Prefer it as a file? Download the PDF: ${PDF_URL}`,
     '',
@@ -140,7 +147,7 @@ export default async function handler(req: Request): Promise<Response> {
     '',
     'Go build the first garland,',
     'Brenda',
-    'Balloonia Events · 412 Newbold St, Unit 4, London ON, Canada',
+    'Balloonia Events',
     '',
     'To unsubscribe, reply with the word "unsubscribe" and we will take you off the same day.',
   ].join('\n');
@@ -152,11 +159,21 @@ export default async function handler(req: Request): Promise<Response> {
         <a href="${GUIDE_URL}" style="display: inline-block; background: #1c3d34; color: #ffffff; padding: 12px 22px; border-radius: 999px; font-weight: 600; text-decoration: none;">Read the Balloon Side Hustle Starter Guide</a>
       </p>
       <p style="font-size: 14px; color: #6b6b6b; margin-top: -8px;">Or copy the link: <a href="${GUIDE_URL}" style="color: #1c3d34;">${GUIDE_URL}</a></p>
-      <p>It covers the full starter kit list, your first three builds in the right order, how to price from day one, your first 10 customers in the first 4 weeks, and three paths to scale past a side hustle. The studio prices in it are the ones we publish and charge.</p>
+      <div style="background: #f6f2ea; border-radius: 12px; padding: 16px 20px; margin: 20px 0;">
+        <p style="margin: 0 0 8px; font-weight: 700; color: #1c3d34;">Inside the guide</p>
+        <ul style="margin: 0; padding-left: 20px;">
+          <li style="margin: 4px 0;">The full starter kit list</li>
+          <li style="margin: 4px 0;">Your first three builds, in the right order</li>
+          <li style="margin: 4px 0;">How to price from day one</li>
+          <li style="margin: 4px 0;">Your first 10 customers in the first 4 weeks</li>
+          <li style="margin: 4px 0;">Three paths to scale past a side hustle</li>
+        </ul>
+      </div>
+      <p>The studio prices in it are the ones we publish and charge.</p>
       <p>Prefer it as a file? <a href="${PDF_URL}" style="color: #1c3d34;">Download the PDF</a> and keep it on your phone.</p>
       <p>Once in a while we will send a build tip or a pricing lesson from the studio. When we publish the full playbook of how this business runs, you will hear it here first.</p>
       <p style="margin-bottom: 0;">Go build the first garland,</p>
-      <p style="margin-top: 0;"><strong>Brenda</strong><br/>Balloonia Events · 412 Newbold St, Unit 4, London ON, Canada</p>
+      <p style="margin-top: 0;"><strong>Brenda</strong><br/>Balloonia Events</p>
       <hr style="border: 0; border-top: 1px solid #e8e3da; margin: 24px 0;" />
       <p style="font-size: 12px; color: #6b6b6b;">
         To unsubscribe, <a href="mailto:contact@balloonia.events?subject=unsubscribe" style="color: #1c3d34;">reply with the word unsubscribe</a> and we will take you off the same day.
