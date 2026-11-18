@@ -29,9 +29,9 @@ export const business = {
   ],
   hoursDisplay: 'Mon-Fri 9-6, Sat 11-6, Sun closed',
   social: {
-    // Canonical handle per the Aug 2026 decision. balloonia.co still exists but
-    // this is the account we post to, so it is the one the entity graph points at.
-    instagram: 'https://instagram.com/balloonia.events.ca',
+    // balloonia.co is the account we post to since 2026-11-16 (DH: no access to
+    // the older balloonia.events.ca), so it is the one the entity graph points at.
+    instagram: 'https://instagram.com/balloonia.co',
     pinterest: 'https://ca.pinterest.com/ballooniaeventscanada/',
     facebook: 'https://www.facebook.com/profile.php?id=61590064883594',
     googleBusiness: 'https://maps.google.com/?cid=17219525027009520365',
