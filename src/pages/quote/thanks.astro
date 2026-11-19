@@ -25,6 +25,11 @@ import CTAButton from '../../components/CTAButton.astro';
         <ScheduleCallButton variant="primary" />
         <CTAButton href="/portfolio" variant="secondary">Browse the portfolio</CTAButton>
       </div>
+      <p class="thanks-follow">
+        New builds go up on Instagram every day.
+        <a href="https://instagram.com/balloonia.co" target="_blank" rel="noopener">Follow @balloonia.co</a>
+        to see them first.
+      </p>
     </div>
   </section>
 </BaseLayout>
@@ -51,5 +56,8 @@ import CTAButton from '../../components/CTAButton.astro';
     gap: var(--space-3);
     justify-content: center;
     margin-top: var(--space-7);
+  }
+  .thanks-follow {
+    margin-top: var(--space-6);
   }
 </style>
