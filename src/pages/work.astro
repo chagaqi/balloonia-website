@@ -1,0 +1,243 @@
+---
+// /work: the "top 10" portfolio link for venue follow-up emails.
+// Every photo is a real install, checked by eye (no renders, no AI images, no faces).
+// Web copies live in public/images/work/ (about 1200x1600 webp, EXIF stripped).
+// Not in the main nav on purpose. @astrojs/sitemap picks the page up on its own.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTAButton from '../components/CTAButton.astro';
+
+type Shot = {
+  file: string;
+  width: number;
+  height: number;
+  caption: string;
+  alt: string;
+  // Where the 3:4 crop sits in the two-column grid. Phones show the whole photo.
+  focus?: string;
+};
+
+const shots: Shot[] = [
+  {
+    file: '01-stage-arch-charity-banquet.webp',
+    width: 1200,
+    height: 1600,
+    caption: 'Orange, blue and silver stage arch, charity banquet',
+    alt: 'Balloon arch in orange, blue and silver over a wooden podium on a stage, with a matching balloon garland across the front of the stage.',
+  },
+  {
+    file: '02-sage-blush-garland-15th-birthday.webp',
+    width: 1200,
+    height: 1600,
+    caption: 'Sage and blush garland, 15th birthday',
+    alt: 'Tall organic balloon garland in sage, olive and blush with clear confetti balloons and greenery, in front of a round backdrop with a glowing neon 15.',
+  },
+  {
+    file: '03-entrance-arch-car-showroom.webp',
+    width: 1200,
+    height: 1600,
+    caption: 'Blue and silver entrance arch, car dealership',
+    alt: 'Balloon arch in blue, silver and white around the glass front doors of a car dealership showroom, with an orange car parked inside.',
+  },
+  {
+    file: '04-burgundy-ivory-garland.webp',
+    width: 1200,
+    height: 1600,
+    caption: 'Burgundy and ivory garland, mirror photo spot',
+    alt: 'Burgundy and ivory balloon garland with eucalyptus and clear balloons, beside a mirror framed in ivy and white flowers.',
+  },
+  {
+    file: '05-rainbow-gold-hoop-birthday.webp',
+    width: 880,
+    height: 1168,
+    caption: 'Rainbow and gold hoop, birthday party in a gym',
+    alt: 'Large balloon hoop with gold balloons across the top, rainbow colours down both sides and white daisy balloons, set up in a gym under a basketball net.',
+  },
+  {
+    file: '06-black-gold-hoop-graduation.webp',
+    width: 1200,
+    height: 1600,
+    caption: 'Black and gold hoop, graduation',
+    alt: 'Gold hoop with black and gold balloons, gold star bursts and gold 2025 numbers, beside a teddy bear balloon in a graduation cap and a stack of clear balloon boxes.',
+  },
+  {
+    file: '07-blue-tan-hoop-baby-shower.webp',
+    width: 1087,
+    height: 1600,
+    caption: 'Blue and tan hoop, baby shower',
+    alt: 'Gold hoop with baby blue, tan and cream balloons, an Oh Baby neon sign and a giant teddy bear sitting on balloons, in an event room.',
+  },
+  {
+    file: '08-heart-wall-valentines-day.webp',
+    width: 862,
+    height: 986,
+    caption: "Heart balloon wall, Valentine's Day",
+    alt: "Full balloon wall in red, pink and blush with heart balloons, star bursts and a Happy Valentine's Day sign in the middle.",
+  },
+  {
+    file: '09-pink-white-hoop-50th-birthday.webp',
+    width: 1104,
+    height: 1600,
+    caption: 'Pink and white hoop, outdoor 50th birthday',
+    alt: 'Gold hoop with a pink and pearl white balloon garland set up outdoors in front of old barn doors, with a Happy 50th banner and a pink blanket on the leaves.',
+    focus: '50% 25%',
+  },
+  {
+    file: '10-ceiling-balloons-hotel-room.webp',
+    width: 1164,
+    height: 1600,
+    caption: 'Ceiling balloons, 25th birthday in a hotel room',
+    alt: 'Hotel room with red, white and blush balloons on the ceiling with ribbons hanging down, a happy bday sign and silver 25 over the bed, and balloons across the floor.',
+  },
+];
+---
+
+<BaseLayout
+  topic="Our best work"
+  description="Ten of our best balloon setups from in and around London, Ontario. Stage arches, garlands, hoops and balloon walls for banquets, showrooms, hotels and parties. We deliver, set up and take down."
+  ogImage="/images/work/og-work.jpg"
+  breadcrumbs={[
+    { name: 'Home', url: '/' },
+    { name: 'Our best work', url: '/work' },
+  ]}
+>
+  <section class="work-hero">
+    <div class="container work-wrap">
+      <p class="eyebrow">Balloonia Events</p>
+      <h1>Our best work</h1>
+      <p class="lede">Ten of our favourite setups from in and around London, Ontario. We deliver, set up and take down.</p>
+    </div>
+  </section>
+
+  <section class="work-gallery" aria-label="Ten setups">
+    <div class="container work-wrap">
+      <ol class="work-grid">
+        {shots.map((shot, i) => (
+          <li class="work-item">
+            <figure>
+              <div class="work-frame">
+                <img
+                  src={`/images/work/${shot.file}`}
+                  alt={shot.alt}
+                  width={shot.width}
+                  height={shot.height}
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                  fetchpriority={i === 0 ? 'high' : undefined}
+                  decoding="async"
+                  style={shot.focus ? `object-position: ${shot.focus}` : undefined}
+                />
+              </div>
+              <figcaption>
+                <span class="work-num">{String(i + 1).padStart(2, '0')}</span>
+                <span>{shot.caption}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="work-cta section">
+    <div class="container container-narrow">
+      <h2>Have an event coming up?</h2>
+      <p class="lede">Tell us the date and the room. We will send you a quote.</p>
+      <div class="work-cta-actions">
+        <CTAButton href="/quote" variant="primary" size="lg">Get a quote</CTAButton>
+        <CTAButton href="https://corp.balloonia.events" variant="ghost" size="md" external>See our corporate lookbook</CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .work-hero {
+    padding: var(--space-7) 0 var(--space-5);
+  }
+  .work-hero h1 {
+    margin-bottom: var(--space-3);
+  }
+
+  .work-gallery {
+    padding-bottom: var(--space-7);
+  }
+  .work-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+  .work-item {
+    margin: 0;
+  }
+  .work-item figure {
+    margin: 0;
+  }
+  .work-frame {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-paper-edge);
+  }
+  /* Phones: one column, the whole photo, no crop. */
+  .work-frame img {
+    width: 100%;
+    height: auto;
+  }
+  .work-item figcaption {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    font-size: var(--font-size-base);
+    line-height: var(--line-snug);
+    color: var(--color-ink);
+  }
+  .work-num {
+    flex: none;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-accent-deep);
+  }
+
+  .work-cta {
+    background: var(--color-paper-soft);
+    text-align: center;
+  }
+  .work-cta .lede {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .work-cta-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  /* Tablet and up: two columns, every photo in the same 3:4 frame. */
+  @media (min-width: 640px) {
+    .work-hero {
+      padding: var(--space-8) 0 var(--space-6);
+    }
+    .work-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-7) var(--space-5);
+    }
+    .work-frame {
+      aspect-ratio: 3 / 4;
+    }
+    .work-frame img {
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  /* Hero and gallery share one width so their left edges line up. */
+  @media (min-width: 1024px) {
+    .work-wrap {
+      max-width: 64rem;
+    }
+  }
+</style>
